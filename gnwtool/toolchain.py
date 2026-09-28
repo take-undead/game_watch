@@ -3,8 +3,10 @@ from __future__ import annotations
 
 import glob
 import hashlib
+import json
 import os
 import shutil
+import stat
 import subprocess
 import sys
 import urllib.request
@@ -312,6 +314,85 @@ ROMS_README = """ここに機種ごとのフォルダへROMイメージを入れ
 """
 
 
+def cheat_files(folder: str) -> list[Path]:
+    d = C.CHEATS / folder
+    if not d.is_dir():
+        return []
+    return [p for p in d.iterdir() if p.is_file() and p.suffix.lower() in C.CHEAT_SUFFIXES]
+
+
+def cheat_count(rom: Path) -> int:
+    """ROM に対応するチートの件数 (roms 側 → cheat_code 側の順に探す)."""
+    from .capacity import rom_stem
+    stem = rom_stem(rom)
+    for d in (rom.parent, C.CHEATS / rom.parent.name):
+        for suf in C.CHEAT_SUFFIXES:
+            f = d / (stem + suf)
+            if f.exists():
+                try:
+                    lines = f.read_text(encoding="utf-8", errors="replace").splitlines()
+                except OSError:
+                    return 0
+                if suf == ".mcf":
+                    return sum(1 for ln in lines if ln.strip())
+                return min(16, sum(1 for ln in lines if ln.split(",", 1)[0].strip()))
+    return 0
+
+
+# ---- 表示名 (roms/<機種>.json) ----------------------------------------------
+# retro-go の romdef 形式 {"<ROM名(拡張子なし)>": {"name": "<表示名>"}}。parse_roms.py が roms/<機種>.json を読む。
+# ファイル名は英数字でないとビルドが失敗するが、表示名は CODEPAGE=932 なら日本語にできる。
+def names_file(folder: str) -> Path:
+    return C.ROMS / f"{folder}.json"
+
+
+def load_names(folder: str) -> dict[str, str]:
+    try:
+        data = json.loads(names_file(folder).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    return {k: v["name"] for k, v in data.items() if isinstance(v, dict) and v.get("name")}
+
+
+def save_names(folder: str, names: dict[str, str]) -> None:
+    f = names_file(folder)
+    names = {k: v for k, v in names.items() if v and v != k}
+    if not names:
+        f.unlink(missing_ok=True)
+        return
+    f.write_text(json.dumps({k: {"name": v} for k, v in sorted(names.items())}, ensure_ascii=False, indent=1),
+                 encoding="utf-8")
+
+
+def fix_non_ascii_names(log: Log) -> int:
+    """英数字以外を含む ROM のファイル名を付け替え、元の名前は表示名として残す。関連ファイルも一緒に."""
+    import re
+    import zlib
+    from .capacity import ALL_COVER_SUFFIXES, rom_stem
+    fixed = 0
+    for folder, _, _ in C.ROM_SYSTEMS:
+        d = C.ROMS / folder
+        if not d.is_dir():
+            continue
+        names = load_names(folder)
+        for p in sorted(d.iterdir()):
+            if not p.is_file() or p.name.isascii() or p.suffix.lower() in ALL_COVER_SUFFIXES + C.CHEAT_SUFFIXES:
+                continue
+            stem = rom_stem(p)
+            ascii_part = re.sub(r"[^A-Za-z0-9]+", "_", stem.encode("ascii", "ignore").decode()).strip("_")
+            new_stem = f"{ascii_part or 'rom'}_{zlib.crc32(stem.encode('utf-8')) & 0xFFFFFFFF:08X}"
+            related = [q for q in d.iterdir() if q.is_file() and rom_stem(q) == stem]
+            related += [q for q in (d / ".cover_originals").glob(f"{stem}.*")] if (d / ".cover_originals").is_dir() else []
+            related += [q for q in (C.CHEATS / folder).glob(f"{stem}.*")] if (C.CHEATS / folder).is_dir() else []
+            for q in related:
+                q.rename(q.with_name(new_stem + q.name[len(stem):]))
+                log(f"名前を変更: {folder}/{q.name} → {new_stem + q.name[len(stem):]}")
+            names[new_stem] = names.pop(stem, stem)
+            fixed += 1
+        save_names(folder, names)
+    return fixed
+
+
 def ensure_roms_dirs() -> None:
     for folder, _, _ in C.ROM_SYSTEMS:
         (C.ROMS / folder).mkdir(parents=True, exist_ok=True)
@@ -331,6 +412,14 @@ _KEEP = {".keep", "readme.md", "msxromdb.xml"}
 _DERIVED = (".lzma", ".cdk")
 
 
+def _force_unlink(p: Path) -> None:
+    try:
+        p.unlink()
+    except PermissionError:
+        os.chmod(p, stat.S_IREAD | stat.S_IWRITE)
+        p.unlink()
+
+
 def sync_roms(log: Log, proc_hook=None) -> None:
     """プロジェクトの roms/ を retro-go/roms/ へミラーする.
 
@@ -343,6 +432,9 @@ def sync_roms(log: Log, proc_hook=None) -> None:
         src_dir, dst_dir = C.ROMS / folder, C.RETROGO_REPO / "roms" / folder
         dst_dir.mkdir(parents=True, exist_ok=True)
         src = {p.name: p for p in src_dir.iterdir() if p.is_file() and p.name.lower() not in _KEEP}
+        # cheat_code/<機種>/ のチート定義も ROM の隣に置く (roms 側に同名があればそちらを優先)
+        for p in cheat_files(folder):
+            src.setdefault(p.name, p)
         for d in list(dst_dir.iterdir()):
             if not d.is_file() or d.name.lower() in _KEEP or d.name.lower().endswith(".json"):
                 continue
@@ -361,11 +453,19 @@ def sync_roms(log: Log, proc_hook=None) -> None:
             elif not stale:
                 stale = s.stat().st_mtime > d.stat().st_mtime
             if stale:
-                d.unlink()
+                _force_unlink(d)
                 removed += 1
         for name, s in src.items():
             d = dst_dir / name
             if not d.exists():
                 shutil.copy2(s, d)
+                # 読み取り専用属性まで引き継ぐと、次回の入れ替えで消せなくなる (retro-go も BIOS を書き換える)
+                os.chmod(d, stat.S_IREAD | stat.S_IWRITE)
                 copied += 1
+        # 表示名 (roms/<機種>.json) も同期。無ければ retro-go 側からも消す
+        src_names, dst_names = names_file(folder), C.RETROGO_REPO / "roms" / f"{folder}.json"
+        if src_names.exists():
+            shutil.copy2(src_names, dst_names)
+        elif dst_names.exists():
+            _force_unlink(dst_names)
     log(f"ROM同期: コピー {copied} 件 / 削除 {removed} 件")

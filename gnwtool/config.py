@@ -9,6 +9,9 @@ APP_NAME = "G&W 改造ツール (ゼルダ / マリオ)"
 
 ROOT = Path(__file__).resolve().parent.parent
 ROMS = ROOT / "roms"
+# チート定義 (<機種>/<ROM名>.ggcodes 等)。ビルド時に同名 ROM の隣へコピーされる
+CHEATS = ROOT / "cheat_code"
+CHEAT_SUFFIXES = (".ggcodes", ".pceplus", ".mcf")
 TOOLS = ROOT / "tools"
 WORKSPACE = ROOT / "workspace"
 SETTINGS_FILE = ROOT / "settings.json"

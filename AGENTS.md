@@ -76,13 +76,27 @@ Retro-Go は常に `INTFLASH_BANK=2`（0x08100000）で、`GNW_TARGET` は機種
 実ビルドの結果（`scripts/extflash_size.sh` の出力と ELF のシンボル）と、バイト単位で一致することを確認済みです。
 
 - 使用量 = 固定データ + エミュレータのコード + ROM データ + カバー画像
-  - 固定データ = `align4K(4 + フォント + NES なら 40252 + SMS 系なら 8192)`。日本語フォント（CODEPAGE=932）は 212816。**機種（ゼルダ / マリオ）では変わりません**（以前「マリオはロゴ分 8KB 少ない」と書いたのは誤りでした）。
-  - エミュレータのコード: `EMU_CODE`（ELF の `.overlay_*` セクションで LMA が 0x9xxxxxxx のもの）。MSX と Amstrad は BIOS 等が無いと計測できないので推定値です。
+  - 固定データ = `align4K(4 + フォント + NES なら 40252 + SMS 系なら 8192 + MSX なら 262144)`。日本語フォント（CODEPAGE=932）は 212816。MSX の 262144 は YJK 色変換表 `msxYjkColor`、SMS 系の 8192 は `ColecoVision_BIOS` です。**機種（ゼルダ / マリオ）では変わりません**（以前「マリオはロゴ分 8KB 少ない」と書いたのは誤りでした）。
+  - エミュレータのコード: `EMU_CODE`（ELF の `.overlay_*` セクションで LMA が 0x9xxxxxxx のもの）。NES（fceumm）は、使うマッパーの種類だけコードが増えます（0 番以外 1 種類あたり平均 `NES_MAPPER_CODE`=1110）。Amstrad だけは計測できていないので推定値です。CHEAT_CODES=1 では PCE がおよそ 100 バイト増えます（見積もりには含めていません）。
+  - 2026-09-28 に、利用者の ROM 231 本（NES / PCE / SMS / MD / MSX / GW、カバーあり、日本語、チートあり）でビルドし、使用量の差は 100 バイトでした（容量は一致）。
   - ROM データ: 圧縮する機種は `parse_roms.py` と同じ LZMA 設定（FORMAT_ALONE、preset 6、dict 16KB、ヘッダ 13 バイトを除く）。GB は先頭バンク以外を 16KB ごとに圧縮します。SMS / GG / MD / COL / SG / GW は非圧縮です。
   - カバー: `write_covart` と同じ変換（RGB → LANCZOS で 128×96 → JPEG optimize）を venv の Pillow で行ったサイズ。`.img`（変換済み）はそのままのサイズ。
 - 容量 = 割り当て - セーブ領域（ROM ごとに 4KB 単位）- 4KB（設定）-（スクリーンショット有効なら 150KB）
 
 **Retro-Go を更新したら、この数値を計測し直すこと。** 方法: 機種ごとにダミー ROM を 1 本だけ入れてビルドし、`arm-none-eabi-objdump -t` の `__extflash_data_end__` / `__extflash_game_rom_start__` と、`-h` の `.overlay_*` のサイズを読みます。NES のダミーは iNES ヘッダが必要です（`nesmapper.py` が読むため）。
+
+## チート（cheat_code/ と scripts/nes_cheats.py）
+
+- `cheat_code/<機種>/<ROM名>.ggcodes|.pceplus|.mcf` は、`sync_roms()` で同名 ROM の隣へコピーされます（`roms` 側に同名があれば、そちらを優先）。
+- Retro-Go の NES チートは、ゲームジニー（6 / 8 文字）、`AAAA:VV`、`AAAA?CC:VV`、PAR を読みます（`main_nes_fceu.c` の `apply_cheat_code`）。1 本あたり最大 16 個です。`parse_roms.py` は `#` の行を読み飛ばしません。説明文は CODEPAGE で C ソースに書き出されるので、ASCII にしています。
+- `scripts/nes_cheats.py` は、libretro-database と martaaay のコードを集め、**手元の日本版 ROM と照合して**から書き出します。
+  - 8 文字コードは、比較値が PRG の該当番地（マッパーのバンク配置を考慮）にあるかで判定します。
+  - 6 文字コードは、置換元の命令が典型パターン（DEC→LDA など）の場合だけ、北米版のものも採用します。
+  - 日本版・日米共通版のファイルにある RAM コードは、出典を根拠に採用します。
+  - 同じゲームでも版が違うと一致しません（例: イー・アル・カンフー Rev 1.2 と Rev 1.4）。題名が不明な ROM は、候補のコードの一致数や、ROM 内の製品番号（例: `RC802 1.4`）で特定しました。
+- ファミコンチート集 Wiki（wikiwiki.jp）は、連続してアクセスすると 429 で拒否されます。
+- PCエンジンの `.pceplus` は ROM パッチだけです（`main_pce.c` の `pce_rom_full_patch`）。ヘッダ（`len & 0x1FFF`）を除き、北米版のビット反転を解読した **後** の ROM_DATA に当たります。書式は 1 コマンド = `[バイト数-1:4bit][番地:20bit][データ]` の 16 進です。
+- `scripts/pce_cheats.py` は、パッチ先の元の命令が典型的な改造の形（DEC/STA→LDA/LDX/CMP/NOP、分岐の変更、即値・書き込み先番地の変更）かどうかでゲームごとの一致率を出し、ランダムな位置での割合と比べます。判定の形が狭すぎると正しいコードを落とします（STA abs,Y→LDX abs,Y や DEC→CMP を加える前は、スプラッターハウスなどが落ちていました）。
 
 ## つまずきどころ
 
@@ -90,6 +104,8 @@ Retro-Go は常に `INTFLASH_BANK=2`（0x08100000）で、`GNW_TARGET` は機種
 - ROM が 1 本も無いと、`parse_roms.py` がエラーになります。
 - **MSX** は BIOS 7 ファイルを SHA1 で照合し、1 つでも違うと MSX は使えません。`PANASONICDISK_.rom` はビルド時に作られます（+16KB）。
 - **FDS** の BIOS は `nes_bios\disksys.rom`（8192 バイト）の固定名です。
+- **ROM・カバーのファイル名に日本語などがあると、ビルドが失敗します。** `parse_roms.py` は Python の `isalnum()` で記号を `_` に置き換えますが、日本語はそのまま残ります。そのため C 側の識別子が壊れます（932 では EUC-JP のバイト列で `stray '¥'`、1252 ではエンコードエラー）。表示名は `roms/<機種>.json`（romdef 形式の `name`）で付けられ、CODEPAGE=932 なら日本語にできます。このファイルは `sync_roms()` が retro-go 側へ同期します。
+- 読み取り専用属性の付いた ROM があると、コピー先も読み取り専用になり、次の同期で削除できません。同期ではコピー後に書き込み可能にしています。
 - `.md` はメガドライブの ROM の拡張子です（Markdown と間違えて除外しないこと）。`README.md` は名前で除外しています。
 - `.ggcodes` / `.pceplus` / `.mcf` はチート用の付属ファイルで、ROM ではありません。
 - 拡張子の大文字小文字は、Retro-Go 側で区別されません。

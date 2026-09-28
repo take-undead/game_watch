@@ -34,20 +34,23 @@ COMPRESS_LIMIT = {
 }
 
 # 機種ごとのエミュレータコード (外部フラッシュ上の overlay セクション, bytes)。実ビルドで計測。
-# msx/amstrad は BIOS 等が必要で計測できていないため推定値。
+# amstrad は計測できていないため推定値 (msx は実ROMでのビルドで計測済み)。
 EMU_CODE = {
     "nes": 62144, "gb": 48088, "sms": 66008, "gg": 66008, "col": 66008, "sg": 66008,
     "pce": 37924, "wsv": 23128, "md": 564616, "a7800": 91432, "gw": 21592,
-    "msx": 300 * 1024, "amstrad": 200 * 1024, "tama": 34968,
+    "msx": 176448, "amstrad": 200 * 1024, "tama": 34968,
 }
-EMU_CODE_ESTIMATED = {"msx", "amstrad"}
+EMU_CODE_ESTIMATED = {"amstrad"}
+# fceumm は入れた ROM が使うマッパーのコードだけを組み込む。0 番以外 1 種類あたりの平均 (実ビルド: 10 種で +11096)
+NES_MAPPER_CODE = 1110
 # 1つのoverlayを共有する機種
 EMU_GROUP = {"sms": "sms", "gg": "sms", "col": "sms", "sg": "sms"}
 
 # ROMデータの前に置かれる固定データ (フォント + 機種別のエミュレータ用データ)。
 # ROMデータはその後の 4KB 境界から始まる。機種ごとに1本ずつ入れた実ビルドで計測。
 FIXED_COMMON = 4  # extflash_magic_sign
-FIXED_EMU_DATA = {"nes": 40252, "sms": 8192}  # NES: パレット等 / SMS系(SMS,GG,SG,COL)共通
+# NES: パレット等 / SMS系: ColecoVision BIOS 等 / MSX: YJK 色変換表 (msxYjkColor)
+FIXED_EMU_DATA = {"nes": 40252, "sms": 8192, "msx": 262144}
 FONT_DATA = {"1252": 0, "932": 212816}  # 日本語フォント (CODEPAGE=932)
 CONFIG_FLASH = 4096
 SCREENSHOT_FLASH = ((320 * 240 * 2 + 4095) // 4096) * 4096
@@ -348,6 +351,10 @@ class Estimator:
                 est.saves += info.save
             if folder in EMU_CODE:
                 used_groups.add(EMU_GROUP.get(folder, folder))
+        mappers = {m for m in (self._mapper(r.path) for r in est.roms if r.folder == "nes" and not r.note)
+                   if m is not None}
+        if "nes" in used_groups:
+            est.emu_code += NES_MAPPER_CODE * len(mappers - {0})
         for g in used_groups:
             est.emu_code += EMU_CODE[g]
             est.emu_estimated |= g in EMU_CODE_ESTIMATED
@@ -383,7 +390,20 @@ class Estimator:
                 est.rom_data += extra
                 est.usage += extra
         self._check_fds(est, roms_root)
+        self._check_names(est, roms_root, settings)
         return est
+
+    @staticmethod
+    def _mapper(p: Path) -> Optional[int]:
+        """iNES ヘッダのマッパー番号 (.fds / .nsf は None)."""
+        if p.suffix.lower() != ".nes":
+            return None
+        try:
+            with open(p, "rb") as f:
+                h = f.read(16)
+        except OSError:
+            return None
+        return ((h[6] >> 4) | (h[7] & 0xF0)) if len(h) == 16 and h[:4] == b"NES" else None
 
     def _sha1(self, p: Path) -> str:
         st = p.stat()
@@ -410,6 +430,31 @@ class Estimator:
             elif p.name != name:
                 bad.append((name, f"の名前を {name} にしてください（今は {p.name}）"))
         return bad
+
+    @staticmethod
+    def _check_names(est: Estimate, roms_root: Path, settings: C.Settings) -> None:
+        """ファイル名に英数字以外 (日本語など) があるとビルドが失敗する。表示名の日本語は CODEPAGE=932 のみ可."""
+        bad = []
+        for folder, _, _ in C.ROM_SYSTEMS:
+            d = roms_root / folder
+            if d.is_dir():
+                bad += [f"{folder}/{p.name}" for p in d.iterdir() if p.is_file() and not p.name.isascii()]
+        if bad:
+            est.problems.append(f"ファイル名に日本語などが含まれています（ビルドが失敗します）: {', '.join(bad[:3])}"
+                                + (f" ほか {len(bad) - 3} 件" if len(bad) > 3 else "")
+                                + " — ④の「ファイル名を英数字に直す」で修正できます")
+        if settings.codepage != "932":
+            import json
+            jp = []
+            for folder, _, _ in C.ROM_SYSTEMS:
+                try:
+                    data = json.loads((roms_root / f"{folder}.json").read_text(encoding="utf-8"))
+                except (OSError, ValueError):
+                    continue
+                jp += [v.get("name", "") for v in data.values() if isinstance(v, dict) and not v.get("name", "").isascii()]
+            if jp:
+                est.problems.append(f"日本語の表示名が {len(jp)} 件あります。メニュー言語が英語だとビルドが失敗します"
+                                    "（③構成で「日本語 (932)」を選んでください）")
 
     @staticmethod
     def _check_fds(est: Estimate, roms_root: Path) -> None:

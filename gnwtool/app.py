@@ -546,6 +546,8 @@ class App(tk.Tk):
         ttk.Button(top, text="選択を削除", command=self.remove_roms).pack(side=tk.LEFT, padx=4)
         ttk.Button(top, text="カバーを編集…", command=self.edit_cover).pack(side=tk.LEFT)
         ttk.Button(top, text="カバー削除", command=self.remove_cover).pack(side=tk.LEFT, padx=4)
+        ttk.Button(top, text="表示名…", command=self.edit_display_name).pack(side=tk.LEFT)
+        self.fix_names_btn = ttk.Button(top, text="ファイル名を英数字に直す", command=self.fix_names)
         ttk.Button(top, text="再計算", command=lambda: self.request_estimate(force=True)).pack(side=tk.LEFT)
         self._btn(top, "試しビルドで正確に確認", self.do_exact_check, side=tk.RIGHT)
 
@@ -677,6 +679,12 @@ class App(tk.Tk):
         for r in est.roms:
             groups.setdefault(r.folder, []).append(r)
         cf = self.settings.coverflow
+        cheat_roms = 0
+        display_names: dict[str, dict] = {}
+        if any("日本語などが含まれています" in p for p in est.problems):
+            self.fix_names_btn.pack(side=tk.LEFT, padx=4)
+        else:
+            self.fix_names_btn.pack_forget()
         for folder, roms in groups.items():
             ncov = sum(1 for r in roms if r.cover)
             parent = tree.insert("", tk.END, iid=f"sys:{folder}", open=True,
@@ -687,6 +695,9 @@ class App(tk.Tk):
                                          f"{ncov}/{len(roms)} 枚", ""))
             for r in roms:
                 note = r.note or (f"圧縮 {r.stored * 100 // max(r.size, 1)}%" if r.compressed else "非圧縮")
+                if not r.note and (nch := T.cheat_count(r.path)):
+                    note += f" / チート{nch}"
+                    cheat_roms += 1
                 if not r.cover:
                     cov = "なし"
                 elif r.cover_bytes < 0:
@@ -694,7 +705,8 @@ class App(tk.Tk):
                     note = "カバー画像を読み込めません"
                 else:
                     cov = self._fmt(r.cover_bytes) if cf else f"({self._fmt(r.cover_bytes)})"
-                tree.insert(parent, tk.END, iid=str(r.path), text=r.path.name,
+                disp = display_names.setdefault(folder, T.load_names(folder)).get(rom_stem(r.path))
+                tree.insert(parent, tk.END, iid=str(r.path), text=r.path.name + (f"  →「{disp}」" if disp else ""),
                             values=(self._fmt(r.size), self._fmt(r.stored), self._fmt(r.save), cov, note),
                             tags=("warn",) if r.note or cov == "変換失敗" else ())
         if est.orphan_images:
@@ -730,6 +742,10 @@ class App(tk.Tk):
             cover_txt = f"\nカバー画像 {ncov} 枚あり — ③構成で「カバーアート表示」を有効にすると使われます（括弧内は有効時のサイズ）"
         elif self.settings.coverflow:
             cover_txt = f"\nカバー画像 {ncov}/{len(est.roms)} 本に設定済み（画像が無いROMはカバー無しで表示されます）"
+        if cheat_roms:
+            cover_txt += (f"\nチート定義のあるROM {cheat_roms} 本" + (
+                "（ゲーム選択画面の「Cheat Codes」で選べます）" if self.settings.cheat_codes else
+                " — ③構成で「チートコード対応」をオンにすると使えます"))
         self.detail_var.set(
             f"Retro-Go 用領域 {self._fmt(est.total)}（外部フラッシュ {self.settings.flash_mb}MB 構成）"
             f"　ROM {len([r for r in est.roms if not r.note])} 本 / 元サイズ合計 {self._fmt(sum(r.size for r in est.roms))}"
@@ -794,6 +810,37 @@ class App(tk.Tk):
             return None
         p = Path(sel[0])
         return p if p.suffix.lower() not in ALL_COVER_SUFFIXES else None
+
+    def edit_display_name(self) -> None:
+        from tkinter import simpledialog
+        rom = self._selected_rom()
+        if not rom:
+            messagebox.showinfo(C.APP_NAME, "表示名を変えるROMを一覧から選んでください。")
+            return
+        folder, stem = rom.parent.name, rom_stem(rom)
+        names = T.load_names(folder)
+        new = simpledialog.askstring(C.APP_NAME, (
+            f"{rom.name} のメニューでの表示名\n（空欄でファイル名のまま。日本語はメニュー言語が日本語のときだけ使えます）"),
+            initialvalue=names.get(stem, stem), parent=self)
+        if new is None:
+            return
+        new = new.strip()
+        if new and not new.isascii() and self.settings.codepage != "932":
+            messagebox.showwarning(C.APP_NAME, "日本語の表示名は、③構成でメニュー言語を「日本語 (932)」にしたときだけ使えます。")
+        names[stem] = new
+        T.save_names(folder, names)
+        self.log(f"表示名: {rom.name} → {new or '(ファイル名)'}")
+        self.request_estimate(force=False)
+        self._est_sig = None  # json の変更は監視対象外なので再計算させる
+
+    def fix_names(self) -> None:
+        if not messagebox.askyesno(C.APP_NAME, (
+                "日本語などを含むファイル名を英数字に付け替えます。\n"
+                "元の名前はメニューの表示名として残します（カバー画像・チートのファイル名も一緒に変更）。\n\n続けますか？")):
+            return
+        n = T.fix_non_ascii_names(self.log)
+        self.log(f"{n} 件のファイル名を修正しました")
+        self._est_sig = None
 
     def edit_cover(self, paste: bool = False) -> None:
         rom = self._selected_rom()

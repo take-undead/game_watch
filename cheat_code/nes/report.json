@@ -1,0 +1,4112 @@
+[
+ {
+  "rom": "BABEL",
+  "name": "バベルの塔",
+  "mapper": 4,
+  "written": 7,
+  "rejected": 0,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 7
+  },
+  "sources": [
+   "Babel no Tou (Japan)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "0085:00",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "trusted",
+    "0026:02",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "trusted",
+    "SKGKNP",
+    "Infinite Power",
+    "Infinite Power"
+   ],
+   [
+    "trusted",
+    "009F:00",
+    "Floor Modifier",
+    "Floor Modifier"
+   ],
+   [
+    "trusted",
+    "010F:00",
+    "Exit Always Open",
+    "Exit Always Open"
+   ],
+   [
+    "trusted",
+    "0203:01",
+    "Change Horizontal Location",
+    "Change Horizontal Location"
+   ],
+   [
+    "trusted",
+    "006C:C8",
+    "Change Vertical Location",
+    "Change Vertical Location"
+   ]
+  ]
+ },
+ {
+  "rom": "BALLOON_FIGHT",
+  "name": "バルーンファイト",
+  "mapper": 0,
+  "written": 1,
+  "rejected": 10,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 1
+  },
+  "sources": [
+   "Balloon Fight (Japan)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "PETYYO",
+    "Start With 9 Lives (Player 1)",
+    "Start With 9 Lives (Player 1)"
+   ]
+  ]
+ },
+ {
+  "rom": "BOKOSUKA",
+  "name": "ボコスカウォーズ",
+  "mapper": 0,
+  "written": 1,
+  "rejected": 0,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 1
+  },
+  "sources": [
+   "Bokosuka Wars (Japan)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "0700:1F",
+    "Infinite Energy",
+    "Infinite Energy"
+   ]
+  ]
+ },
+ {
+  "rom": "BOMBAERMAN",
+  "name": "ボンバーマン",
+  "mapper": 0,
+  "written": 15,
+  "rejected": 29,
+  "levels": {
+   "ok": 11,
+   "plausible": 0,
+   "trusted": 4
+  },
+  "sources": [
+   "Bomber Man (Japan)",
+   "Bomberman (USA) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "AANSGAPA",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "ATNIPASZ",
+    "Perfect Invincibility",
+    "Perfect Invincibility"
+   ],
+   [
+    "trusted",
+    "ENIKYT",
+    "Invulnerable To Explosions",
+    "Invulnerable To Explosions"
+   ],
+   [
+    "ok",
+    "SXOGAGVG",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "LVXGLLZA",
+    "Start With 99 Lives",
+    "Start With 99 Lives"
+   ],
+   [
+    "trusted",
+    "PEZGLU",
+    "Start With 9 Lives",
+    "Start With 9 Lives"
+   ],
+   [
+    "ok",
+    "EEKGALAP",
+    "Start With Max Bomb Power",
+    "Start With Max Bomb Power"
+   ],
+   [
+    "ok",
+    "SZKKATVG",
+    "Infinite Time",
+    "Infinite Time"
+   ],
+   [
+    "ok",
+    "PAEGLGAA",
+    "Start With Walk Through Bombs",
+    "Start With Walk Through Bombs"
+   ],
+   [
+    "ok",
+    "OXVGITSX",
+    "Immune To Bomb Blasts",
+    "Immune To Bomb Blasts"
+   ],
+   [
+    "ok",
+    "PEKGGLAA",
+    "Start w/ Walk Through Walls",
+    "Start With Walk Through Walls, Detonator And Inmune To Explosions"
+   ],
+   [
+    "ok",
+    "PANKTGAA",
+    "Don't Loose Items When You Die",
+    "Don't Loose Items When You Die"
+   ],
+   [
+    "ok",
+    "GXEKLGSA",
+    "No Lose Remote Controller",
+    "Never Lose Remote Controller After Pick-Up"
+   ],
+   [
+    "trusted",
+    "AAPGVL",
+    "Show Location Of Hidden Tiles",
+    "Show Location Of Hidden Tiles"
+   ],
+   [
+    "trusted",
+    "EYTIIA",
+    "Invulnerable To Enemies",
+    "Invulnerable To Enemies"
+   ]
+  ]
+ },
+ {
+  "rom": "B_TAKESHI",
+  "name": "たけしの挑戦状",
+  "mapper": 2,
+  "written": 1,
+  "rejected": 0,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 1
+  },
+  "sources": [
+   "Takeshi no Chousenjou (Japan)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "00E9:40",
+    "Infinite Energy",
+    "Infinite Energy"
+   ]
+  ]
+ },
+ {
+  "rom": "CHALENGER",
+  "name": "チャレンジャー",
+  "mapper": 0,
+  "written": 6,
+  "rejected": 0,
+  "levels": {
+   "ok": 6,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Challenger (Japan)",
+   "Challenger (Japan) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "SZOENTSA",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "PEXONYGE",
+    "Start w/ 9 lives (not 4)",
+    "Start With 9 Lives (Instead of 4)"
+   ],
+   [
+    "ok",
+    "YEXONYGE",
+    "Start With 15 Lives",
+    "Start With 15 Lives"
+   ],
+   [
+    "ok",
+    "POXONYGE",
+    "Start With 25 Lives",
+    "Start With 25 Lives"
+   ],
+   [
+    "ok",
+    "ZUXONYGA",
+    "Start With 50 Lives",
+    "Start With 50 Lives"
+   ],
+   [
+    "ok",
+    "SZSXGZVG",
+    "Infinite Lives",
+    "Infinite Lives"
+   ]
+  ]
+ },
+ {
+  "rom": "Clu Clu Land",
+  "name": "クルクルランド",
+  "mapper": 0,
+  "written": 16,
+  "rejected": 0,
+  "levels": {
+   "ok": 6,
+   "plausible": 1,
+   "trusted": 9
+  },
+  "sources": [
+   "Clu Clu Land (World)",
+   "Clu Clu Land (World) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "VTSKPLSA",
+    "Player 2 Has Only 1 Life",
+    "Player 2 Has Only 1 Life"
+   ],
+   [
+    "trusted",
+    "GXLILL",
+    "Both P Have Inf lives",
+    "Both Players Have Infinite Lives"
+   ],
+   [
+    "trusted",
+    "PAGKGL",
+    "Both Players Start With 1 Life",
+    "Both Players Start With 1 Life"
+   ],
+   [
+    "plausible",
+    "GZPGSL",
+    "Infinite Time",
+    "Infinite Time"
+   ],
+   [
+    "trusted",
+    "TEYIGL",
+    "Increase Extra Time",
+    "Increase Extra Time"
+   ],
+   [
+    "trusted",
+    "002F:99",
+    "Inf Time",
+    "Infinite Time (Ten's &amp; One's Digits)"
+   ],
+   [
+    "ok",
+    "AASIAYGA",
+    "Enemy Can Go Thru Gold Bars",
+    "Enemy Can Go Thru Gold Bars"
+   ],
+   [
+    "ok",
+    "IEVISZZA",
+    "Shoot More Rays",
+    "Shoot More Rays"
+   ],
+   [
+    "ok",
+    "AOVSOZAZ",
+    "Shoot Shorter Rays",
+    "Shoot Shorter Rays"
+   ],
+   [
+    "ok",
+    "ASVSOZAZ",
+    "Shoot Longer Rays",
+    "Shoot Longer Rays"
+   ],
+   [
+    "trusted",
+    "APGKGL",
+    "Both P Start w/ 10 lives",
+    "Both Players Start With 10 Lives"
+   ],
+   [
+    "trusted",
+    "YLKKGL",
+    "Both P Start w/ Lots lives",
+    "Both Players Start With Lots Of Lives"
+   ],
+   [
+    "trusted",
+    "0080:05",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "trusted",
+    "002E:09",
+    "Inf Time (Hundred's Digit)",
+    "Infinite Time (Hundred's Digit)"
+   ],
+   [
+    "ok",
+    "SXEIYTOP",
+    "No enemies",
+    "No enemies"
+   ],
+   [
+    "trusted",
+    "003F:99",
+    "Have 99 Lasts",
+    "Have 99 Lasts"
+   ]
+  ]
+ },
+ {
+  "rom": "DEVIL_WORLD",
+  "name": "デビルワールド",
+  "mapper": 0,
+  "written": 1,
+  "rejected": 0,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 1
+  },
+  "sources": [
+   "Devil World (Japan) (Rev 1)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "LTTGNG",
+    "Start with 99 Lives",
+    "Start with 99 Lives"
+   ]
+  ]
+ },
+ {
+  "rom": "DIG_DUG",
+  "name": "ディグダグ",
+  "mapper": 0,
+  "written": 8,
+  "rejected": 0,
+  "levels": {
+   "ok": 4,
+   "plausible": 0,
+   "trusted": 4
+  },
+  "sources": [
+   "Dig Dug (Japan)",
+   "Dig Dug (Japan) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "ATKTGKOZ",
+    "Invincibility Against Enemies",
+    "Invincibility Against Enemies"
+   ],
+   [
+    "ok",
+    "AVOTGEOZ",
+    "Invincibility Against Rocks",
+    "Invincibility Against Rocks"
+   ],
+   [
+    "ok",
+    "SXUKTIVG",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "trusted",
+    "0060:03",
+    "Infinite Lives (Player 1&2)",
+    "Infinite Lives (Player 1&2)"
+   ],
+   [
+    "trusted",
+    "PAZGTK",
+    "Start With 9 Lives",
+    "Start With 9 Lives"
+   ],
+   [
+    "ok",
+    "OXXGLUPX",
+    "Skip Title Screen Scroll",
+    "Skip Title Screen Scroll"
+   ],
+   [
+    "trusted",
+    "006E:01",
+    "Stage Round Select",
+    "Stage Round Select"
+   ],
+   [
+    "trusted",
+    "PAPGLG",
+    "Start On Round ??",
+    "Start On Round ??"
+   ]
+  ]
+ },
+ {
+  "rom": "DIG_DUG2",
+  "name": "ディグダグII",
+  "mapper": 0,
+  "written": 10,
+  "rejected": 7,
+  "levels": {
+   "ok": 9,
+   "plausible": 0,
+   "trusted": 1
+  },
+  "sources": [
+   "Dig Dug II (Japan)",
+   "Dig Dug II - Trouble in Paradise (USA) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "LKSGGVGE+AVOIYESZ",
+    "Invincible Against Enemies And",
+    "Invincible Against Enemies And Flames"
+   ],
+   [
+    "ok",
+    "PEETOPLA",
+    "Start w/ 1 Life (Both P)",
+    "Start With 1 Life (Both Players)"
+   ],
+   [
+    "ok",
+    "AEETOPLE",
+    "Start w/ 8 lives (Both P)",
+    "Start With 8 Lives (Both Players)"
+   ],
+   [
+    "ok",
+    "SZXLSVVK",
+    "No Lose lives From Touching",
+    "Never Lose Lives From Touching Water"
+   ],
+   [
+    "ok",
+    "GZETIZEI",
+    "Instant Inflate And Explode",
+    "Instant Inflate And Explode"
+   ],
+   [
+    "ok",
+    "OZNYPUPX+ZANYZLLA",
+    "Turbo Speed",
+    "Turbo Speed"
+   ],
+   [
+    "ok",
+    "SXVKLVVK",
+    "No Lose lives From Fygar's",
+    "Never Lose Lives From Fygar's Flame"
+   ],
+   [
+    "ok",
+    "SXNIPEVK",
+    "No Lose lives From Hitting",
+    "Never Lose Lives From Hitting Enemies"
+   ],
+   [
+    "trusted",
+    "02C9:03",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "YYXLSVVK",
+    "Touch Water To Get Lots of",
+    "Touch Water To Get Lots of Lives"
+   ]
+  ]
+ },
+ {
+  "rom": "DONKEEY_KONG",
+  "name": "ドンキーコング",
+  "mapper": 0,
+  "written": 4,
+  "rejected": 0,
+  "levels": {
+   "ok": 3,
+   "plausible": 0,
+   "trusted": 1
+  },
+  "sources": [
+   "Donkey Kong (Japan)",
+   "Donkey Kong (World) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "SXNGOZVG",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "PENKNPLA",
+    "Start With 1 Life",
+    "Start With 1 Life"
+   ],
+   [
+    "ok",
+    "PENKNPLE",
+    "Start With 9 Lives",
+    "Start With 9 Lives"
+   ],
+   [
+    "trusted",
+    "PEZISA",
+    "Gain Hammer After Jumping",
+    "Gain Hammer After Jumping"
+   ]
+  ]
+ },
+ {
+  "rom": "DONKEY3",
+  "name": "ドンキーコング3",
+  "mapper": 0,
+  "written": 16,
+  "rejected": 1,
+  "levels": {
+   "ok": 10,
+   "plausible": 2,
+   "trusted": 4
+  },
+  "sources": [
+   "Donkey Kong 3 (World)",
+   "Donkey Kong 3 (World) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "AVVGELEY",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "SZNKOPVI",
+    "Start With Infinite Lives",
+    "Start With Infinite Lives"
+   ],
+   [
+    "ok",
+    "PEEGITLA",
+    "Start With 1 Life",
+    "Start With 1 Life"
+   ],
+   [
+    "ok",
+    "PEEGITLE",
+    "Start With 9 Lives",
+    "Start With 9 Lives"
+   ],
+   [
+    "ok",
+    "ZAOSZAPA",
+    "Normal Spray More Powerful",
+    "Normal Spray More Powerful"
+   ],
+   [
+    "ok",
+    "ZEKKGYEE",
+    "Reduce The Time For Pros",
+    "Reduce The Time For Pros"
+   ],
+   [
+    "plausible",
+    "SZLKIT",
+    "Infinite Time",
+    "Infinite Time"
+   ],
+   [
+    "ok",
+    "AAKVZALL",
+    "Normal Bees Explode",
+    "Normal Bees Explode"
+   ],
+   [
+    "trusted",
+    "0085:00+0086:00",
+    "Score Modifier",
+    "Score Modifier"
+   ],
+   [
+    "ok",
+    "TEXKVGLA",
+    "Speeding Stanley",
+    "Speeding Stanley"
+   ],
+   [
+    "ok",
+    "ZLOSLAAA",
+    "Normal Spray Longer",
+    "Normal Spray Longer"
+   ],
+   [
+    "ok",
+    "AASSYPPA",
+    "Spray Cuts Through Baddies",
+    "Spray Cuts Through Baddies"
+   ],
+   [
+    "trusted",
+    "POSTIT",
+    "Some Enemies Get Stuck At Top",
+    "Some Enemies Get Stuck At The Top Of The Screen"
+   ],
+   [
+    "trusted",
+    "IONYOU",
+    "Music Faster Than Normal",
+    "The Music Is Faster Than Normal"
+   ],
+   [
+    "plausible",
+    "SLYKOP",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "trusted",
+    "0092:09",
+    "Fake Infinite Lives",
+    "Fake Infinite Lives"
+   ]
+  ]
+ },
+ {
+  "rom": "DONKEY_JR",
+  "name": "ドンキーコングJR.",
+  "mapper": 0,
+  "written": 4,
+  "rejected": 16,
+  "levels": {
+   "ok": 4,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Donkey Kong Jr. (Japan)",
+   "Donkey Kong Jr. (World) (Rev 1)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "ATEIIKOZ",
+    "Invincibility Against Enemies",
+    "Invincibility Against Enemies"
+   ],
+   [
+    "ok",
+    "ATEIIKOZ+AAKIOZLA",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "PAUIEZIA",
+    "Cannot Die If Falling From",
+    "Cannot Die If Falling From A High Platform"
+   ],
+   [
+    "ok",
+    "AAKIOZLA",
+    "Can Fall Onto Platforms",
+    "Can Fall Onto Platforms"
+   ]
+  ]
+ },
+ {
+  "rom": "DRACULA",
+  "name": "悪魔城ドラキュラ",
+  "mapper": 2,
+  "written": 16,
+  "rejected": 10,
+  "levels": {
+   "ok": 15,
+   "plausible": 0,
+   "trusted": 1
+  },
+  "sources": [
+   "Akumajou Dracula (Japan)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "AAVTUOLA+AEKOXLIP",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "OZOGZLVK",
+    "Infinite lives",
+    "Infinite lives"
+   ],
+   [
+    "ok",
+    "PAVGSPGA",
+    "Start with 1 life",
+    "Start with 1 life"
+   ],
+   [
+    "ok",
+    "AAVGSPGE",
+    "Start with 8 lives",
+    "Start with 8 lives"
+   ],
+   [
+    "ok",
+    "KXXSXZKA",
+    "Clock doesn't use power hearts",
+    "Clock doesn't use power hearts"
+   ],
+   [
+    "ok",
+    "KXVISZKA",
+    "Weapons don't use power hearts",
+    "Weapons don't use power hearts"
+   ],
+   [
+    "ok",
+    "AXEGUPIE",
+    "Start with 40 power hearts",
+    "Start with 40 power hearts"
+   ],
+   [
+    "ok",
+    "SXUZGAAX",
+    "Infinite time",
+    "Infinite time"
+   ],
+   [
+    "ok",
+    "AEELATPA",
+    "Start with rapid-fire shots",
+    "Start with rapid-fire shots"
+   ],
+   [
+    "ok",
+    "KXVVPYSA",
+    "Can't add or spend hearts",
+    "Can't add or spend hearts"
+   ],
+   [
+    "ok",
+    "SXXSXZKA",
+    "Infinite Hearts",
+    "Infinite Hearts"
+   ],
+   [
+    "trusted",
+    "04E5:00",
+    "Disable Medusa Heads",
+    "Disable Medusa Heads"
+   ],
+   [
+    "ok",
+    "ASEGUPIA",
+    "Start with 80 power hearts",
+    "Start with 80 power hearts"
+   ],
+   [
+    "ok",
+    "SXKTAYSE",
+    "Infinite health",
+    "Infinite health"
+   ],
+   [
+    "ok",
+    "LVEGUPIA",
+    "Start with 99 power hearts",
+    "Start with 99 power hearts"
+   ],
+   [
+    "ok",
+    "GZUKLUSE",
+    "Keep weapons after losing a",
+    "Keep weapons after losing a life"
+   ]
+  ]
+ },
+ {
+  "rom": "DRAEMON",
+  "name": "ドラえもん",
+  "mapper": 66,
+  "written": 0,
+  "rejected": 0,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [],
+  "codes": []
+ },
+ {
+  "rom": "DRAGON_QUEST",
+  "name": "ドラゴンクエスト",
+  "mapper": 3,
+  "written": 8,
+  "rejected": 22,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 8
+  },
+  "sources": [
+   "wikiwiki.jp/nnnes1 (ファミコンチート集 Wiki)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "00E2:00",
+    "Enemy dies in one hit",
+    "Enemy dies in one hit"
+   ],
+   [
+    "trusted",
+    "00C5:FF",
+    "HP 255",
+    "HP 255"
+   ],
+   [
+    "trusted",
+    "00C6:FF",
+    "MP 255",
+    "MP 255"
+   ],
+   [
+    "trusted",
+    "00BC:FF+00BD:FF",
+    "Gold 65535",
+    "Gold 65535"
+   ],
+   [
+    "trusted",
+    "00BA:FF+00BB:FF",
+    "EXP 65535 (max level)",
+    "EXP 65535 (max level)"
+   ],
+   [
+    "trusted",
+    "00BF:06",
+    "Keys x6",
+    "Keys x6"
+   ],
+   [
+    "trusted",
+    "00C0:06",
+    "Herbs x6",
+    "Herbs x6"
+   ],
+   [
+    "trusted",
+    "0094:FF+0095:FF",
+    "Fewer encounters",
+    "Fewer encounters"
+   ]
+  ]
+ },
+ {
+  "rom": "DRAGON_QUEST2",
+  "name": "ドラゴンクエストII",
+  "mapper": 2,
+  "written": 6,
+  "rejected": 60,
+  "levels": {
+   "ok": 6,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "martaaay (USA)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "AXKLOIIE",
+    "Start with 40 strength points",
+    "Start with 40 strength points"
+   ],
+   [
+    "ok",
+    "ASKLOIIA",
+    "Start with 80 strength points",
+    "Start with 80 strength points"
+   ],
+   [
+    "ok",
+    "ZUKUUIAZ",
+    "Start with 50 hit points",
+    "Start with 50 hit points"
+   ],
+   [
+    "ok",
+    "LVKUUIAZ",
+    "Start with 99 hit points",
+    "Start with 99 hit points"
+   ],
+   [
+    "ok",
+    "POKUOIZE",
+    "Start with 25 strength points",
+    "Start with 25 strength points"
+   ],
+   [
+    "ok",
+    "ZUKUOIZA",
+    "Start with 50 strength points",
+    "Start with 50 strength points"
+   ]
+  ]
+ },
+ {
+  "rom": "DRAGON_QUEST3",
+  "name": "ドラゴンクエストIII",
+  "mapper": 1,
+  "written": 5,
+  "rejected": 36,
+  "levels": {
+   "ok": 5,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "martaaay (USA)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "PASPZPAA",
+    "King gives mega-gold",
+    "King gives mega-gold"
+   ],
+   [
+    "ok",
+    "LTVUIZPA",
+    "Wizard starts with increased",
+    "Wizard starts with increased strength and/or attack power"
+   ],
+   [
+    "ok",
+    "VYVUIZPE",
+    "Wizard starts with greatly",
+    "Wizard starts with greatly increased strength and/or attack power"
+   ],
+   [
+    "ok",
+    "ZTVUTZLA",
+    "Pilgrim starts with increased",
+    "Pilgrim starts with increased strength and/or attack power"
+   ],
+   [
+    "ok",
+    "VNELZZLE",
+    "Pilgrim starts with greatly",
+    "Pilgrim starts with greatly increased luck"
+   ]
+  ]
+ },
+ {
+  "rom": "DRAGON_SLAYER4",
+  "name": "ドラゴンスレイヤーIV",
+  "mapper": 4,
+  "written": 3,
+  "rejected": 31,
+  "levels": {
+   "ok": 3,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Legacy of the Wizard (USA) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "GZKVUASA",
+    "Shopkeeper Forgets To Charge",
+    "Shopkeeper Forgets To Charge"
+   ],
+   [
+    "ok",
+    "AAOAOYZL",
+    "1st Item In Shop Free",
+    "The First Item In The Shop Is Free (You Can Use This Code With The Codes Below If You'd Like)"
+   ],
+   [
+    "ok",
+    "AAOAUNYI",
+    "2nd Item In Shop Free",
+    "The Second Item In The Shop Is Free (You Can Use This Code With The Codes Below If You'd Like)"
+   ]
+  ]
+ },
+ {
+  "rom": "DRUAGA",
+  "name": "ドルアーガの塔",
+  "mapper": 0,
+  "written": 8,
+  "rejected": 0,
+  "levels": {
+   "ok": 1,
+   "plausible": 2,
+   "trusted": 5
+  },
+  "sources": [
+   "Druaga no Tou (Japan)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "OXNUATSX+OZELLGSX",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "plausible",
+    "SZLOOT",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "plausible",
+    "SUAPOS",
+    "Infinite Time",
+    "Infinite Time"
+   ],
+   [
+    "trusted",
+    "00C0:00",
+    "Stage &quot;Floor&quot",
+    "Stage &quot;Floor&quot; Modifier"
+   ],
+   [
+    "trusted",
+    "0099:40",
+    "Doors Always Opened",
+    "Doors Always Opened"
+   ],
+   [
+    "trusted",
+    "00E5:01",
+    "Treasure Instantly Appears",
+    "Treasure Instantly Appears"
+   ],
+   [
+    "trusted",
+    "AAASZZ",
+    "Doors Open Without Keys",
+    "Doors Open Without Keys"
+   ],
+   [
+    "trusted",
+    "AAGSII",
+    "Have Treasure",
+    "Have Treasure"
+   ]
+  ]
+ },
+ {
+  "rom": "GALAGA",
+  "name": "ギャラガ",
+  "mapper": 0,
+  "written": 12,
+  "rejected": 6,
+  "levels": {
+   "ok": 12,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Galaga (Japan)",
+   "Galaga - Demons of Death (USA) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "ATETKOOZ",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "XVOKVUXK",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "PAKKKILA",
+    "Start With 1 Life",
+    "Start With 1 Life"
+   ],
+   [
+    "ok",
+    "TAKKKILA",
+    "Start With 6 Lives",
+    "Start With 6 Lives"
+   ],
+   [
+    "ok",
+    "OXKKESPX",
+    "Skip Title Scroll",
+    "Skip Title Scroll"
+   ],
+   [
+    "ok",
+    "GXOKOTEI",
+    "Play Challenge Stages Only",
+    "Play Challenge Stages Only"
+   ],
+   [
+    "ok",
+    "AVNTKEOZ",
+    "Keep Double Ship After Being",
+    "Keep Double Ship After Being Destroyed"
+   ],
+   [
+    "ok",
+    "SSVGILEA+PZKGNISO",
+    "Start With Double Ship",
+    "Start With Double Ship"
+   ],
+   [
+    "ok",
+    "PXVIIEOK+AEVITEAZ",
+    "Always Get Perfect Bonus",
+    "Always Get Perfect Bonus"
+   ],
+   [
+    "ok",
+    "NYSSPPGV",
+    "Get 25500 pts If You Get",
+    "Get 25500 Points If You Get Perfect In Bonus"
+   ],
+   [
+    "ok",
+    "GGVSGXOX+EZVSIZPE+UGVSTZSE",
+    "Press Start For Extra Life",
+    "Press Start For Extra Life"
+   ],
+   [
+    "ok",
+    "KPNIPZEA+GANIZZIA+AAVSIZPA",
+    "Press Start For Next Wave",
+    "Press Start For Next Wave"
+   ]
+  ]
+ },
+ {
+  "rom": "GARIUS2",
+  "name": "魔城伝説II 大魔司教ガリウス",
+  "mapper": 2,
+  "written": 2,
+  "rejected": 0,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 2
+  },
+  "sources": [
+   "Majou Densetsu II - Daimashikyou Galious (Japan)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "00B2:08",
+    "Infinite Energy Man",
+    "Infinite Energy Man"
+   ],
+   [
+    "trusted",
+    "00B3:08",
+    "Infinite Energy Woman",
+    "Infinite Energy Woman"
+   ]
+  ]
+ },
+ {
+  "rom": "GRADIUS",
+  "name": "グラディウス",
+  "mapper": 3,
+  "written": 10,
+  "rejected": 11,
+  "levels": {
+   "ok": 10,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Gradius (Japan)",
+   "Gradius (World) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "GKOKPPSX+NEOKZOLP+XKOKLOOG",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "TAEAILLA",
+    "Start w/ 6 lives - Both P",
+    "Start With 6 Lives - Both Players"
+   ],
+   [
+    "ok",
+    "PAEAILLE",
+    "Start w/ 9 lives - Both P",
+    "Start With 9 Lives - Both Players"
+   ],
+   [
+    "ok",
+    "SLVPZYVI",
+    "Infinite Lives - Both Players",
+    "Infinite Lives - Both Players"
+   ],
+   [
+    "ok",
+    "YGEPXUZS+YGEPVUIL",
+    "Never Lose Weapons",
+    "Never Lose Weapons"
+   ],
+   [
+    "ok",
+    "SXEGGPVG",
+    "Infinite Force Field Barrier",
+    "Infinite Force Field Barrier"
+   ],
+   [
+    "ok",
+    "PESPEXZA+SUSOEZVI",
+    "Pause the game and press Up to",
+    "Pause the game and press Up to acquire Missiles, 2 Options, and Force Field Barrier"
+   ],
+   [
+    "ok",
+    "AENELZLA",
+    "Both Players Start With 1 Life",
+    "Both Players Start With 1 Life"
+   ],
+   [
+    "ok",
+    "IENELZLA",
+    "Both P Start w/ 6 lives",
+    "Both Players Start With 6 Lives"
+   ],
+   [
+    "ok",
+    "AENELZLE",
+    "Both P Start w/ 9 lives",
+    "Both Players Start With 9 Lives"
+   ]
+  ]
+ },
+ {
+  "rom": "GRADIUS2",
+  "name": "グラディウスII",
+  "mapper": 25,
+  "written": 16,
+  "rejected": 0,
+  "levels": {
+   "ok": 7,
+   "plausible": 0,
+   "trusted": 9
+  },
+  "sources": [
+   "Gradius II (Japan)",
+   "Gradius II (Japan) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "VPANGI",
+    "Never Die",
+    "Never Die"
+   ],
+   [
+    "ok",
+    "SUUTTYVI",
+    "Infinite Lives - Both Players",
+    "Infinite Lives - Both Players"
+   ],
+   [
+    "ok",
+    "EISVYGEY",
+    "Enable Start w/ 30 lives Cheat",
+    "Enable Start with 30 Lives Cheat"
+   ],
+   [
+    "trusted",
+    "0056:05",
+    "Infinite Lives (Player 1)",
+    "Infinite Lives (Player 1)"
+   ],
+   [
+    "trusted",
+    "0501:05",
+    "Have 6th Powerup Both P",
+    "Have 6th Powerup Both Players (Shield)"
+   ],
+   [
+    "trusted",
+    "008B:01",
+    "Have 3rd Power-Up (Both P)",
+    "Have 3rd Power-Up (Both Players)"
+   ],
+   [
+    "trusted",
+    "008A:03",
+    "Have 4th Power-Up (Both P)",
+    "Have 4th Power-Up (Both Players)"
+   ],
+   [
+    "ok",
+    "AVVLVUOZ",
+    "Shots Pierce Through Enemies",
+    "Shots Pierce Through Enemies"
+   ],
+   [
+    "trusted",
+    "04FB:00",
+    "Set Weapon Modifier",
+    "Set Weapon Modifier"
+   ],
+   [
+    "trusted",
+    "0503:01",
+    "Set Missiles",
+    "Set Missiles"
+   ],
+   [
+    "ok",
+    "AEUVTZLA",
+    "Skip Intro Screen",
+    "Skip Intro Screen"
+   ],
+   [
+    "trusted",
+    "0500:07",
+    "Set Max. Speed",
+    "Set Max. Speed"
+   ],
+   [
+    "ok",
+    "ATENGIAZ",
+    "Invinicibility",
+    "Invinicibility"
+   ],
+   [
+    "ok",
+    "EUXUNLEY+ZUULEUTP",
+    "Enemies Die Automatically",
+    "Enemies Die Automatically"
+   ],
+   [
+    "ok",
+    "PXKLOUIA+GZEUKGEL",
+    "Hit Anywhere",
+    "Hit Anywhere"
+   ],
+   [
+    "trusted",
+    "0057:03",
+    "Infinite Lives (Player 2)",
+    "Infinite Lives (Player 2)"
+   ]
+  ]
+ },
+ {
+  "rom": "HOKUTO1",
+  "name": "北斗の拳",
+  "mapper": 3,
+  "written": 3,
+  "rejected": 0,
+  "levels": {
+   "ok": 3,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Hokuto no Ken (Japan)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "SXVATYAX",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "SZKAAZVI",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "SZXAXISA",
+    "Infinite Energy",
+    "Infinite Energy"
+   ]
+  ]
+ },
+ {
+  "rom": "HOKUTO2",
+  "name": "北斗の拳2",
+  "mapper": 2,
+  "written": 4,
+  "rejected": 12,
+  "levels": {
+   "ok": 4,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Hokuto no Ken 2 (Japan)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "SZSKTTAX",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "SXSKAPVG",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "SZOGUISA",
+    "Infinite Energy",
+    "Infinite Energy"
+   ],
+   [
+    "ok",
+    "SZKTLYVG",
+    "Freeze Time",
+    "Freeze Time"
+   ]
+  ]
+ },
+ {
+  "rom": "HYDLIDE",
+  "name": "ハイドライド・スペシャル",
+  "mapper": 0,
+  "written": 0,
+  "rejected": 9,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [],
+  "codes": []
+ },
+ {
+  "rom": "KAGE_D",
+  "name": "影の伝説",
+  "mapper": 3,
+  "written": 2,
+  "rejected": 3,
+  "levels": {
+   "ok": 2,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Legend of Kage, The (USA) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "SXVALZVG",
+    "Both P Have Inf lives",
+    "Both Players Have Infinite Lives"
+   ],
+   [
+    "ok",
+    "KEOATAVA",
+    "Both P Start w/ 28 lives",
+    "Both Players Start With 28 Lives"
+   ]
+  ]
+ },
+ {
+  "rom": "KANFU",
+  "name": "イー・アル・カンフー",
+  "mapper": 0,
+  "written": 5,
+  "rejected": 0,
+  "levels": {
+   "ok": 3,
+   "plausible": 0,
+   "trusted": 2
+  },
+  "sources": [
+   "Yie Ar Kung-Fu (Japan) (Game Genie)",
+   "Yie Ar Kung-Fu (Japan) (Rev 1.4)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "AAXIOTIZ",
+    "One Hit Kills",
+    "One Hit Kills"
+   ],
+   [
+    "ok",
+    "SUOIUIVT",
+    "Infinite Health",
+    "Infinite Health"
+   ],
+   [
+    "trusted",
+    "00DB:00",
+    "Infinite Energy",
+    "Infinite Energy"
+   ],
+   [
+    "ok",
+    "EYUSOGEI+EYKSOGEI",
+    "Hit Anywhere",
+    "Hit Anywhere"
+   ],
+   [
+    "trusted",
+    "0068:00",
+    "Opponet Modifier",
+    "Opponet  Modifier"
+   ]
+  ]
+ },
+ {
+  "rom": "KEKYOKU",
+  "name": "けっきょく南極大冒険",
+  "mapper": 0,
+  "written": 10,
+  "rejected": 0,
+  "levels": {
+   "ok": 5,
+   "plausible": 0,
+   "trusted": 5
+  },
+  "sources": [
+   "Kekkyoku Nankyoku Daibouken (Japan)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "AVOTYZSZ",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "SZKNALVT",
+    "Infinite Time",
+    "Infinite Time"
+   ],
+   [
+    "trusted",
+    "00A9:09",
+    "Infinite Time (One's Digit)",
+    "Infinite Time (One's Digit)"
+   ],
+   [
+    "trusted",
+    "00AA:09",
+    "Infinite Time (Ten's Digit)",
+    "Infinite Time (Ten's Digit)"
+   ],
+   [
+    "trusted",
+    "00D5:00",
+    "Win Level Now",
+    "Win Level Now"
+   ],
+   [
+    "ok",
+    "GAUGZVIA+SXXTZASA+SXOVGASA",
+    "Go Always At Max Speed",
+    "Go Always At Max Speed"
+   ],
+   [
+    "ok",
+    "AAVKTNPA",
+    "Distance Left To Goal",
+    "Distance Left To The Goal Decreases Dramatically"
+   ],
+   [
+    "ok",
+    "AOVTIAAE+SEVVAAVT",
+    "Touch Small Pond To Become",
+    "Touch A Small Pond To Become Invulnerable To Obstacles"
+   ],
+   [
+    "trusted",
+    "00AB:09",
+    "Inf Time (Hundred's Digit)",
+    "Infinite Time (Hundred's Digit)"
+   ],
+   [
+    "trusted",
+    "00AC:09",
+    "Inf Time (Thousand's Digit)",
+    "Infinite Time (Thousand's Digit)"
+   ]
+  ]
+ },
+ {
+  "rom": "LIPURU_ILAND",
+  "name": "リップルアイランド",
+  "mapper": 1,
+  "written": 0,
+  "rejected": 0,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [],
+  "codes": []
+ },
+ {
+  "rom": "LOAD_RUNNER",
+  "name": "ロードランナー",
+  "mapper": 0,
+  "written": 6,
+  "rejected": 1,
+  "levels": {
+   "ok": 6,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Lode Runner (Japan)",
+   "Lode Runner (USA, Japan) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "GXOKIGEY+GXOGTGEY+GZNGLGEY",
+    "Become Invincible",
+    "Become Invincible"
+   ],
+   [
+    "ok",
+    "PPNGZKXO+POOGIKXO+POOKGKXO",
+    "Invincible",
+    "Invincible"
+   ],
+   [
+    "ok",
+    "GZNGYIVG",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "PASKLTIA",
+    "Start With 1 Life",
+    "Start With 1 Life"
+   ],
+   [
+    "ok",
+    "ZASKLTIE",
+    "Start With 10 Lives",
+    "Start With 10 Lives"
+   ],
+   [
+    "ok",
+    "APOIGPAL",
+    "Moonwalk!",
+    "Moonwalk!"
+   ]
+  ]
+ },
+ {
+  "rom": "MACROSS",
+  "name": "超時空要塞マクロス",
+  "mapper": 0,
+  "written": 5,
+  "rejected": 0,
+  "levels": {
+   "ok": 4,
+   "plausible": 0,
+   "trusted": 1
+  },
+  "sources": [
+   "Choujikuu Yousai - Macross (Japan)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "SXEKTLVK",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "SZUKLISA",
+    "Infinite Power",
+    "Infinite Power"
+   ],
+   [
+    "trusted",
+    "00EB:30",
+    "Infinite Energy",
+    "Infinite Energy"
+   ],
+   [
+    "ok",
+    "SXSGXPSA",
+    "Don't Lose Speed When Morphing",
+    "Don't Lose Speed When Morphing"
+   ],
+   [
+    "ok",
+    "SXUIAIVK",
+    "Infinite Rockets",
+    "Infinite Rockets"
+   ]
+  ]
+ },
+ {
+  "rom": "MAKAIMURA",
+  "name": "魔界村",
+  "mapper": 2,
+  "written": 13,
+  "rejected": 7,
+  "levels": {
+   "ok": 13,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Makaimura (Japan)",
+   "martaaay (USA)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "APOVPEAU",
+    "Invincible Against Enemies And",
+    "Invincible Against Enemies And Running Out Of Time"
+   ],
+   [
+    "ok",
+    "SXVKKEVK",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "ZENGIILE",
+    "Start With 9 Lives",
+    "Start With 9 Lives"
+   ],
+   [
+    "ok",
+    "SZXKSOVK",
+    "Inf lives For P1 In Two P Mode",
+    "Infinite Lives For Player 1 In Two Player Mode"
+   ],
+   [
+    "ok",
+    "SXOITUVK",
+    "Stop timer",
+    "Stop timer"
+   ],
+   [
+    "ok",
+    "AASIAAAY+AIVGOTEY",
+    "Always Enable Stage Select",
+    "Always Enable Stage Select"
+   ],
+   [
+    "ok",
+    "EYVSSYVG+EYNSSYVG",
+    "Walk Through Walls",
+    "Walk Through Walls"
+   ],
+   [
+    "ok",
+    "STESUNON+KYESKNSY",
+    "Jump A Bit Higher",
+    "Jump A Bit Higher"
+   ],
+   [
+    "ok",
+    "STESUNON+GPESKNSY",
+    "Jump Much Higher",
+    "Jump Much Higher"
+   ],
+   [
+    "ok",
+    "PTESOPIV+YZOIOOZA",
+    "Everything Worth 1000 pts",
+    "Everything Is Worth 1000 Points"
+   ],
+   [
+    "ok",
+    "GAUSSYYA",
+    "Slower Descent",
+    "Slower Descent"
+   ],
+   [
+    "ok",
+    "LEVKYLAA+LEOKLKNY",
+    "Always Continue After Game",
+    "Always Continue After Game Over"
+   ],
+   [
+    "ok",
+    "SZKGVOVK",
+    "Inf lives For P2 In Two P Mode",
+    "Infinite Lives For Player 2 In Two Player Mode"
+   ]
+  ]
+ },
+ {
+  "rom": "MAPPY",
+  "name": "マッピー",
+  "mapper": 0,
+  "written": 9,
+  "rejected": 1,
+  "levels": {
+   "ok": 7,
+   "plausible": 1,
+   "trusted": 1
+  },
+  "sources": [
+   "Mappy (Japan)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "GXEIOZEY+ASSSXZEI",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "plausible",
+    "SZTGNZ",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "trusted",
+    "PATKKE",
+    "Start With 9 Lives",
+    "Start With 9 Lives"
+   ],
+   [
+    "ok",
+    "GZEKUZVG",
+    "Infinite Time Bonus Stages",
+    "Infinite Time Bonus Stages"
+   ],
+   [
+    "ok",
+    "SXKYTEOO",
+    "Disable Trap Floors",
+    "Disable Trap Floors"
+   ],
+   [
+    "ok",
+    "GZENZLVT",
+    "Disable &quot;Hurry!&quot",
+    "Disable &quot;Hurry!&quot; Timer"
+   ],
+   [
+    "ok",
+    "GXSNPPEL+GXKNTPEI",
+    "Collect Red Ballons Anywhere",
+    "Collect Red Ballons Anywhere In Bonus Stage"
+   ],
+   [
+    "ok",
+    "GZNTLTEI+GZNVTTEL",
+    "Collect Items Anywhere In",
+    "Collect Items Anywhere In Normal Stage"
+   ],
+   [
+    "ok",
+    "SZOVZXVS+SZOSNKVS",
+    "Ropes No Change Color When",
+    "Ropes Don't Change Color When Jumping On Them"
+   ]
+  ]
+ },
+ {
+  "rom": "MEIKYU",
+  "name": "迷宮組曲",
+  "mapper": 3,
+  "written": 2,
+  "rejected": 12,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 2
+  },
+  "sources": [
+   "Meikyuu Kumikyoku - Milon no Daibouken (Japan)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "00B2:20",
+    "Infinite Energy",
+    "Infinite Energy"
+   ],
+   [
+    "trusted",
+    "00A3:09",
+    "Infinite Money",
+    "Infinite Money"
+   ]
+  ]
+ },
+ {
+  "rom": "META_FIGHT",
+  "name": "超惑星戦記メタファイト",
+  "mapper": 1,
+  "written": 7,
+  "rejected": 11,
+  "levels": {
+   "ok": 6,
+   "plausible": 0,
+   "trusted": 1
+  },
+  "sources": [
+   "Chou-Wakusei Senki - MetaFight (Japan)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "ALSGGGVG",
+    "Infinite lives",
+    "Infinite lives"
+   ],
+   [
+    "trusted",
+    "040D:FF",
+    "infinite health",
+    "infinite health"
+   ],
+   [
+    "ok",
+    "EAUPVATA",
+    "Infinite homing missiles",
+    "Infinite homing missiles"
+   ],
+   [
+    "ok",
+    "LVEGPZAA",
+    "Start with 99 of each weapon",
+    "Start with 99 of each weapon"
+   ],
+   [
+    "ok",
+    "ZLSGYKTA",
+    "Die and you'll see the ending",
+    "Die and you'll see the ending of the game"
+   ],
+   [
+    "ok",
+    "PEOKGZAA+AUOKYZSA",
+    "Some kind of debug mode",
+    "Some kind of debug mode"
+   ],
+   [
+    "ok",
+    "EKNYUYAA",
+    "Enable Debug Features",
+    "Enable Debug Features"
+   ]
+  ]
+ },
+ {
+  "rom": "NATU-MILK",
+  "name": "ナッツ&ミルク",
+  "mapper": 0,
+  "written": 3,
+  "rejected": 0,
+  "levels": {
+   "ok": 2,
+   "plausible": 0,
+   "trusted": 1
+  },
+  "sources": [
+   "Nuts _ Milk (Japan)",
+   "Nuts _ Milk (Japan) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "SZVSLTSA",
+    "Invincible",
+    "Invincible"
+   ],
+   [
+    "trusted",
+    "003C:01+0057:00",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "SZNSXLVG",
+    "Infinite Lives",
+    "Infinite Lives"
+   ]
+  ]
+ },
+ {
+  "rom": "OOKAMI",
+  "name": "戦場の狼",
+  "mapper": 94,
+  "written": 0,
+  "rejected": 6,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [],
+  "codes": []
+ },
+ {
+  "rom": "Okhotsk ni Kiyu",
+  "name": "オホーツクに消ゆ",
+  "mapper": 1,
+  "written": 0,
+  "rejected": 0,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [],
+  "codes": []
+ },
+ {
+  "rom": "PACMAN",
+  "name": "パックマン",
+  "mapper": 0,
+  "written": 5,
+  "rejected": 9,
+  "levels": {
+   "ok": 3,
+   "plausible": 0,
+   "trusted": 2
+  },
+  "sources": [
+   "Pac-Man (Japan) (En)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "GEXILXAA",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "SXEGUGVG",
+    "Infinite Lives - Both Players",
+    "Infinite Lives - Both Players"
+   ],
+   [
+    "trusted",
+    "0067:06",
+    "P1 Infinite Lives",
+    "P1 Infinite Lives"
+   ],
+   [
+    "trusted",
+    "0077:06",
+    "P2 Infinite Lives",
+    "P2 Infinite Lives"
+   ],
+   [
+    "ok",
+    "SXNILAVT",
+    "Infinite Power Pill Time",
+    "Infinite Power Pill Time"
+   ]
+  ]
+ },
+ {
+  "rom": "ROMANCIA",
+  "name": "ロマンシア",
+  "mapper": 1,
+  "written": 2,
+  "rejected": 0,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 2
+  },
+  "sources": [
+   "Romancia (Japan)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "0153:14",
+    "Infinite Energy",
+    "Infinite Energy"
+   ],
+   [
+    "trusted",
+    "0001:17",
+    "Sound Test",
+    "Sound Test"
+   ]
+  ]
+ },
+ {
+  "rom": "SANMA",
+  "name": "さんまの名探偵",
+  "mapper": 4,
+  "written": 0,
+  "rejected": 0,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [],
+  "codes": []
+ },
+ {
+  "rom": "SARAMANDA",
+  "name": "沙羅曼蛇",
+  "mapper": 73,
+  "written": 9,
+  "rejected": 16,
+  "levels": {
+   "ok": 4,
+   "plausible": 0,
+   "trusted": 5
+  },
+  "sources": [
+   "Salamander (Japan)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "LEKGAPGA+EEUKLOEA",
+    "Invincibility - Both Players",
+    "Invincibility - Both Players"
+   ],
+   [
+    "ok",
+    "SUNKYAVI",
+    "Infinite Lives - Both Players",
+    "Infinite Lives - Both Players"
+   ],
+   [
+    "ok",
+    "TOKTNZLE",
+    "Start w/ 30 lives - Both P",
+    "Start with 30 Lives - Both Players"
+   ],
+   [
+    "trusted",
+    "0034:09",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "trusted",
+    "0068:02",
+    "Start with/keep Powerups",
+    "Start with/keep Powerups"
+   ],
+   [
+    "trusted",
+    "0076:02",
+    "Start with/keep Missiles",
+    "Start with/keep Missiles"
+   ],
+   [
+    "trusted",
+    "0070:08",
+    "Speed",
+    "Speed"
+   ],
+   [
+    "ok",
+    "GXNGIPSP",
+    "Keep pods after death",
+    "Keep pods after death"
+   ],
+   [
+    "trusted",
+    "0074:20",
+    "Untouchable",
+    "Untouchable"
+   ]
+  ]
+ },
+ {
+  "rom": "SKYKID",
+  "name": "スカイキッド",
+  "mapper": 4,
+  "written": 14,
+  "rejected": 0,
+  "levels": {
+   "ok": 10,
+   "plausible": 0,
+   "trusted": 4
+  },
+  "sources": [
+   "Sky Kid (USA)",
+   "Sky Kid (USA, Japan) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "00BB:00",
+    "Invincible (Player 1)",
+    "Invincible (Player 1)"
+   ],
+   [
+    "trusted",
+    "00CB:00",
+    "Invincible (Player 2)",
+    "Invincible (Player 2)"
+   ],
+   [
+    "ok",
+    "SXEKGZVI",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "PANYNZLA",
+    "Start w/ 1 Life (Both P)",
+    "Start With 1 Life (Both Players)"
+   ],
+   [
+    "ok",
+    "TANYNZLA",
+    "Start w/ 6 lives (Both P)",
+    "Start With 6 Lives (Both Players)"
+   ],
+   [
+    "ok",
+    "IAVNNZPA+GAVNUZAA",
+    "Start At Level 5",
+    "Start At Level 5"
+   ],
+   [
+    "ok",
+    "ZAVNNZPE+PAVNUZAE",
+    "Start At Level 10",
+    "Start At Level 10"
+   ],
+   [
+    "ok",
+    "APVNNZPA+YAVNUZAE",
+    "Start At Level 15",
+    "Start At Level 15"
+   ],
+   [
+    "ok",
+    "AAOKIZPA",
+    "Shoot More Bullets",
+    "Shoot More Bullets"
+   ],
+   [
+    "ok",
+    "PANYNZLE",
+    "Start w/ 9 lives (Both P)",
+    "Start With 9 Lives (Both Players)"
+   ],
+   [
+    "ok",
+    "VANNVZSA",
+    "P1 Has More lives Than P2",
+    "Player 1 Has More Lives Than Player 2"
+   ],
+   [
+    "trusted",
+    "0066:09",
+    "Infinite Lives P1 (Baron)",
+    "Infinite Lives P1 (Baron)"
+   ],
+   [
+    "trusted",
+    "0067:09",
+    "Infinite Lives P2 (Max)",
+    "Infinite Lives P2 (Max)"
+   ],
+   [
+    "ok",
+    "GPVNNZPA+LPVNUZAA",
+    "Start At Level 20",
+    "Start At Level 20"
+   ]
+  ]
+ },
+ {
+  "rom": "SOLOMON",
+  "name": "ソロモンの鍵",
+  "mapper": 3,
+  "written": 7,
+  "rejected": 3,
+  "levels": {
+   "ok": 7,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Solomon's Key (USA, Europe) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "GZOXLAAX",
+    "Indestructible Fireball",
+    "Indestructible Fireball"
+   ],
+   [
+    "ok",
+    "GZUPTOSE",
+    "Start On Last Level Reached",
+    "Start On Last Level Reached"
+   ],
+   [
+    "ok",
+    "VTUPTOSE",
+    "Start On Next Level",
+    "Start On Next Level"
+   ],
+   [
+    "ok",
+    "SZUOPOSE+UPUOLPGA+PAUPIPAE",
+    "Start On Level 10",
+    "Start On Level 10"
+   ],
+   [
+    "ok",
+    "SZUOPOSE+UPUOLPGA+LPUPIPAA",
+    "Start On Level 20",
+    "Start On Level 20"
+   ],
+   [
+    "ok",
+    "SZUOPOSE+UPUOLPGA+IPUPIPAE",
+    "Start On Level 30",
+    "Start On Level 30"
+   ],
+   [
+    "ok",
+    "SZUOPOSE+UPUOLPGA+YZUPIPAA",
+    "Start On Level 40",
+    "Start On Level 40"
+   ]
+  ]
+ },
+ {
+  "rom": "SPALTANX",
+  "name": "スパルタンX",
+  "mapper": 0,
+  "written": 16,
+  "rejected": 11,
+  "levels": {
+   "ok": 8,
+   "plausible": 0,
+   "trusted": 8
+  },
+  "sources": [
+   "Kung Fu (World) (Game Genie)",
+   "Spartan X (Japan)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "ATXXSVAP",
+    "Invincible Against Common And",
+    "Invincibility Against Common And Dwarf Guys Grabs"
+   ],
+   [
+    "ok",
+    "AVKGGUSA",
+    "Invincible Against Jars",
+    "Invincibility Against Jars, Snakes, Dragons, Floating Balls, Butterflies And Dragon Fire"
+   ],
+   [
+    "ok",
+    "ATNGSUOZ",
+    "Invincible Against Small Balls",
+    "Invincibility Against Small Balls"
+   ],
+   [
+    "trusted",
+    "005C:0A",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "trusted",
+    "SUAAXA",
+    "Both P Have Inf lives",
+    "Both Players Have Infinite Lives"
+   ],
+   [
+    "trusted",
+    "PEZELG",
+    "Both Players Have 1 Life",
+    "Both Players Have 1 Life"
+   ],
+   [
+    "trusted",
+    "04A6:30",
+    "Infinite Energy",
+    "Infinite Energy"
+   ],
+   [
+    "trusted",
+    "04A6:1E",
+    "Infinite Health",
+    "Infinite Health"
+   ],
+   [
+    "trusted",
+    "020B:53",
+    "FAKE Infinite Health",
+    "FAKE Infinite Health"
+   ],
+   [
+    "ok",
+    "ATOGANAL",
+    "Infinite Time",
+    "Infinite Time"
+   ],
+   [
+    "trusted",
+    "0056:00",
+    "Level Select",
+    "Level Select"
+   ],
+   [
+    "ok",
+    "AVVGKOOZ",
+    "Dwarves Don't Jump Anymore",
+    "Dwarves Don't Jump Anymore"
+   ],
+   [
+    "ok",
+    "AEVKEYZA",
+    "1st Boss Doesn't Attack",
+    "1st Boss Doesn't Attack"
+   ],
+   [
+    "ok",
+    "SXVKOYSA",
+    "1st Boss Doesn't Counter-Attac",
+    "1st Boss Doesn't Counter-Attack And 3rd Boss Doesn't Attack"
+   ],
+   [
+    "ok",
+    "SUOLXVVN",
+    "Guy That Throws Knives Doesn't",
+    "Guy That Throws Knives Doesn't Do It Anymore"
+   ],
+   [
+    "trusted",
+    "GZLATG",
+    "P1 Start w/ Last Lv Reached",
+    "Player 1 Start At Last Level Reached"
+   ]
+  ]
+ },
+ {
+  "rom": "SPELUNKER",
+  "name": "スペランカー",
+  "mapper": 70,
+  "written": 10,
+  "rejected": 0,
+  "levels": {
+   "ok": 7,
+   "plausible": 1,
+   "trusted": 2
+  },
+  "sources": [
+   "Spelunker (Japan)",
+   "Spelunker (USA, Japan) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "ATKPAIAZ+TUEEYKNN+GXOAPKIX",
+    "Become Invincible",
+    "Become Invincible"
+   ],
+   [
+    "ok",
+    "IXOOPSVK",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "AANATPZA",
+    "Start With 1 Life",
+    "Start With 1 Life"
+   ],
+   [
+    "ok",
+    "IANATPZA",
+    "Start With 6 Lives",
+    "Start With 6 Lives"
+   ],
+   [
+    "plausible",
+    "SXPPES",
+    "Infinite Bombs",
+    "Infinite Bombs"
+   ],
+   [
+    "trusted",
+    "VKTPOU",
+    "Pickup One Bomb To Have Max",
+    "Pickup One Bomb To Have The Maximum Amount"
+   ],
+   [
+    "ok",
+    "SNEAKEVN+EANEEAAA",
+    "Jump A Little Higher",
+    "Jump A Little Higher"
+   ],
+   [
+    "ok",
+    "AEXAYTAP",
+    "Become Invisible!",
+    "Become Invisible!"
+   ],
+   [
+    "ok",
+    "AANATPZE",
+    "Start With 9 Lives",
+    "Start With 9 Lives"
+   ],
+   [
+    "trusted",
+    "LTYATP",
+    "Start With 99 Lives",
+    "Start With 99 Lives"
+   ]
+  ]
+ },
+ {
+  "rom": "STAR_FOACE",
+  "name": "スターフォース",
+  "mapper": 0,
+  "written": 2,
+  "rejected": 8,
+  "levels": {
+   "ok": 2,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Star Force (Japan)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "IEOINTVT",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "AAXKVAVG",
+    "Infinite Lives",
+    "Infinite Lives"
+   ]
+  ]
+ },
+ {
+  "rom": "STAR_SOLDIER",
+  "name": "スターソルジャー",
+  "mapper": 3,
+  "written": 11,
+  "rejected": 0,
+  "levels": {
+   "ok": 6,
+   "plausible": 0,
+   "trusted": 5
+  },
+  "sources": [
+   "Star Soldier (USA)",
+   "Star Soldier (USA, Japan) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "ATSPENOZ+OXEPVTSX+OXKPUTSX",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "SZUPEOGK",
+    "One Hit Kills",
+    "One Hit Kills"
+   ],
+   [
+    "trusted",
+    "0040:37",
+    "Invincible",
+    "Invincible (Except Touching Mother Brain)"
+   ],
+   [
+    "ok",
+    "SZOEAPVG",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "GXVPXTVG",
+    "Infinite Shield Power",
+    "Infinite Shield Power"
+   ],
+   [
+    "ok",
+    "ZAOOOYIE+ZENOGLIE",
+    "Double Shield Power",
+    "Double Shield Power"
+   ],
+   [
+    "trusted",
+    "003C:04+003D:05",
+    "Fully Powered 5-Way Shot",
+    "Fully Powered 5-Way Shot"
+   ],
+   [
+    "ok",
+    "PEOAPPAA",
+    "Start With Laser",
+    "Start With Laser"
+   ],
+   [
+    "trusted",
+    "0036:00",
+    "Fake Stage Select",
+    "Fake Stage Select"
+   ],
+   [
+    "trusted",
+    "0027:FF",
+    "1 hit kills all flying enemies",
+    "1 hit kills all flying enemies per screen"
+   ],
+   [
+    "trusted",
+    "0027:00",
+    "Spawn Certain Enemy Forever",
+    "Spawn A Certain Enemy Forever Modifier"
+   ]
+  ]
+ },
+ {
+  "rom": "STAR_WARS",
+  "name": "スター・ウォーズ (ナムコ)",
+  "mapper": 4,
+  "written": 16,
+  "rejected": 0,
+  "levels": {
+   "ok": 6,
+   "plausible": 0,
+   "trusted": 10
+  },
+  "sources": [
+   "Star Wars (Japan) (Namco)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "AANSYIPA",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "ATNIGSSZ",
+    "Alternate Invincibility",
+    "Alternate Invincibility"
+   ],
+   [
+    "trusted",
+    "018E:7E",
+    "Invincible [Must Activate Blue",
+    "Invincible [Must Activate Blue Sphere Icon First]"
+   ],
+   [
+    "ok",
+    "SXSZAUVK",
+    "Nfinite Lives",
+    "Nfinite Lives"
+   ],
+   [
+    "ok",
+    "ZASYAYLE",
+    "Start With 9 Lives",
+    "Start With 9 Lives"
+   ],
+   [
+    "trusted",
+    "0143:03",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "trusted",
+    "0170:60",
+    "Freeze Death Star Trench Timer",
+    "Freeze Death Star Trench Timer"
+   ],
+   [
+    "trusted",
+    "0187:09",
+    "Inf Lightsaber Icon Shots",
+    "Infinite Lightsaber Icon Shots [Must Activate Lightsaber]"
+   ],
+   [
+    "trusted",
+    "017F:01",
+    "Enable Lightsaber Lasers",
+    "Enable Lightsaber Lasers"
+   ],
+   [
+    "trusted",
+    "007D:03",
+    "Inf Shields In Falcon Stages",
+    "Infinite Shields In Falcon Stages"
+   ],
+   [
+    "trusted",
+    "0144:00",
+    "Level Modifier",
+    "Level Modifier"
+   ],
+   [
+    "trusted",
+    "0181:01",
+    "Super Jump Midair",
+    "Super Jump Midair"
+   ],
+   [
+    "trusted",
+    "0182:01",
+    "Speed Up",
+    "Speed Up"
+   ],
+   [
+    "ok",
+    "LTKYLYAA",
+    "Start w/ 99 Crystals And All",
+    "Start With 99 Crystals And All The Friends"
+   ],
+   [
+    "ok",
+    "SZVUEKSE",
+    "Infinite Crystals",
+    "Infinite Crystals"
+   ],
+   [
+    "trusted",
+    "0143:05",
+    "Inf X-Wings In Death Star",
+    "Unlimited X-Wings In Death Star Trench"
+   ]
+  ]
+ },
+ {
+  "rom": "S_MARIO",
+  "name": "スーパーマリオブラザーズ",
+  "mapper": 0,
+  "written": 16,
+  "rejected": 26,
+  "levels": {
+   "ok": 16,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Super Mario Bros. (World)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "VPKUGUOE+ESVVKTEY",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "ENOUNGEI",
+    "Invincibility Star Stay's Put",
+    "Invincibility Star Stay's Put"
+   ],
+   [
+    "ok",
+    "ESOUUGEY",
+    "Invincible Star Does Not",
+    "Invincibility Star Does Not Bounce, Firepower Plant Moves Like Mushroom Powerups"
+   ],
+   [
+    "ok",
+    "AAVOAZPA",
+    "Big Mario After Loosing a Life",
+    "Big Mario After Loosing a Life"
+   ],
+   [
+    "ok",
+    "SKSOPOVK",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "ASSOGPAP",
+    "Allow More than 127 Lives",
+    "Allow More than 127 Lives"
+   ],
+   [
+    "ok",
+    "ASKLOGEP",
+    "Powerups Keep Rising",
+    "Powerups Keep Rising"
+   ],
+   [
+    "ok",
+    "ESVSKYEY",
+    "Powerups Don't Fall",
+    "Powerups Don't Fall"
+   ],
+   [
+    "ok",
+    "ENOLUGEI",
+    "Powerups Don't Move",
+    "Powerups Don't Move"
+   ],
+   [
+    "ok",
+    "OLNASNOO",
+    "Freeze Time",
+    "Freeze Time"
+   ],
+   [
+    "ok",
+    "AGXOIZZA",
+    "Time Running Out Hurry Up",
+    "Time Running Out Hurry Up Music"
+   ],
+   [
+    "ok",
+    "AUELYNAO",
+    "Timer Counts Slower",
+    "Timer Counts Slower"
+   ],
+   [
+    "ok",
+    "ZAXOTPGA+ZAXOYPLA",
+    "Timer Starts At 200",
+    "Timer Starts At 200"
+   ],
+   [
+    "ok",
+    "AEVLYTTA",
+    "Boomerang Fireball",
+    "Boomerang Fireball"
+   ],
+   [
+    "ok",
+    "VENITZYA",
+    "Allways Get Fireworks",
+    "Allways Get Fireworks"
+   ],
+   [
+    "ok",
+    "ZEXAGIAA+SXUAPSSE+AAVPZAPA",
+    "Start as Fire Mario",
+    "Start as Fire Mario"
+   ]
+  ]
+ },
+ {
+  "rom": "S_MARIO3",
+  "name": "スーパーマリオブラザーズ3",
+  "mapper": 4,
+  "written": 16,
+  "rejected": 14,
+  "levels": {
+   "ok": 16,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "martaaay (USA)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "ELKZYVEK",
+    "Power Jumps",
+    "Power Jumps"
+   ],
+   [
+    "ok",
+    "EZKZYVEK",
+    "Super Power Jumps",
+    "Super Power Jumps"
+   ],
+   [
+    "ok",
+    "EAKZYVEK",
+    "Mega Power Jumps",
+    "Mega Power Jumps"
+   ],
+   [
+    "ok",
+    "ZEUXKGAA",
+    "Start the game as Fire Mario",
+    "Start the game as Fire Mario"
+   ],
+   [
+    "ok",
+    "UXKXGLIA",
+    "Start and stay as Fire Mario",
+    "Start and stay as Fire Mario"
+   ],
+   [
+    "ok",
+    "PEUZUGAA",
+    "Start on World 2",
+    "Start on World 2"
+   ],
+   [
+    "ok",
+    "ZEUZUGAA",
+    "Start on World 3",
+    "Start on World 3"
+   ],
+   [
+    "ok",
+    "LEUZUGAA",
+    "Start on World 4",
+    "Start on World 4"
+   ],
+   [
+    "ok",
+    "OXKZELSX",
+    "Super speed running",
+    "Super speed running"
+   ],
+   [
+    "ok",
+    "YPXXLVGE",
+    "Mario can re-use items again",
+    "Mario (not Luigi) can re-use items again and again"
+   ],
+   [
+    "ok",
+    "LEUXKGAA",
+    "Start the game as Raccoon",
+    "Start the game as Raccoon Mario"
+   ],
+   [
+    "ok",
+    "GEUXKGAA",
+    "Start the game as Frog Mario",
+    "Start the game as Frog Mario"
+   ],
+   [
+    "ok",
+    "SZUEXNSO",
+    "Restore powers after playing",
+    "Restore powers after playing an action scene (e.g. if you were \"Fire Mario\" on the map screen, then entered an action scene, died or changed to \"Frog Mario,\"you would return to the map scene as \"Fire Mario\")"
+   ],
+   [
+    "ok",
+    "GEUZUGAA",
+    "Start on World 5",
+    "Start on World 5"
+   ],
+   [
+    "ok",
+    "IEUZUGAA",
+    "Start on World 6",
+    "Start on World 6"
+   ],
+   [
+    "ok",
+    "TEUZUGAA",
+    "Start on World 7",
+    "Start on World 7"
+   ]
+  ]
+ },
+ {
+  "rom": "S_XEVIOUS",
+  "name": "スーパーゼビウス ガンプの謎",
+  "mapper": 4,
+  "written": 6,
+  "rejected": 0,
+  "levels": {
+   "ok": 2,
+   "plausible": 0,
+   "trusted": 4
+  },
+  "sources": [
+   "Super Xevious - Gump no Nazo (Japan)",
+   "Super Xevious - Gump no Nazo (Japan) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "0078:00",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "SZKNELVG",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "YOVZYTZY+GEVXPTPA+ESNZZTEY",
+    "Password Menu",
+    "Password Menu"
+   ],
+   [
+    "trusted",
+    "0078:08",
+    "Weapons Modifier",
+    "Weapons Modifier"
+   ],
+   [
+    "trusted",
+    "008F:03",
+    "Always Have Shield",
+    "Always Have Shield (Invincibility)"
+   ],
+   [
+    "trusted",
+    "0611:00+0612:00+0613:00",
+    "Ship Palette Modifiers",
+    "Ship Palette Modifiers"
+   ]
+  ]
+ },
+ {
+  "rom": "TATAKAI",
+  "name": "闘いの挽歌",
+  "mapper": 2,
+  "written": 3,
+  "rejected": 10,
+  "levels": {
+   "ok": 3,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Tatakai no Banka (Japan) (Game Genie)",
+   "martaaay (USA)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "SZKKVXVK",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "SZKSZXVK",
+    "Infinite Health",
+    "Infinite Health"
+   ],
+   [
+    "ok",
+    "GXEPGKVS",
+    "Freeze timer",
+    "Freeze timer"
+   ]
+  ]
+ },
+ {
+  "rom": "TERRA_CRESTA",
+  "name": "テラクレスタ",
+  "mapper": 2,
+  "written": 4,
+  "rejected": 9,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 4
+  },
+  "sources": [
+   "Terra Cresta (USA)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "0078:00+0278:01",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "trusted",
+    "0020:09",
+    "Infinite Lives P1",
+    "Infinite Lives P1"
+   ],
+   [
+    "trusted",
+    "0021:09",
+    "Infinite Lives P2",
+    "Infinite Lives P2"
+   ],
+   [
+    "trusted",
+    "006F:00",
+    "Shot Modifier",
+    "Shot Modifier"
+   ]
+  ]
+ },
+ {
+  "rom": "THEXDER",
+  "name": "テグザー",
+  "mapper": 0,
+  "written": 8,
+  "rejected": 0,
+  "levels": {
+   "ok": 2,
+   "plausible": 1,
+   "trusted": 5
+  },
+  "sources": [
+   "Thexder (Japan)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "SXEPSISA",
+    "Infinite Energy",
+    "Infinite Energy"
+   ],
+   [
+    "plausible",
+    "SZYPNI+SZYPSI",
+    "Infinite Health (Alt)",
+    "Infinite Health (Alt)"
+   ],
+   [
+    "trusted",
+    "00D8:C8",
+    "Infinite Health",
+    "Infinite Health"
+   ],
+   [
+    "trusted",
+    "0074:BE",
+    "Level Select",
+    "Level Select"
+   ],
+   [
+    "trusted",
+    "00B0:FF",
+    "Super Jump Midair",
+    "Super Jump Midair"
+   ],
+   [
+    "trusted",
+    "NYZOEK",
+    "Jump In Mid-Air",
+    "Jump In Mid-Air"
+   ],
+   [
+    "ok",
+    "SZEOKAVG",
+    "Infinite Shield",
+    "Infinite Shield"
+   ],
+   [
+    "trusted",
+    "00AD:80",
+    "Remain as Ship Always",
+    "Remain as Ship Always"
+   ]
+  ]
+ },
+ {
+  "rom": "WARPMAN",
+  "name": "ワープマン",
+  "mapper": 0,
+  "written": 1,
+  "rejected": 0,
+  "levels": {
+   "ok": 0,
+   "plausible": 1,
+   "trusted": 0
+  },
+  "sources": [
+   "Warpman (Japan)"
+  ],
+  "codes": [
+   [
+    "plausible",
+    "SUTIOS",
+    "Invulnerability (Blinking)",
+    "Invulnerability (Blinking)"
+   ]
+  ]
+ },
+ {
+  "rom": "WRECKING_CREW",
+  "name": "レッキングクルー",
+  "mapper": 0,
+  "written": 16,
+  "rejected": 1,
+  "levels": {
+   "ok": 5,
+   "plausible": 2,
+   "trusted": 9
+  },
+  "sources": [
+   "Wrecking Crew (World)",
+   "Wrecking Crew (World) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "ATNKYZAZ",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "plausible",
+    "SXGXGL",
+    "Infinite Lives (Player 1)",
+    "Infinite Lives (Player 1)"
+   ],
+   [
+    "plausible",
+    "SXIXZL",
+    "Infinite Lives (Player 2)",
+    "Infinite Lives (Player 2)"
+   ],
+   [
+    "trusted",
+    "PELXYP",
+    "Start w/ 1 Life (Both P)",
+    "Start With 1 Life (Both Players)"
+   ],
+   [
+    "trusted",
+    "0055:7F",
+    "Freeze monsters  freeze timer",
+    "Freeze monsters, freeze timer"
+   ],
+   [
+    "trusted",
+    "03DD:FF",
+    "Fireball timer",
+    "Fireball timer "
+   ],
+   [
+    "ok",
+    "VVUXGPSA",
+    "Start With Golden Hammer",
+    "Start With Golden Hammer"
+   ],
+   [
+    "trusted",
+    "004C:01",
+    "Die to Complete Stage",
+    "Die to Complete Stage"
+   ],
+   [
+    "ok",
+    "SANXYLSZ",
+    "Instant Win",
+    "Instant Win"
+   ],
+   [
+    "ok",
+    "SZXILXSO+SXKILOSO",
+    "Annoying Guy Doesn't Bother",
+    "Annoying Guy Doesn't Bother You"
+   ],
+   [
+    "ok",
+    "ASSGPTEY+AISLOGEI+AEKKTTYG",
+    "Always Can Climb Up",
+    "Always Can Climb Up"
+   ],
+   [
+    "trusted",
+    "PELXYO",
+    "Start w/ 10 lives (Both P)",
+    "Start With 10 Lives (Both Players)"
+   ],
+   [
+    "trusted",
+    "YELXYO",
+    "Start w/ 15 lives (Both P)",
+    "Start With 15 Lives (Both Players)"
+   ],
+   [
+    "trusted",
+    "ENLXYO",
+    "250 Lives",
+    "250 Lives"
+   ],
+   [
+    "trusted",
+    "0090:09",
+    "Infinite Lives P1",
+    "Infinite Lives P1"
+   ],
+   [
+    "trusted",
+    "0091:09",
+    "Infinite Lives P2",
+    "Infinite Lives P2"
+   ]
+  ]
+ },
+ {
+  "rom": "XEVIUS",
+  "name": "ゼビウス",
+  "mapper": 0,
+  "written": 5,
+  "rejected": 7,
+  "levels": {
+   "ok": 2,
+   "plausible": 1,
+   "trusted": 2
+  },
+  "sources": [
+   "Xevious (Japan) (En)",
+   "Xevious (Japan) (En) (Rev 1)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "AAXTNGVT+AAEGNYVT",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "plausible",
+    "SZZTNG",
+    "Invulnerable To Planes",
+    "Invulnerable To Planes"
+   ],
+   [
+    "ok",
+    "GEXYPNVA+AEXYZYVG",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "trusted",
+    "EVGZGV",
+    "Start With 8 Lives",
+    "Start With 8 Lives"
+   ],
+   [
+    "trusted",
+    "ASANAT",
+    "View The Map Mode",
+    "View The Map Mode"
+   ]
+  ]
+ },
+ {
+  "rom": "YS1",
+  "name": "イース",
+  "mapper": 1,
+  "written": 16,
+  "rejected": 0,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 16
+  },
+  "sources": [
+   "Ys (Japan)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "0358:FF",
+    "Infinite HP",
+    "Infinite HP"
+   ],
+   [
+    "trusted",
+    "051A:0F",
+    "Set Power Ring",
+    "Set Power Ring"
+   ],
+   [
+    "trusted",
+    "051C:0F",
+    "Set Timer Ring",
+    "Set Timer Ring"
+   ],
+   [
+    "trusted",
+    "04FA:0F",
+    "Set Short Sword",
+    "Set Short Sword"
+   ],
+   [
+    "trusted",
+    "04FB:0F",
+    "Set Long Sword",
+    "Set Long Sword"
+   ],
+   [
+    "trusted",
+    "04FD:0F",
+    "Set Silver Sword",
+    "Set Silver Sword"
+   ],
+   [
+    "trusted",
+    "035F:0F+035E:FF",
+    "Set Infinite Gold F",
+    "Set Infinite Gold    F"
+   ],
+   [
+    "trusted",
+    "035B:0F+035A:FF",
+    "Set Max. Exp. F",
+    "Set Max. Exp.  F"
+   ],
+   [
+    "trusted",
+    "052E:0F",
+    "Set Gold Pedestal",
+    "Set Gold Pedestal"
+   ],
+   [
+    "trusted",
+    "04FC:0F",
+    "Set Talwar",
+    "Set Talwar"
+   ],
+   [
+    "trusted",
+    "0502:0F",
+    "Set Small Shield",
+    "Set Small Shield"
+   ],
+   [
+    "trusted",
+    "0503:0F",
+    "Set Middle Shield",
+    "Set Middle Shield"
+   ],
+   [
+    "trusted",
+    "04FE:0F",
+    "Set Flame Sword",
+    "Set Flame Sword"
+   ],
+   [
+    "trusted",
+    "0504:0F",
+    "Set Large Shield",
+    "Set Large Shield"
+   ],
+   [
+    "trusted",
+    "0505:0F",
+    "Set Silver Shield",
+    "Set Silver Shield"
+   ],
+   [
+    "trusted",
+    "0506:0F",
+    "Set Battle Shield",
+    "Set Battle Shield"
+   ]
+  ]
+ },
+ {
+  "rom": "YS2",
+  "name": "イースII",
+  "mapper": 4,
+  "written": 16,
+  "rejected": 1,
+  "levels": {
+   "ok": 8,
+   "plausible": 0,
+   "trusted": 8
+  },
+  "sources": [
+   "Ys II - Ancient Ys Vanished - The Final Chapter (Japan)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "SXOVXISA",
+    "Infinite HP",
+    "Infinite HP"
+   ],
+   [
+    "ok",
+    "SZNLKYVG",
+    "Fire Spell don't reduce MP",
+    "Fire Spell don't reduce MP"
+   ],
+   [
+    "ok",
+    "SXELXYSA",
+    "Light Spell don't reduce MP",
+    "Light Spell don't reduce MP"
+   ],
+   [
+    "trusted",
+    "053B:7F",
+    "Set All Swords",
+    "Set All Swords"
+   ],
+   [
+    "ok",
+    "AEOSNSPE+AEXISSZE",
+    "Lots of Experience",
+    "Lots of Experience"
+   ],
+   [
+    "ok",
+    "SZXELISA+SZUAZISA",
+    "Infinite Gold",
+    "Infinite Gold"
+   ],
+   [
+    "trusted",
+    "00AC:FF+00AD:FF",
+    "Set Infinite Gold",
+    "Set Infinite Gold"
+   ],
+   [
+    "ok",
+    "YYKSKIPE",
+    "All the Equip",
+    "All the Equip"
+   ],
+   [
+    "trusted",
+    "053D:7F",
+    "Set All Armor",
+    "Set All Armor"
+   ],
+   [
+    "trusted",
+    "0565:FF",
+    "Set All Inventory #1",
+    "Set All Inventory #1"
+   ],
+   [
+    "ok",
+    "SXNPZLSA",
+    "Return Spell don't reduce MP",
+    "Return Spell don't reduce MP"
+   ],
+   [
+    "trusted",
+    "00A6:FF+00A8:FF",
+    "Set Infinite/Max. MP",
+    "Set Infinite/Max. MP"
+   ],
+   [
+    "ok",
+    "SZEUXYVG",
+    "Time Stop  Telepathy and",
+    "Time Stop, Telepathy and Shield Spells don't reduce MP"
+   ],
+   [
+    "trusted",
+    "00AA:FF+00AB:FF",
+    "Set Max. Exp",
+    "Set Max. Exp."
+   ],
+   [
+    "trusted",
+    "0566:FF",
+    "Set All Inventory #2",
+    "Set All Inventory #2"
+   ],
+   [
+    "trusted",
+    "0567:FF",
+    "Set All Inventory #3",
+    "Set All Inventory #3"
+   ]
+  ]
+ },
+ {
+  "rom": "ZELDA",
+  "name": "ゼルダの伝説",
+  "mapper": 1,
+  "written": 16,
+  "rejected": 16,
+  "levels": {
+   "ok": 16,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Legend of Zelda, The (USA, Europe) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "ESSYGLSL",
+    "Sword Beam Does Not Stop After",
+    "Sword Beam Does Not Stop After Hitting Enemies"
+   ],
+   [
+    "ok",
+    "AANYSEVI+AANNKANI",
+    "Always Able To Shoot Sword",
+    "Always Able To Shoot Sword Beams"
+   ],
+   [
+    "ok",
+    "AVVLAUSZ",
+    "No Take Damage From Anything",
+    "Don't Take Damage From Anything"
+   ],
+   [
+    "ok",
+    "SZVXASVK",
+    "Don't Lose Rubies When Buying",
+    "Don't Lose Rubies When Buying"
+   ],
+   [
+    "ok",
+    "ESKUILTA",
+    "Wear A Blue Ring",
+    "Wear A Blue Ring"
+   ],
+   [
+    "ok",
+    "OSKUILTA",
+    "Wear A Red Ring",
+    "Wear A Red Ring"
+   ],
+   [
+    "ok",
+    "ZPOPTLYO",
+    "Link Has Green Hair In",
+    "Link Has Green Hair In Overworld"
+   ],
+   [
+    "ok",
+    "SPVEGGSA",
+    "Enemy Attacks Do Not Disable",
+    "Enemy Attacks Do Not Disable Sword"
+   ],
+   [
+    "ok",
+    "TLOEKYAK",
+    "Music In Overworld One Note",
+    "Music In Overworld Is One Note Flat"
+   ],
+   [
+    "ok",
+    "AAVATTEZ",
+    "Buy Large Shield For Free In",
+    "Buy The Large Shield For Free (Instead Of $160) In The Cave Just Northwest Of Where You Start The Game"
+   ],
+   [
+    "ok",
+    "AAVAYTGT",
+    "Buy Keys For Free In Cave Just",
+    "Buy Keys For Free (Instead Of $100) In The Cave Just Northwest Of Where You Start The Game"
+   ],
+   [
+    "ok",
+    "AAVEAVGL",
+    "Buy Blue Candle For Free In",
+    "Buy The Blue Candle For Free (Instead Of $60) In The Cave Just Northwest Of Where You Start The Game"
+   ],
+   [
+    "ok",
+    "AEVATVAA",
+    "No Zolas",
+    "No Zolas"
+   ],
+   [
+    "ok",
+    "ZAVEIVXY",
+    "Blue Ring Costs 2 Rupies",
+    "Blue Ring Costs 2 Rupies"
+   ],
+   [
+    "ok",
+    "SLKEUVSY",
+    "Armos Statue Has 6 Spots On",
+    "Armos Statue Has 6 Spots On Shield"
+   ],
+   [
+    "ok",
+    "KUOZSPKK",
+    "Change Trees Into Gravestones",
+    "Change Trees Into Gravestones"
+   ]
+  ]
+ },
+ {
+  "rom": "ZGUNDAM",
+  "name": "機動戦士Zガンダム ホットスクランブル",
+  "mapper": 66,
+  "written": 5,
+  "rejected": 0,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 5
+  },
+  "sources": [
+   "Kidou Senshi Z Gundam - Hot Scramble (Japan)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "007D:4F+007E:4F",
+    "Infinite Energy",
+    "Infinite Energy"
+   ],
+   [
+    "trusted",
+    "0079:01",
+    "Have Weapon 1",
+    "Have Weapon 1"
+   ],
+   [
+    "trusted",
+    "007A:01",
+    "Have Weapon 2",
+    "Have Weapon 2"
+   ],
+   [
+    "trusted",
+    "0010:00",
+    "Stage Select",
+    "Stage Select"
+   ],
+   [
+    "trusted",
+    "0042:01",
+    "Automatically End Flying",
+    "Automatically End Flying Levels"
+   ]
+  ]
+ },
+ {
+  "rom": "gegege",
+  "name": "ゲゲゲの鬼太郎 妖怪大魔境",
+  "mapper": 3,
+  "written": 3,
+  "rejected": 0,
+  "levels": {
+   "ok": 2,
+   "plausible": 0,
+   "trusted": 1
+  },
+  "sources": [
+   "Gegege no Kitarou - Youkai Daimakyou (Japan)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "ATVOZASA",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "trusted",
+    "0068:FF",
+    "Invincibility - Alternative",
+    "Invincibility - Alternative"
+   ],
+   [
+    "ok",
+    "SZXATZVG",
+    "Infinite Lives",
+    "Infinite Lives"
+   ]
+  ]
+ },
+ {
+  "rom": "goonies",
+  "name": "グーニーズ",
+  "mapper": 87,
+  "written": 15,
+  "rejected": 0,
+  "levels": {
+   "ok": 6,
+   "plausible": 0,
+   "trusted": 9
+  },
+  "sources": [
+   "Goonies (Japan)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "05F6:40",
+    "Invincibility",
+    "Invincibility"
+   ],
+   [
+    "ok",
+    "OZEALLVK",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "ok",
+    "SZSUNTSA",
+    "Infinite Energy",
+    "Infinite Energy"
+   ],
+   [
+    "trusted",
+    "00A1:18",
+    "Infinite Health",
+    "Infinite Health"
+   ],
+   [
+    "ok",
+    "SSOOUZVI",
+    "Freeze Time",
+    "Freeze Time"
+   ],
+   [
+    "trusted",
+    "0090:80",
+    "Infinite Time",
+    "Infinite Time"
+   ],
+   [
+    "trusted",
+    "05F3:FA",
+    "Set Infinite Bombs",
+    "Set Infinite Bombs"
+   ],
+   [
+    "trusted",
+    "05F2:64",
+    "Set Infinite Slingshot (99)",
+    "Set Infinite Slingshot (99)"
+   ],
+   [
+    "ok",
+    "AEOEPOUY",
+    "Skip Title Scroll",
+    "Skip Title Scroll"
+   ],
+   [
+    "ok",
+    "ZASZYTPA",
+    "Walk Faster",
+    "Walk Faster"
+   ],
+   [
+    "ok",
+    "SXNPTZAX",
+    "Walk Through Walls",
+    "Walk Through Walls"
+   ],
+   [
+    "trusted",
+    "05DF:04",
+    "Set Infinite Keys",
+    "Set Infinite Keys"
+   ],
+   [
+    "trusted",
+    "0049:FF",
+    "Set All Equipment",
+    "Set All Equipment"
+   ],
+   [
+    "trusted",
+    "05D8:03",
+    "Set Max. Diamonds",
+    "Set Max. Diamonds"
+   ],
+   [
+    "trusted",
+    "05D6:07",
+    "Set Max. Goonies Rescued",
+    "Set Max. Goonies Rescued"
+   ]
+  ]
+ },
+ {
+  "rom": "goonies2",
+  "name": "グーニーズ2",
+  "mapper": 2,
+  "written": 9,
+  "rejected": 11,
+  "levels": {
+   "ok": 9,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [
+   "Goonies II, The (USA, Europe) (Game Genie)"
+  ],
+  "codes": [
+   [
+    "ok",
+    "SESEZESX",
+    "Invincible",
+    "Invincible (Can Walk Thru Enemies)"
+   ],
+   [
+    "ok",
+    "SXUASSVK",
+    "Infinite Bombs On Pick-Up",
+    "Infinite Bombs On Pick-Up"
+   ],
+   [
+    "ok",
+    "SZVAESVK",
+    "Inf Molotov Bombs On Pick-Up",
+    "Infinite Molotov Bombs On Pick-Up"
+   ],
+   [
+    "ok",
+    "SZNEEVVK",
+    "Inf Shots For Sling On Pick-Up",
+    "Infinite Shots For Sling On Pick-Up"
+   ],
+   [
+    "ok",
+    "LEUAOPZA",
+    "Always Have Mega-Jump",
+    "Always Have Mega-Jump"
+   ],
+   [
+    "ok",
+    "IEUEKPGA",
+    "Better Jumping Boots On",
+    "Better Jumping Boots On Pick-Up"
+   ],
+   [
+    "ok",
+    "ZESAPAPA",
+    "Super Speed",
+    "Super Speed"
+   ],
+   [
+    "ok",
+    "OXOGYASX+YOOKAAPO",
+    "Play Game In Black And White",
+    "Play Game In Black And White Mode"
+   ],
+   [
+    "ok",
+    "YEUAOPZA",
+    "Jump Up To Ceiling",
+    "Jump Up To Ceiling"
+   ]
+  ]
+ },
+ {
+  "rom": "saradanokuni",
+  "name": "サラダの国のトマト姫",
+  "mapper": 1,
+  "written": 0,
+  "rejected": 1,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 0
+  },
+  "sources": [],
+  "codes": []
+ }
+]
