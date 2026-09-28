@@ -1,0 +1,14 @@
+# 自動導入されるツール・ソース
+tools/
+workspace/
+settings.json
+__pycache__/
+# 著作物・個体固有データはコミットしない
+backup_rom/
+roms/
+# 環境ごとに作り直すファイル
+*.lnk
+error.log
+# ROM を含むビルド結果とセーブデータ
+builds/
+saves/
