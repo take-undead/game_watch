@@ -25,6 +25,8 @@ ROOT = Path(__file__).resolve().parent.parent
 ROMS = ROOT / "roms" / "pce"
 OUT = ROOT / "cheat_code" / "pce"
 CACHE = ROOT / "tools" / "cache" / "cheats"
+# scripts/download_cheats.py でまとめて落としたもの (あれば先に使う)
+DB = ROOT / "tools" / "cache" / "cheatdb" / "olderzeus-codes" / "pceplus"
 SRC = "https://raw.githubusercontent.com/olderzeus/game-genie-codes-nes/master/pceplus/"
 
 # ROM ファイル名 -> (日本語名, コード集のファイル名)
@@ -142,6 +144,9 @@ def short(desc: str, limit: int = 30) -> str:
 
 def fetch(name: str) -> str | None:
     CACHE.mkdir(parents=True, exist_ok=True)
+    local = DB / f"{name}.pceplus"
+    if local.exists():
+        return local.read_text(encoding="utf-8", errors="replace")
     f = CACHE / f"pceplus_{name}.pceplus"
     if f.exists():
         return f.read_text(encoding="utf-8", errors="replace")

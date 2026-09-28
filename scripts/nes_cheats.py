@@ -117,6 +117,9 @@ ROOT = Path(__file__).resolve().parent.parent
 ROMS = ROOT / "roms" / "nes"
 OUT = ROOT / "cheat_code" / "nes"
 CACHE = ROOT / "tools" / "cache" / "cheats"
+# scripts/download_cheats.py でまとめて落としたもの (あれば先に使う)
+DB_LIBRETRO = ROOT / "tools" / "cache" / "cheatdb" / "libretro-database" / "cht" / "Nintendo - Nintendo Entertainment System"
+DB_MARTAAAY = ROOT / "tools" / "cache" / "cheatdb" / "martaaay-ggcodes" / "ggcodes"
 LIBRETRO = ("https://raw.githubusercontent.com/libretro/libretro-database/master/cht/"
             "Nintendo%20-%20Nintendo%20Entertainment%20System/")
 MARTAAAY = "https://raw.githubusercontent.com/martaaay/game-and-watch-retro-go-game-genie-codes/HEAD/ggcodes/"
@@ -259,10 +262,25 @@ MANUAL = {
         ("0094:FF+0095:FF", "Fewer encounters"),
         ("00E2:00", "Enemy dies in one hit"),
     ]),
+    # 002A/002B は Wiki (002A-1-09, 002B-2-0020)、ステージ別は ameblo.jp/grannaska/entry-12865856022.html。
+    # ROM で確認: $2A は DEC して負ならゲームオーバー、$2B は被弾で減り、満タン = (8 - $2C) * 4 (= $20)。
+    # ステージ別の番地は他のステージで別の用途に使われるので、そのステージ以外では外すこと。
+    "DRAEMON": ("wikiwiki.jp/nnnes1 + ameblo.jp/grannaska", [
+        ("002A:09", "Lives 9"),
+        ("002B:20+002C:00", "Full HP"),
+        ("0079:12", "Stage1 Invincible"),
+        ("007B:03", "Stage1 Power Uchiwa"),
+        ("0084:FF", "Stage1 Max rapid fire"),
+        ("00A0:10", "Stage2 Invincible"),
+        ("007C:03", "Stage2 Gian + Small Light"),
+        ("0080:03", "Stage2 Hirari Mantle"),
+    ]),
 }
 
 
-def fetch(url: str, dest: Path) -> str | None:
+def fetch(url: str, dest: Path, local: Path | None = None) -> str | None:
+    if local and local.exists():
+        return local.read_text(encoding="utf-8", errors="replace")
     if dest.exists():
         return dest.read_text(encoding="utf-8", errors="replace")
     try:
@@ -384,15 +402,16 @@ def main():
         rom = Rom(rom_path)
         cands = []  # (code, desc, source, trusted)
         for f in jp_files:
-            t = fetch(LIBRETRO + urllib.parse.quote(f + ".cht"), CACHE / f"{f}.cht")
+            t = fetch(LIBRETRO + urllib.parse.quote(f + ".cht"), CACHE / f"{f}.cht", DB_LIBRETRO / f"{f}.cht")
             if t:
                 cands += [(c, d, f, True) for c, d in parse_cht(t)]
         for f in us_files:
-            t = fetch(LIBRETRO + urllib.parse.quote(f + ".cht"), CACHE / f"{f}.cht")
+            t = fetch(LIBRETRO + urllib.parse.quote(f + ".cht"), CACHE / f"{f}.cht", DB_LIBRETRO / f"{f}.cht")
             if t:
                 cands += [(c, d, f, False) for c, d in parse_cht(t)]
         mt = fetch(MARTAAAY + urllib.parse.quote(US_TITLES[stem] + ".ggcodes"),
-                   CACHE / f"martaaay_{stem}.ggcodes") if stem in US_TITLES else None
+                   CACHE / f"martaaay_{stem}.ggcodes",
+                   DB_MARTAAAY / (re.sub(r'[\\:*?"<>|]', "_", US_TITLES[stem]) + ".ggcodes")) if stem in US_TITLES else None
         if mt:
             cands += [(c, d, "martaaay (USA)", False) for c, d in parse_ggcodes(mt)]
 

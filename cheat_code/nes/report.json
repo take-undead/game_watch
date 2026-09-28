@@ -885,15 +885,66 @@
   "rom": "DRAEMON",
   "name": "ドラえもん",
   "mapper": 66,
-  "written": 0,
+  "written": 8,
   "rejected": 0,
   "levels": {
    "ok": 0,
    "plausible": 0,
-   "trusted": 0
+   "trusted": 8
   },
-  "sources": [],
-  "codes": []
+  "sources": [
+   "wikiwiki.jp/nnnes1 + ameblo.jp/grannaska"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "0079:12",
+    "Stage1 Invincible",
+    "Stage1 Invincible"
+   ],
+   [
+    "trusted",
+    "00A0:10",
+    "Stage2 Invincible",
+    "Stage2 Invincible"
+   ],
+   [
+    "trusted",
+    "002A:09",
+    "Lives 9",
+    "Lives 9"
+   ],
+   [
+    "trusted",
+    "002B:20+002C:00",
+    "Full HP",
+    "Full HP"
+   ],
+   [
+    "trusted",
+    "007B:03",
+    "Stage1 Power Uchiwa",
+    "Stage1 Power Uchiwa"
+   ],
+   [
+    "trusted",
+    "0084:FF",
+    "Stage1 Max rapid fire",
+    "Stage1 Max rapid fire"
+   ],
+   [
+    "trusted",
+    "007C:03",
+    "Stage2 Gian + Small Light",
+    "Stage2 Gian + Small Light"
+   ],
+   [
+    "trusted",
+    "0080:03",
+    "Stage2 Hirari Mantle",
+    "Stage2 Hirari Mantle"
+   ]
+  ]
  },
  {
   "rom": "DRAGON_QUEST",
