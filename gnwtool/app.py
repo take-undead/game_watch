@@ -302,10 +302,80 @@ class App(tk.Tk):
         note.pack(fill=tk.X)
         ttk.Label(note, justify=tk.LEFT, text=(
             "ST-Link を初めて使う場合は ST 公式の USB ドライバ (STSW-LINK009) をインストールしてください。\n"
-            "配線は GND / SWDIO / SWCLK のみ。ST-Link の 3.3V と本体の VDD は絶対に接続しないでください。"
+            "配線は下の表のとおりです。ST-Link の 3.3V と本体の VDD は絶対に接続しないでください。"
         )).pack(anchor=tk.W)
         ttk.Button(note, text="STSW-LINK009 のページを開く",
                    command=lambda: webbrowser.open("https://www.st.com/en/development-tools/stsw-link009.html")).pack(anchor=tk.W, pady=(6, 0))
+
+        pins = ttk.LabelFrame(f, text="ST-Link を繋ぐ端子", padding=6)
+        pins.pack(fill=tk.BOTH, expand=True, pady=(10, 0))
+        wires = ttk.Frame(pins)
+        wires.pack(side=tk.LEFT, anchor=tk.N, padx=(0, 12))
+        for r, (st, body, memo) in enumerate((
+            ("ST-Link 側", "本体側", ""),
+            ("5 または 6  GND", "GND", "必須"),
+            ("4  SWDIO", "SWDIO", "必須"),
+            ("2  SWCLK", "SWCLK", "必須"),
+            ("1  RST", "NRST", "任意\n(つなぐと接続が安定しやすい)"),
+            ("7 / 8  3.3V", "VDD", "✖ 絶対につながない"),
+        )):
+            head = r == 0
+            fg = "#57606a" if head else ("#cf222e" if "✖" in memo else "")
+            ttk.Label(wires, text=st, width=16, foreground=fg).grid(row=r, column=0, sticky=tk.NW)
+            ttk.Label(wires, text="→" if not head else "", foreground=fg).grid(row=r, column=1, padx=6, sticky=tk.N)
+            ttk.Label(wires, text=body, width=8, foreground=fg).grid(row=r, column=2, sticky=tk.NW)
+            ttk.Label(wires, text=memo, foreground=fg).grid(row=r, column=3, sticky=tk.NW, pady=(0, 2))
+        self._pinout_canvas(pins)
+
+    PINOUTS = (("pinout_stlink.png", "ST-Link V2 側"),
+               ("pinout_mario.png", "マリオ本体側"),
+               ("pinout_zelda.png", "ゼルダ本体側 (マリオと同じ並び)"))
+
+    def _pinout_canvas(self, parent: ttk.Frame) -> None:
+        """配線図 3 枚を、空いている大きさに合わせて横に並べる。"""
+        try:
+            from PIL import Image, ImageTk
+        except ImportError:
+            ttk.Label(parent, text="(配線図の表示には Pillow が必要です)", foreground="#57606a").pack(anchor=tk.W)
+            return
+        assets = Path(__file__).parent / "assets"
+        srcs = [(Image.open(assets / name).convert("RGB"), cap) for name, cap in self.PINOUTS]
+        bg = ttk.Style(self).lookup("TFrame", "background") or self.cget("background")
+        c = tk.Canvas(parent, height=1, highlightthickness=0, background=bg)
+        c.pack(fill=tk.BOTH, expand=True)
+        gap, cap_h = 16, 20
+        state = {"size": None, "job": None}
+
+        def redraw():
+            state["job"] = None
+            w, h = c.winfo_width(), c.winfo_height()
+            if w < 50 or h < 50 or state["size"] == (w, h):
+                return
+            state["size"] = (w, h)
+            # 高さをそろえ、全体の幅が収まる大きさにする
+            ratio = sum(im.width / im.height for im, _ in srcs)
+            ih = min(h - cap_h, (w - gap * (len(srcs) - 1)) / ratio)
+            if ih < 20:
+                c.delete("all")
+                return
+            c.delete("all")
+            self._pinout_photos = []
+            total = ratio * ih + gap * (len(srcs) - 1)
+            x = (w - total) / 2
+            for im, cap in srcs:
+                iw = im.width / im.height * ih
+                photo = ImageTk.PhotoImage(im.resize((max(1, round(iw)), max(1, round(ih))), Image.Resampling.LANCZOS))
+                self._pinout_photos.append(photo)
+                c.create_image(x, 0, image=photo, anchor=tk.NW)
+                c.create_text(x + iw / 2, ih + 3, text=cap, anchor=tk.N, fill="#57606a")
+                x += iw + gap
+
+        def on_resize(_e):
+            if state["job"]:
+                c.after_cancel(state["job"])
+            state["job"] = c.after(80, redraw)
+
+        c.bind("<Configure>", on_resize)
 
     def refresh_status(self) -> None:
         def work():
