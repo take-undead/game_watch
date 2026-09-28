@@ -64,6 +64,36 @@ class Rom:
         return sum(1 for o in self.candidates(addr) if 0 <= o < len(self.prg) and self.prg[o] == compare)
 
 
+class FdsRom(Rom):
+    """ディスクシステム: 各面のプログラムファイル (種別 0) を、読み込み先の番地ごとに並べる.
+
+    同じ番地に読み込むファイルが複数ある (面やステージで入れ替わる) ので、候補はそのすべて.
+    """
+
+    def __init__(self, path):
+        d = open(path, "rb").read()
+        if d[:4] == b"FDS\x1a":
+            d = d[16:]
+        self.mapper = "FDS"
+        self.prg = b""
+        self.files = []  # (読み込み先, prg 内の位置, サイズ)
+        for side in range(len(d) // 65500):
+            s = d[side * 65500:(side + 1) * 65500]
+            p = 56 + 2  # ブロック 1 (ディスク情報) + ブロック 2 (ファイル数)
+            while p + 16 <= len(s) and s[p] == 3:
+                addr = s[p + 11] | s[p + 12] << 8
+                size = s[p + 13] | s[p + 14] << 8
+                kind = s[p + 15]
+                data = s[p + 17:p + 17 + size]  # ブロック 4 の先頭 1 バイト (4) を飛ばす
+                if kind == 0:
+                    self.files.append((addr, len(self.prg), len(data)))
+                    self.prg += data
+                p += 16 + 1 + size
+
+    def candidates(self, addr: int) -> list[int]:
+        return [off + addr - a for a, off, size in self.files if a <= addr < a + size]
+
+
 RAW = re.compile(r"^([0-9A-F]{4})(?:\?([0-9A-F]{2}))?:([0-9A-F]{2})$")
 
 
@@ -119,12 +149,16 @@ OUT = ROOT / "cheat_code" / "nes"
 CACHE = ROOT / "tools" / "cache" / "cheats"
 # scripts/download_cheats.py でまとめて落としたもの (あれば先に使う)
 DB_LIBRETRO = ROOT / "tools" / "cache" / "cheatdb" / "libretro-database" / "cht" / "Nintendo - Nintendo Entertainment System"
+DB_LIBRETRO_FDS = DB_LIBRETRO.parent / "Nintendo - Family Computer Disk System"
 DB_MARTAAAY = ROOT / "tools" / "cache" / "cheatdb" / "martaaay-ggcodes" / "ggcodes"
 LIBRETRO = ("https://raw.githubusercontent.com/libretro/libretro-database/master/cht/"
             "Nintendo%20-%20Nintendo%20Entertainment%20System/")
+LIBRETRO_FDS = ("https://raw.githubusercontent.com/libretro/libretro-database/master/cht/"
+                "Nintendo%20-%20Family%20Computer%20Disk%20System/")
 MARTAAAY = "https://raw.githubusercontent.com/martaaay/game-and-watch-retro-go-game-genie-codes/HEAD/ggcodes/"
 
 # ROM -> (日本語名, [日本版/日米共通の libretro ファイル], [北米版の参考ファイル (8文字のみ採用)])
+# .fds (ディスクシステム) の日本版ファイルは libretro の「Family Computer Disk System」フォルダから取る
 MAP = {
     "BABEL": ("バベルの塔", ["Babel no Tou (Japan)"], []),
     "BALLOON_FIGHT": ("バルーンファイト", ["Balloon Fight (Japan)"], ["Balloon Fight (World) (Game Genie)"]),
@@ -196,6 +230,10 @@ MAP = {
     "goonies2": ("グーニーズ2", ["Goonies 2 - Fratelli Saigo no Chousen (Japan) (Action Replay)"],
                  ["Goonies II, The (USA, Europe) (Game Genie)"]),
     "saradanokuni": ("サラダの国のトマト姫", [], ["Princess Tomato in the Salad Kingdom (USA)"]),
+    "link": ("リンクの冒険 (FDS)", ["Link no Bouken - The Legend of Zelda 2 (Japan)"],
+             ["Zelda II - The Adventure of Link (USA, Europe) (Game Genie)"]),
+    "metroid": ("メトロイド (FDS)", ["Metroid (Japan) (v1.1) [b]"], ["Metroid (USA, Europe) (Game Genie)"]),
+    "nazo_mura": ("なぞの村雨城 (FDS)", ["Nazo no Murasamejou (Japan)"], []),
 }
 
 # martaaay/game-and-watch-retro-go-game-genie-codes の北米版タイトル (8文字コード / 根拠のある6文字のみ採用)
@@ -235,7 +273,9 @@ US_TITLES = {
  "XEVIUS": "Xevious",
  "ZELDA": "The Legend of Zelda",
  "goonies2": "Goonies 2",
- "TERRA_CRESTA": "Terra Cresta"
+ "TERRA_CRESTA": "Terra Cresta",
+ "link": "Zelda 2 - The Adventure of Link",
+ "metroid": "Metroid",
 }
 
 # 6文字コードの根拠: 「減らす/書き込む命令」を「読むだけの命令」などに置き換える典型パターン
@@ -274,6 +314,41 @@ MANUAL = {
         ("00A0:10", "Stage2 Invincible"),
         ("007C:03", "Stage2 Gian + Small Light"),
         ("0080:03", "Stage2 Hirari Mantle"),
+    ]),
+    # 北米版 Hydlide とは RAM の配置が違う (北米版の $0038 = 体力 は、日本版では経験値)。ROM で確認:
+    # $36 = LIFE (0 でゲームオーバー)、$39 = MAGIC (魔法で 20〜60 減る)、$7F = 0 以外の間 MAGIC を 100 に保つ、
+    # $26 = 0 以外なら被弾の処理を飛ばす、$57-$64 = 所持品 (例: 死んだとき $5B があれば消費して復活)
+    "HYDLIDE": ("wikiwiki.jp/nnnes1 (ファミコンチート集 Wiki)", [
+        ("0026:FF", "Invincible"),
+        ("0036:64", "LIFE 100"),
+        ("0039:64", "MAGIC 100"),
+        ("007F:FF", "Unlimited magic"),
+        ("0037:64+003F:64+0040:64", "Max status"),
+        ("0038:64", "EXP 100 (fast level up)"),
+        ("0057:FF+0058:FF+0059:FF", "All items 1/5"),
+        ("005A:FF+005B:FF+005C:FF", "All items 2/5"),
+        ("005D:FF+005E:FF+005F:FF", "All items 3/5"),
+        ("0060:FF+0061:FF+0062:FF", "All items 4/5"),
+        ("0063:FF+0064:FF", "All items 5/5"),
+    ]),
+    # ROM で確認: $049C = 残り人数 (DEC)、$04AB = 装備のビット (01/02/08=手榴弾・PW, 10=面スキップ, 20=無敵,
+    # 40=地下道の表示, 80=マシンガン PW。ゲーム内で AND #$xx で調べている)。EB は 10 (面スキップ) を含まない
+    "OOKAMI": ("wikiwiki.jp/nnnes1 (ファミコンチート集 Wiki)", [
+        ("04AB:20", "Invincible"),
+        ("04AB:EB", "Invincible + all power-ups"),
+        ("049C:09", "Lives 9"),
+        ("04A6:99", "Grenades 99"),
+    ]),
+    "saradanokuni": ("wikiwiki.jp/nnnes1 (ファミコンチート集 Wiki)", [
+        ("03E1:09", "Money 9"),
+        ("03E0:09", "Gold coins 9 (OFF to give)"),
+    ]),
+    # FDS 版の RAM を ROM で確認 (北米カートリッジ版の $6877-$6879 は FDS では $B410-$B413 にある):
+    # $0106/$0107 = エネルギー (BCD。$0107 の上位 4bit は E タンク数。満タン処理は $0106=$99, $0107=タンク|9)、
+    # $B412 = ミサイル (発射で DEC)、$B413 = ミサイルの上限
+    "metroid": ("ROM で確認 (北米版 Metroid の RAM コードを FDS 版の番地に合わせたもの)", [
+        ("0106:99+0107:09", "Energy always 99"),
+        ("B412:FF+B413:FF", "Infinite Missiles"),
     ]),
 }
 
@@ -375,6 +450,13 @@ def judge(rom: Rom, code: str, trusted: bool):
                 continue
             addr, val, _ = g
             origs = {rom.prg[o] for o in rom.candidates(addr) if 0 <= o < len(rom.prg)}
+            if not origs:  # FDS: ディスクから読み込まない番地
+                if addr >= 0xE000:  # BIOS = カートリッジ版のコード
+                    return None, f"{p}:not-on-disk"
+                if not trusted:  # $6000-$DFFF の空き = RAM の値を固定するコード
+                    return None, f"{p}:ram-from-other-version"
+                kinds.append("trusted")
+                continue
             if val != 0xEA and val in PLAUSIBLE and origs & PLAUSIBLE[val]:
                 kinds.append("plausible")
             elif trusted:
@@ -397,12 +479,16 @@ def main():
     report = []
     for stem, (jname, jp_files, us_files) in MAP.items():
         rom_path = ROMS / f"{stem}.nes"
-        if not rom_path.exists():
-            continue
-        rom = Rom(rom_path)
+        fds = not rom_path.exists()
+        if fds:
+            rom_path = ROMS / f"{stem}.fds"
+            if not rom_path.exists():
+                continue
+        rom = FdsRom(rom_path) if fds else Rom(rom_path)
+        jp_url, jp_db = (LIBRETRO_FDS, DB_LIBRETRO_FDS) if fds else (LIBRETRO, DB_LIBRETRO)
         cands = []  # (code, desc, source, trusted)
         for f in jp_files:
-            t = fetch(LIBRETRO + urllib.parse.quote(f + ".cht"), CACHE / f"{f}.cht", DB_LIBRETRO / f"{f}.cht")
+            t = fetch(jp_url + urllib.parse.quote(f + ".cht"), CACHE / f"{f}.cht", jp_db / f"{f}.cht")
             if t:
                 cands += [(c, d, f, True) for c, d in parse_cht(t)]
         for f in us_files:

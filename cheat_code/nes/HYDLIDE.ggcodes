@@ -1,0 +1,11 @@
+0026:FF, Invincible
+0036:64, LIFE 100
+0039:64, MAGIC 100
+007F:FF, Unlimited magic
+0038:64, EXP 100 (fast level up)
+0037:64+003F:64+0040:64, Max status
+0057:FF+0058:FF+0059:FF, All items 1/5
+005A:FF+005B:FF+005C:FF, All items 2/5
+005D:FF+005E:FF+005F:FF, All items 3/5
+0060:FF+0061:FF+0062:FF, All items 4/5
+0063:FF+0064:FF, All items 5/5

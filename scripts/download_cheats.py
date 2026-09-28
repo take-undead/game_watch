@@ -1,7 +1,7 @@
 """チートコードの出典を tools/cache/cheatdb/ にまとめてダウンロード (2 回目以降は更新).
 
 使い方:  tools\venv\Scripts\python.exe scripts\download_cheats.py
-  - nes_cheats.py / pce_cheats.py は、ここにあるファイルを先に読む (無ければ 1 本ずつネットから取る)
+  - nes_cheats.py / pce_cheats.py / msx_cheats.py は、ここにあるファイルを先に読む (無ければ 1 本ずつネットから取る)
   - libretro-database は大きい (cht 全体で 160MB 超) ので、使う機種のフォルダだけを sparse checkout する
   - 小さいリポジトリは zip で取る。Windows で使えない文字を含むファイル名 (例: "Q*Bert.ggcodes") があり、
     git checkout ではそこで止まるため。使えない文字は "_" に置き換える
@@ -30,6 +30,8 @@ ZIPS = [
     ("martaaay-ggcodes", "martaaay/game-and-watch-retro-go-game-genie-codes"),
     ("olderzeus-codes", "olderzeus/game-genie-codes-nes"),
 ]
+# blueMSX のチート集 (MCF)。Retro-Go の README が案内しているが、公式サイトは 404 なので archive.org から取る
+BLUEMSX = ("bluemsx", "https://web.archive.org/web/2015id_/http://bluemsx.msxblue.com/rel_download/Cheats.zip")
 
 
 def git(*args: str, cwd: Path | None = None) -> None:
@@ -47,8 +49,8 @@ def get_libretro() -> None:
     git("sparse-checkout", "set", *paths, cwd=dest)
 
 
-def get_zip(name: str, repo: str) -> None:
-    url = f"https://codeload.github.com/{repo}/zip/HEAD"
+def get_zip(name: str, repo: str, url: str | None = None, strip: int = 1) -> None:
+    url = url or f"https://codeload.github.com/{repo}/zip/HEAD"
     print(f"> {url}", flush=True)
     data = urllib.request.urlopen(url, timeout=120).read()
     dest = DB / name
@@ -59,7 +61,7 @@ def get_zip(name: str, repo: str) -> None:
         for info in z.infolist():
             if info.is_dir():
                 continue
-            parts = info.filename.split("/")[1:]  # 先頭の "<repo>-<hash>/" を外す
+            parts = info.filename.split("/")[strip:]  # GitHub の zip は先頭の "<repo>-<hash>/" を外す
             out = dest.joinpath(*[re.sub(r'[\\:*?"<>|]', "_", p) for p in parts])
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_bytes(z.read(info))
@@ -72,6 +74,7 @@ def main() -> None:
     get_libretro()
     for name, repo in ZIPS:
         get_zip(name, repo)
+    get_zip(BLUEMSX[0], "", BLUEMSX[1], strip=0)
     print(f"完了: {DB}")
 
 

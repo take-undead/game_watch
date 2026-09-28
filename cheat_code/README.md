@@ -5,7 +5,7 @@
 
 ## ファミコン（nes）: 自動で作ったもの
 
-`roms\nes` の 68 本のうち **61 本** のチートを作りました（作成: 2026-09-28、`scripts\nes_cheats.py`）。
+`roms\nes` の 71 本のうち **67 本** のチートを作りました（作成: 2026-09-28、`scripts\nes_cheats.py`）。ディスクシステム（`.fds`）の 3 本も含みます。
 
 **日本版 ROM であることが前提です。** ネット上のゲームジニーのコードは、ほとんどが北米版向けです。そのため、集めたコードを 1 本ずつ手元の日本版 ROM と照合し、根拠のあるものだけを残しています。
 
@@ -14,6 +14,8 @@
 | 照合済み | 8 文字のゲームジニーコードで、「書き換え前の値」が手元の ROM の該当番地と一致した（バンク配置を考慮） |
 | 根拠あり | 6 文字コードで、手元の ROM の該当番地に「置き換え元として典型的な命令」があった（例: 残機を減らす DEC を読むだけの LDA に置き換える） |
 | 出典のみ | 日本版（または日米共通版）向けとして公開されているコード。RAM を書き換えるコードなど、ROM と照合できないもの |
+
+ディスクシステム（`.fds`）では、ディスク上の各ファイルの読み込み先の番地を読み取り、同じ方法で照合しています。北米のカートリッジ版向けのコードは、FDS では BIOS の領域（$E000 以降）を指すことが多いので除外しました。
 
 北米版のコードで手元の ROM と値が合わないものは、除外しました。同じゲームでも版（リビジョン）が違うと合わないことがあります。たとえばイー・アル・カンフーでは、Rev 1.2 用のコードはすべて不一致で、Rev 1.4 用だけが一致しました。
 
@@ -80,18 +82,26 @@
 | 闘いの挽歌 | `TATAKAI.nes` | 3 | 3 | 0 | 0 | libretro: Tatakai no Banka (Japan) (Game Genie)<br>martaaay（北米版） |
 | 魔城伝説II 大魔司教ガリウス | `GARIUS2.nes` | 2 | 0 | 0 | 2 | libretro: Majou Densetsu II - Daimashikyou Galious (Japan) |
 | 魔界村 | `MAKAIMURA.nes` | 13 | 13 | 0 | 0 | libretro: Makaimura (Japan)<br>martaaay（北米版） |
+| ハイドライド・スペシャル | `HYDLIDE.nes` | 11 | 0 | 0 | 11 | ファミコンチート集 Wiki（下記） |
+| 戦場の狼 | `OOKAMI.nes` | 4 | 0 | 0 | 4 | ファミコンチート集 Wiki（下記） |
+| サラダの国のトマト姫 | `saradanokuni.nes` | 2 | 0 | 0 | 2 | ファミコンチート集 Wiki |
+| なぞの村雨城 (FDS) | `nazo_mura.fds` | 4 | 1 | 0 | 3 | libretro: Nazo no Murasamejou (Japan) |
+| メトロイド (FDS) | `metroid.fds` | 4 | 0 | 0 | 4 | libretro: Metroid (Japan) (v1.1) [b]<br>ROM で確認（下記） |
+| リンクの冒険 (FDS) | `link.fds` | 5 | 0 | 0 | 5 | libretro: Link no Bouken - The Legend of Zelda 2 (Japan) |
 
-### コードが無いもの（7 本）
+- メトロイド（FDS）: 北米版の RAM コード（ミサイル `6879` など）は、FDS 版では番地が違います（$68xx は FDS 版ではプログラムの領域です）。ROM を調べてエネルギー（`0106` / `0107`、北米版と同じ）とミサイル（`B412` は発射で減る数、`B413` は上限）を確かめ、`Energy always 99` と `Infinite Missiles` を足しました。
+- ハイドライド・スペシャル: 北米版 Hydlide とは RAM の配置が違う（北米版の `0038` = 体力は、日本版では経験値）ため、北米版のコードは使えません。ファミコンチート集 Wiki の日本版のコードを使い、ROM で確かめました（`0036` = LIFE で 0 ならゲームオーバー、`0039` = MAGIC、`007F` が 0 以外の間は MAGIC を 100 に保つ、`0026` が 0 以外なら被弾の処理を飛ばす、`0057`〜`0064` = 所持品）。
+- 戦場の狼: 北米版 Commando のコードは日本版と一致しないため、Wiki の日本版のコードを使いました。ROM で、`049C` が残り人数（撃たれると減る）、`04AB` が装備のビット（`20` = 無敵など。ゲーム内で 1 ビットずつ調べている）であることを確かめました。`EB` は面スキップ（`10`）を含みません。
+- リンクの冒険（FDS）: 北米版とは RAM の配置が一部違う（体力が北米版 `0774`、日本版 `0770`）ため、日本版向けのコードだけを使っています。
+
+### コードが無いもの（4 本）
 
 | ゲーム | ファイル | 理由 |
 |---|---|---|
-| さんまの名探偵 | `SANMA.nes` | コードが見つかりませんでした（アドベンチャーゲーム） |
+| さんまの名探偵 | `SANMA.nes` | Wiki のコードは場面ごとに ON / OFF するもの（名前・場所・イベントの進行）で、常に ON にする用途に合わない |
 | オホーツクに消ゆ | `Okhotsk ni Kiyu.nes` | コードが見つかりませんでした（アドベンチャーゲーム） |
-| サラダの国のトマト姫 | `saradanokuni.nes` | 北米版のコードが日本版と一致しませんでした（アドベンチャーゲーム） |
 | ドラえもん | `DRAEMON.nes` | 日本版向けのコードが見つかりませんでした（Wiki はアクセス制限で未確認） |
-| ハイドライド・スペシャル | `HYDLIDE.nes` | 北米版のコードが日本版（ハイドライド・スペシャル）と一致しませんでした |
 | リップルアイランド | `LIPURU_ILAND.nes` | コードが見つかりませんでした |
-| 戦場の狼 | `OOKAMI.nes` | 北米版（Commando）のコードが日本版と一致しませんでした |
 
 ## PCエンジン（pce）: 自動で作ったもの
 
@@ -139,29 +149,84 @@ PCエンジンのチートは `.pceplus` という **ROM パッチ形式**です
 | 源平討魔伝 | `GENPEI.pce` | コード集に「Hacked Version」（内容不明のパッチ）しかなかった |
 | （題名不明） | `MEZON.pce` | ROM から題名を特定できなかった |
 
+## MSX（msx）: 自動で作ったもの
+
+`roms\msx` の 30 本のうち **26 本** のチートを作りました（作成: 2026-09-28、`scripts\msx_cheats.py`）。
+
+MSX のチートは blueMSX の **MCF 形式**（`0,番地,値,0,説明`）です。Retro-Go は、RAM のその番地が読まれたときに値を差し替えます（値が 255 を超えるものは 2 バイト）。出典は、Retro-Go の README が案内している blueMSX の Cheats.zip です（公式サイトは 404 のため archive.org から取得）。
+
+RAM のコードなので、ROM に「書き換え前の値」はありません。代わりに次の方法で、手元の ROM と版が合うかを確かめています。
+
+- **その番地を直接読み書きする Z80 の命令**（`LD A,(nn)` / `LD (nn),A` / `LD HL,nn` など）が ROM にあるかを、番地ごとに調べました。
+- ゲームごとに「参照がある番地の割合」を出し、RAM のランダムな番地での割合と比べました。**2 倍以上かつ 30% 以上**（または 3 倍以上かつ 20% 以上）のゲームだけを採用しています。
+- 採用したゲームでも、使うのは「直接の参照がある番地」（照合済み）と、「少し手前の番地が参照されている番地」（添字あり: 構造体の中など）だけです。
+- 値を固定すると進行が止まるもの（ステージ・面・ミッションの番号）や、座標・色・2P 用のものは除きました。同じ番地で値だけが違うもの（武器の種類など）は、最後の 1 つ（たいてい一番強いもの）だけを残しています。同じ説明で隣り合う 2 バイト（例: 矢の数の下位と上位）は、1 つの 2 バイトのコードにまとめました。
+
+| ゲーム | ファイル | 件数 | 照合済み | 添字あり | 参照の割合 | ランダム時 | 出典のファイル |
+|---|---|---|---|---|---|---|---|
+| アレスタ | `Aleste (1988)(Compile)(Jp).mcf` | 7 | 6 | 1 | 88% | 4% | aleste1 |
+| イー・アル・カンフー | `Yie Ar Kung-Fu (1985)(Konami)[RC-725].mcf` | 2 | 2 | 0 | 100% | 3% | yiearkungfu1 |
+| イー・アル・カンフーII | `Yie Ar Kung-Fu II - The Emperor Yie-Gah (1985)(Konami)[a][RC-737].mcf` | 2 | 2 | 0 | 100% | 5% | yiearkungfu2 |
+| キングスナイト | `King Knight (1986)(Square)[b].mcf` | 1 | 1 | 0 | 100% | 10% | kingsknight |
+| グラディウス | `Nemesis (1986)(Konami)[a][RC-742].mcf` | 15 | 14 | 1 | 95% | 7% | gradius1 |
+| グラディウス2 | `Nemesis II (1987)(Konami)[a][RC-751].mcf` | 11 | 11 | 0 | 84% | 11% | gradius2 |
+| グーニーズ | `Goonies, The (1986)(Konami)[a][RC-734].mcf` | 8 | 5 | 3 | 70% | 4% | goonies |
+| ゴーファーの野望 エピソードII | `Nemesis III - The Eve Of Destruction (1988)(Konami)[a][RC-764].mcf` | 16 | 16 | 0 | 81% | 12% | nemesis3 |
+| スターソルジャー | `Star Soldier (1986)(Hudson Soft).mcf` | 2 | 2 | 0 | 100% | 3% | starsoldier |
+| スペランカー | `Spelunker (1986)(Irem Corp).mcf` | 5 | 5 | 0 | 100% | 6% | spelunker |
+| タンクバタリアン | `Tank Batallion (1980-84)(Namcot).mcf` | 1 | 1 | 0 | 100% | 4% | tankbattalion |
+| チャックンポップ | `Chack N Pop (1984)(Taito).mcf` | 3 | 3 | 0 | 31% | 2% | chacknpop |
+| ディグダグ | `Dig Dug (1982-84)(Namcot).mcf` | 1 | 1 | 0 | 100% | 5% | digdug |
+| ドラゴンスレイヤーIV | `Dragon Slayer 4 - Drasle Family (1987)(Falcom).mcf` | 16 | 13 | 3 | 55% | 3% | dragonslayer4msx2 |
+| ドラゴンバスター | `Dragon Buster (1987)(Namcot)[b].mcf` | 2 | 2 | 0 | 80% | 7% | dragonbuster |
+| ドルアーガの塔 | `Tower Of Druaga, The (1984-86)(Namcot).mcf` | 4 | 4 | 0 | 100% | 6% | towerofdrauga |
+| ハイドライドII | `Hydlide II - Shine Of Darkness (1985)(T&E Soft).mcf` | 5 | 5 | 0 | 100% | 5% | hydlide2 |
+| ボルガード | `Volguard (1985)(DB Soft).mcf` | 2 | 2 | 0 | 100% | 2% | volguard |
+| メタルギア | `Metal Gear (1987)(Konami)[RC-750].mcf` | 16 | 11 | 5 | 24% | 4% | metalgear1 |
+| メタルギア2 ソリッドスネーク | `Metal Gear 2 - Solid Snake (1990)(Konami)[RC-767].mcf` | 16 | 13 | 3 | 52% | 15% | metalgear2 |
+| ロマンシア | `Romancia - Dragon Slayer Jr (19xx)(Falcom)[b].mcf` | 6 | 6 | 0 | 100% | 5% | romancia |
+| ワープ&ワープ | `Warp & Warp (1980-84)(Namcot).mcf` | 1 | 1 | 0 | 100% | 2% | warpwarp |
+| 夢幻戦士ヴァリス | `Valis - The Fantasm Soldier (1987)(Zemina).mcf` | 2 | 2 | 0 | 100% | 5% | fantasmsoldier1 |
+| 沙羅曼蛇 | `Salamander (1988)(Zemina)[RC-758].mcf` | 14 | 10 | 4 | 57% | 12% | salamander |
+| 魔城伝説 | `MAJYOUDE.mcf` | 8 | 7 | 1 | 67% | 7% | knightmare |
+| 魔城伝説II ガリウスの迷宮 | `Knight Mare II - The Maze Of Galious (1987)(Konami)[RC-749].mcf` | 16 | 13 | 3 | 78% | 14% | mazeofgalious |
+
+### コードが無いもの（4 本）
+
+| ゲーム | ファイル | 理由 |
+|---|---|---|
+| 魔術師麻雀 2 | `Majutsushi Mahjong 2 (1989)(Konami)(Jp)[RC-765].rom` | MCF が見つからなかった |
+| 忍者くん | `Ninjakun (1984)(Jaleco)(Jp).rom` | MCF（ninjakun1 / ninjakun2）の番地が、手元の ROM で 1 つも参照されていなかった（版が違う） |
+| レリクス | `Relics (19xx)(-)[b].rom` | MCF が見つからなかった |
+| トップルジップ | `Topple Zip 2 (1988)(Bothtec).rom` | MCF（topplezipmsx1）の 3 番地のうち 1 つしか参照が無く、版の一致を確かめられなかった |
+
 ## 注意
 
+- **チートは Retro-Go の内部フラッシュ（256KB）を使います。** 1 コードあたり、おおよそ「コードと説明の文字数 + 10 バイト」です。いまのチート全体は約 30KB（ファミコン 22KB / PCエンジン 1.4KB / MSX 6.8KB）です。ROM の本数が多いと `region FLASH overflowed` でビルドが失敗します（ROM の一覧も内部フラッシュに入るため）。その場合は、入れる ROM を減らすか、チートのファイルの下の行（優先度の低いもの）を消してください。
 - **実機ではまだ試していません。** 「照合済み」でも、ゲームの進行によっては不具合が出ることがあります。おかしくなったら OFF にしてください。
 - 1 本あたり最大 16 個です（Retro-Go の上限）。16 個を超える場合は、無敵・残機・体力・時間・武器などを優先し、同じ種類は最大 3 個までにしています。
 - 説明文は英語です（最大 30 文字）。日本語にすると、メニュー言語を英語（CODEPAGE=1252）にしたときにビルドが失敗するためです。
 - 使える形式（ファミコン）: ゲームジニー（6 / 8 文字）、`AAAA:VV`（RAM の値を固定）、`AAAA?CC:VV`（比較付き）。1 行に `+` で 3 つまでつなげられます。
 - 使える形式（PCエンジン）: `.pceplus` の ROM パッチ。`01822fbd` なら「1 バイト / 番地 $1822F / 値 $BD」です。番地はヘッダ（512 バイト）を除いた位置で、1 行に複数並べられます。
-- `#` で始まる行はコメントになりません（メニューに項目として表示されます）。
+- ファミコン / PCエンジンでは、`#` で始まる行はコメントになりません（メニューに項目として表示されます）。
+- 使える形式（MSX）: `.mcf`（`0,番地,値,0,説明`、番地と値は 10 進）。`!` で始まる行はコメントです。1 行に 1 番地で、値が 255 を超えると 2 バイト（下位が先）になります。
 
 ## 自分でコードを足す・作り直す
 
 - ファイルを直接編集できます。書式は `コード, 説明` です（1 行 1 項目）。
-- ROM を追加したときは、`scripts\nes_cheats.py`（ファミコン）/ `scripts\pce_cheats.py`（PCエンジン）の `MAP` に対応を書き足してから実行すると、作り直せます。
+- ROM を追加したときは、`scripts\nes_cheats.py`（ファミコン）/ `scripts\pce_cheats.py`（PCエンジン）/ `scripts\msx_cheats.py`（MSX）の `MAP` に対応を書き足してから実行すると、作り直せます。
 
 ```
 tools\venv\Scripts\python.exe scripts\nes_cheats.py
 ```
 
-- 照合の詳細は `nes\report.json` にあります。
+- 照合の詳細は `nes\report.json` / `msx\report.json` にあります。
 
 ## 出典
 
 - [libretro-database](https://github.com/libretro/libretro-database)（cht/Nintendo - Nintendo Entertainment System）
 - [martaaay/game-and-watch-retro-go-game-genie-codes](https://github.com/martaaay/game-and-watch-retro-go-game-genie-codes)
-- [ファミコンチート集 Wiki](https://wikiwiki.jp/nnnes1/)（ドラゴンクエスト）
+- [ファミコンチート集 Wiki](https://wikiwiki.jp/nnnes1/)（ドラゴンクエスト、ドラえもん、ハイドライド・スペシャル、戦場の狼、サラダの国のトマト姫）
 - [olderzeus/game-genie-codes-nes](https://github.com/olderzeus/game-genie-codes-nes)（pceplus フォルダ。PCエンジン）
+- [libretro-database](https://github.com/libretro/libretro-database)（cht/Nintendo - Family Computer Disk System。ディスクシステム）
+- [blueMSX Cheats.zip](https://web.archive.org/web/2015/http://bluemsx.msxblue.com/rel_download/Cheats.zip)（MCF。MSX。作成: Albert Beevendorp, Patrick van Arkel, Benoît Delvaux）

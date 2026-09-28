@@ -1602,15 +1602,84 @@
   "rom": "HYDLIDE",
   "name": "ハイドライド・スペシャル",
   "mapper": 0,
-  "written": 0,
+  "written": 11,
   "rejected": 9,
   "levels": {
    "ok": 0,
    "plausible": 0,
-   "trusted": 0
+   "trusted": 11
   },
-  "sources": [],
-  "codes": []
+  "sources": [
+   "wikiwiki.jp/nnnes1 (ファミコンチート集 Wiki)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "0026:FF",
+    "Invincible",
+    "Invincible"
+   ],
+   [
+    "trusted",
+    "0036:64",
+    "LIFE 100",
+    "LIFE 100"
+   ],
+   [
+    "trusted",
+    "0039:64",
+    "MAGIC 100",
+    "MAGIC 100"
+   ],
+   [
+    "trusted",
+    "007F:FF",
+    "Unlimited magic",
+    "Unlimited magic"
+   ],
+   [
+    "trusted",
+    "0038:64",
+    "EXP 100 (fast level up)",
+    "EXP 100 (fast level up)"
+   ],
+   [
+    "trusted",
+    "0037:64+003F:64+0040:64",
+    "Max status",
+    "Max status"
+   ],
+   [
+    "trusted",
+    "0057:FF+0058:FF+0059:FF",
+    "All items 1/5",
+    "All items 1/5"
+   ],
+   [
+    "trusted",
+    "005A:FF+005B:FF+005C:FF",
+    "All items 2/5",
+    "All items 2/5"
+   ],
+   [
+    "trusted",
+    "005D:FF+005E:FF+005F:FF",
+    "All items 3/5",
+    "All items 3/5"
+   ],
+   [
+    "trusted",
+    "0060:FF+0061:FF+0062:FF",
+    "All items 4/5",
+    "All items 4/5"
+   ],
+   [
+    "trusted",
+    "0063:FF+0064:FF",
+    "All items 5/5",
+    "All items 5/5"
+   ]
+  ]
  },
  {
   "rom": "KAGE_D",
@@ -2176,15 +2245,42 @@
   "rom": "OOKAMI",
   "name": "戦場の狼",
   "mapper": 94,
-  "written": 0,
+  "written": 4,
   "rejected": 6,
   "levels": {
    "ok": 0,
    "plausible": 0,
-   "trusted": 0
+   "trusted": 4
   },
-  "sources": [],
-  "codes": []
+  "sources": [
+   "wikiwiki.jp/nnnes1 (ファミコンチート集 Wiki)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "04AB:20",
+    "Invincible",
+    "Invincible"
+   ],
+   [
+    "trusted",
+    "04AB:EB",
+    "Invincible + all power-ups",
+    "Invincible + all power-ups"
+   ],
+   [
+    "trusted",
+    "049C:09",
+    "Lives 9",
+    "Lives 9"
+   ],
+   [
+    "trusted",
+    "04A6:99",
+    "Grenades 99",
+    "Grenades 99"
+   ]
+  ]
  },
  {
   "rom": "Okhotsk ni Kiyu",
@@ -4150,14 +4246,159 @@
   "rom": "saradanokuni",
   "name": "サラダの国のトマト姫",
   "mapper": 1,
-  "written": 0,
+  "written": 2,
   "rejected": 1,
   "levels": {
    "ok": 0,
    "plausible": 0,
-   "trusted": 0
+   "trusted": 2
   },
-  "sources": [],
-  "codes": []
+  "sources": [
+   "wikiwiki.jp/nnnes1 (ファミコンチート集 Wiki)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "03E1:09",
+    "Money 9",
+    "Money 9"
+   ],
+   [
+    "trusted",
+    "03E0:09",
+    "Gold coins 9 (OFF to give)",
+    "Gold coins 9 (OFF to give)"
+   ]
+  ]
+ },
+ {
+  "rom": "link",
+  "name": "リンクの冒険 (FDS)",
+  "mapper": "FDS",
+  "written": 5,
+  "rejected": 14,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 5
+  },
+  "sources": [
+   "Link no Bouken - The Legend of Zelda 2 (Japan)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "0518:04",
+    "Invulnerability",
+    "Invulnerability"
+   ],
+   [
+    "trusted",
+    "0700:03",
+    "Infinite Lives",
+    "Infinite Lives"
+   ],
+   [
+    "trusted",
+    "0770:7F",
+    "Infinite Health",
+    "Infinite Health"
+   ],
+   [
+    "trusted",
+    "0087:00+0088:00+0089:00",
+    "Less Random Battles",
+    "Less Random Battles (World Map)"
+   ],
+   [
+    "trusted",
+    "057D:FF",
+    "Keep Gaining Height After",
+    "Keep Gaining Height After Jumping"
+   ]
+  ]
+ },
+ {
+  "rom": "metroid",
+  "name": "メトロイド (FDS)",
+  "mapper": "FDS",
+  "written": 4,
+  "rejected": 21,
+  "levels": {
+   "ok": 0,
+   "plausible": 0,
+   "trusted": 4
+  },
+  "sources": [
+   "Metroid (Japan) (v1.1) [b]",
+   "ROM で確認 (北米版 Metroid の RAM コードを FDS 版の番地に合わせたもの)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "0106:99+0107:09",
+    "Energy always 99",
+    "Energy always 99"
+   ],
+   [
+    "trusted",
+    "B412:FF+B413:FF",
+    "Infinite Missiles",
+    "Infinite Missiles"
+   ],
+   [
+    "trusted",
+    "0300:00",
+    "Jump In Mid-Air (RAM)",
+    "Jump In Mid-Air (RAM)"
+   ],
+   [
+    "trusted",
+    "NYPLPK",
+    "Have All Items",
+    "Have All Items"
+   ]
+  ]
+ },
+ {
+  "rom": "nazo_mura",
+  "name": "なぞの村雨城 (FDS)",
+  "mapper": "FDS",
+  "written": 4,
+  "rejected": 1,
+  "levels": {
+   "ok": 1,
+   "plausible": 0,
+   "trusted": 3
+  },
+  "sources": [
+   "Nazo no Murasamejou (Japan)"
+  ],
+  "codes": [
+   [
+    "trusted",
+    "0347:01",
+    "Invincible",
+    "Invincible"
+   ],
+   [
+    "trusted",
+    "0702:03",
+    "Infinite Energy",
+    "Infinite Energy"
+   ],
+   [
+    "trusted",
+    "066A:09",
+    "Infinite Time",
+    "Infinite Time"
+   ],
+   [
+    "ok",
+    "AAKAVGIA",
+    "Hit Anywhere",
+    "Hit Anywhere"
+   ]
+  ]
  }
 ]

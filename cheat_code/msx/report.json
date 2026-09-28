@@ -1,0 +1,1485 @@
+[
+ {
+  "rom": "Aleste (1988)(Compile)(Jp)",
+  "name": "アレスタ",
+  "written": 7,
+  "mcf": "aleste1",
+  "ratio": 0.88,
+  "random": 0.04,
+  "levels": {
+   "ok": 6,
+   "trusted": 1
+  },
+  "codes": [
+   [
+    "ok",
+    51216,
+    255,
+    "Invulnerable"
+   ],
+   [
+    "ok",
+    49168,
+    98,
+    "Lives"
+   ],
+   [
+    "ok",
+    49170,
+    8,
+    "Maxed up normal shot"
+   ],
+   [
+    "ok",
+    49176,
+    7,
+    "Wave laser"
+   ],
+   [
+    "ok",
+    49177,
+    3,
+    "Maxed up special shot"
+   ],
+   [
+    "ok",
+    49179,
+    99,
+    "Always keep weapon on 99%"
+   ],
+   [
+    "trusted",
+    50349,
+    255,
+    "Scroll speed turbo"
+   ]
+  ]
+ },
+ {
+  "rom": "Chack N Pop (1984)(Taito)",
+  "name": "チャックンポップ",
+  "written": 3,
+  "mcf": "chacknpop",
+  "ratio": 0.31,
+  "random": 0.02,
+  "levels": {
+   "ok": 3,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    57455,
+    3,
+    "Lives"
+   ],
+   [
+    "ok",
+    57451,
+    0,
+    "Infinite time"
+   ],
+   [
+    "ok",
+    57402,
+    255,
+    "No monsters"
+   ]
+  ]
+ },
+ {
+  "rom": "Dig Dug (1982-84)(Namcot)",
+  "name": "ディグダグ",
+  "written": 1,
+  "mcf": "digdug",
+  "ratio": 1.0,
+  "random": 0.05,
+  "levels": {
+   "ok": 1,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    59136,
+    2,
+    "Lives"
+   ]
+  ]
+ },
+ {
+  "rom": "Dragon Buster (1987)(Namcot)[b]",
+  "name": "ドラゴンバスター",
+  "written": 2,
+  "mcf": "dragonbuster",
+  "ratio": 0.8,
+  "random": 0.07,
+  "levels": {
+   "ok": 2,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    49938,
+    1433,
+    "Life and attacks"
+   ],
+   [
+    "ok",
+    49890,
+    39321,
+    "Exp"
+   ]
+  ]
+ },
+ {
+  "rom": "Dragon Slayer 4 - Drasle Family (1987)(Falcom)",
+  "name": "ドラゴンスレイヤーIV",
+  "written": 16,
+  "mcf": "dragonslayer4msx2",
+  "ratio": 0.55,
+  "random": 0.03,
+  "levels": {
+   "ok": 13,
+   "trusted": 3
+  },
+  "codes": [
+   [
+    "ok",
+    49291,
+    255,
+    "Invincible"
+   ],
+   [
+    "ok",
+    49255,
+    109,
+    "Life"
+   ],
+   [
+    "ok",
+    49256,
+    109,
+    "Magic"
+   ],
+   [
+    "ok",
+    49260,
+    255,
+    "Strong weapons"
+   ],
+   [
+    "ok",
+    49262,
+    40,
+    "Shoot far"
+   ],
+   [
+    "trusted",
+    49278,
+    99,
+    "Sword"
+   ],
+   [
+    "ok",
+    49257,
+    109,
+    "Money"
+   ],
+   [
+    "ok",
+    49258,
+    109,
+    "Keys"
+   ],
+   [
+    "trusted",
+    49270,
+    99,
+    "Master key"
+   ],
+   [
+    "ok",
+    49259,
+    40,
+    "Jump high"
+   ],
+   [
+    "ok",
+    49263,
+    99,
+    "Wings"
+   ],
+   [
+    "trusted",
+    49264,
+    99,
+    "Armor"
+   ],
+   [
+    "ok",
+    49277,
+    1,
+    "Crown"
+   ],
+   [
+    "ok",
+    49292,
+    2,
+    "Walk trough air"
+   ],
+   [
+    "ok",
+    49293,
+    2,
+    "Kill enemies with body"
+   ],
+   [
+    "ok",
+    49294,
+    255,
+    "Walk faster"
+   ]
+  ]
+ },
+ {
+  "rom": "Goonies, The (1986)(Konami)[a][RC-734]",
+  "name": "グーニーズ",
+  "written": 8,
+  "mcf": "goonies",
+  "ratio": 0.7,
+  "random": 0.04,
+  "levels": {
+   "ok": 5,
+   "trusted": 3
+  },
+  "codes": [
+   [
+    "ok",
+    57718,
+    255,
+    "Protected from most enemies"
+   ],
+   [
+    "trusted",
+    57719,
+    255,
+    "Protected from water  fire"
+   ],
+   [
+    "trusted",
+    57720,
+    1,
+    "Protected from falling stones"
+   ],
+   [
+    "ok",
+    57444,
+    80,
+    "Vitality"
+   ],
+   [
+    "trusted",
+    57721,
+    4,
+    "Extra vitality"
+   ],
+   [
+    "ok",
+    57445,
+    80,
+    "Experience"
+   ],
+   [
+    "ok",
+    57633,
+    1,
+    "Always have key"
+   ],
+   [
+    "ok",
+    58093,
+    2,
+    "Show hidden items"
+   ]
+  ]
+ },
+ {
+  "rom": "Hydlide II - Shine Of Darkness (1985)(T&E Soft)",
+  "name": "ハイドライドII",
+  "written": 5,
+  "mcf": "hydlide2",
+  "ratio": 1.0,
+  "random": 0.05,
+  "levels": {
+   "ok": 5,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    57373,
+    153,
+    "Life max"
+   ],
+   [
+    "ok",
+    57381,
+    153,
+    "Magic max"
+   ],
+   [
+    "ok",
+    57428,
+    39321,
+    "Money"
+   ],
+   [
+    "ok",
+    57378,
+    153,
+    "Strength max"
+   ],
+   [
+    "ok",
+    61707,
+    153,
+    "Start points"
+   ]
+  ]
+ },
+ {
+  "rom": "King Knight (1986)(Square)[b]",
+  "name": "キングスナイト",
+  "written": 1,
+  "mcf": "kingsknight",
+  "ratio": 1.0,
+  "random": 0.1,
+  "levels": {
+   "ok": 1,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    61252,
+    255,
+    "Top speed"
+   ]
+  ]
+ },
+ {
+  "rom": "Knight Mare II - The Maze Of Galious (1987)(Konami)[RC-749]",
+  "name": "魔城伝説II ガリウスの迷宮",
+  "written": 16,
+  "mcf": "mazeofgalious",
+  "ratio": 0.78,
+  "random": 0.14,
+  "levels": {
+   "ok": 13,
+   "trusted": 3
+  },
+  "codes": [
+   [
+    "ok",
+    58648,
+    1,
+    "Invulnerable"
+   ],
+   [
+    "ok",
+    59152,
+    1,
+    "Big enemy dies after 1 hit"
+   ],
+   [
+    "ok",
+    57430,
+    65535,
+    "Vit popolon"
+   ],
+   [
+    "ok",
+    57414,
+    2457,
+    "Arrows"
+   ],
+   [
+    "trusted",
+    57457,
+    1,
+    "Ceramic arrows"
+   ],
+   [
+    "trusted",
+    57458,
+    1,
+    "Rolling fire"
+   ],
+   [
+    "trusted",
+    57459,
+    1,
+    "Fire"
+   ],
+   [
+    "ok",
+    57495,
+    3,
+    "Shield"
+   ],
+   [
+    "ok",
+    58640,
+    6,
+    "Active weapon - magnifying"
+   ],
+   [
+    "ok",
+    57416,
+    2457,
+    "Coin"
+   ],
+   [
+    "ok",
+    57418,
+    2457,
+    "Keys"
+   ],
+   [
+    "ok",
+    57425,
+    1,
+    "Max exp"
+   ],
+   [
+    "ok",
+    57383,
+    1,
+    "Zeus cheat"
+   ],
+   [
+    "ok",
+    57426,
+    65535,
+    "Aphrodite"
+   ],
+   [
+    "ok",
+    57466,
+    1,
+    "Cross"
+   ],
+   [
+    "ok",
+    57468,
+    1,
+    "Necklace"
+   ]
+  ]
+ },
+ {
+  "rom": "MAJYOUDE",
+  "name": "魔城伝説",
+  "written": 8,
+  "mcf": "knightmare",
+  "ratio": 0.67,
+  "random": 0.07,
+  "levels": {
+   "ok": 7,
+   "trusted": 1
+  },
+  "codes": [
+   [
+    "trusted",
+    57396,
+    0,
+    "End boss dies after one hit"
+   ],
+   [
+    "ok",
+    58880,
+    0,
+    "Invulnerable"
+   ],
+   [
+    "ok",
+    57440,
+    153,
+    "Lives"
+   ],
+   [
+    "ok",
+    58894,
+    153,
+    "Timer"
+   ],
+   [
+    "ok",
+    58889,
+    13,
+    "Nuclear arrows - triple attack"
+   ],
+   [
+    "ok",
+    58890,
+    4,
+    "Speed (0-4)"
+   ],
+   [
+    "ok",
+    57350,
+    8,
+    "All exits directly available"
+   ],
+   [
+    "ok",
+    58892,
+    3,
+    "Red hot"
+   ]
+  ]
+ },
+ {
+  "rom": "Majutsushi Mahjong 2 (1989)(Konami)(Jp)[RC-765]",
+  "name": "麻雀悟空 / 魔術師麻雀 2",
+  "written": 0,
+  "note": "no source"
+ },
+ {
+  "rom": "Metal Gear (1987)(Konami)[RC-750]",
+  "name": "メタルギア",
+  "written": 16,
+  "mcf": "metalgear1",
+  "ratio": 0.24,
+  "random": 0.04,
+  "levels": {
+   "ok": 11,
+   "trusted": 5
+  },
+  "codes": [
+   [
+    "ok",
+    49457,
+    48,
+    "Power bar"
+   ],
+   [
+    "trusted",
+    53318,
+    255,
+    "Sleep time for some guards"
+   ],
+   [
+    "ok",
+    50432,
+    39169,
+    "Always ammo for handgun"
+   ],
+   [
+    "ok",
+    50436,
+    39170,
+    "Always ammo for sub machine"
+   ],
+   [
+    "trusted",
+    50484,
+    2,
+    "Bomb blast suit in inventory"
+   ],
+   [
+    "trusted",
+    50532,
+    14,
+    "Card 1 in inventory"
+   ],
+   [
+    "ok",
+    49458,
+    3,
+    "Class (0-3)"
+   ],
+   [
+    "ok",
+    49465,
+    0,
+    "Scorpions can't poison you"
+   ],
+   [
+    "ok",
+    49561,
+    255,
+    "Enemies can't hurt you"
+   ],
+   [
+    "trusted",
+    50129,
+    0,
+    "Open all doors and passages"
+   ],
+   [
+    "trusted",
+    50440,
+    39171,
+    "Always grenades"
+   ],
+   [
+    "ok",
+    50460,
+    8,
+    "Silencer in inventory"
+   ],
+   [
+    "ok",
+    50480,
+    1,
+    "Body armor in inventory"
+   ],
+   [
+    "ok",
+    50690,
+    0,
+    "No extra guards when detected"
+   ],
+   [
+    "ok",
+    50710,
+    0,
+    "Electrified zones without"
+   ],
+   [
+    "ok",
+    53261,
+    1,
+    "Bosses die faster"
+   ]
+  ]
+ },
+ {
+  "rom": "Metal Gear 2 - Solid Snake (1990)(Konami)[RC-767]",
+  "name": "メタルギア2 ソリッドスネーク",
+  "written": 16,
+  "mcf": "metalgear2",
+  "ratio": 0.52,
+  "random": 0.15,
+  "levels": {
+   "ok": 13,
+   "trusted": 3
+  },
+  "codes": [
+   [
+    "ok",
+    51795,
+    32,
+    "Life bar"
+   ],
+   [
+    "ok",
+    54315,
+    0,
+    "Set avoiding time to 0"
+   ],
+   [
+    "ok",
+    54784,
+    39169,
+    "Get gun"
+   ],
+   [
+    "ok",
+    54788,
+    39169,
+    "Get sub machine gun"
+   ],
+   [
+    "trusted",
+    54800,
+    39169,
+    "Get surface to air missiles"
+   ],
+   [
+    "ok",
+    54804,
+    39169,
+    "Get remote missiles"
+   ],
+   [
+    "trusted",
+    54808,
+    39169,
+    "Get c4 explosives"
+   ],
+   [
+    "ok",
+    51772,
+    1,
+    "Invisible until an alert is"
+   ],
+   [
+    "ok",
+    52009,
+    32,
+    "Do not sink into the swamp"
+   ],
+   [
+    "ok",
+    54320,
+    2,
+    "Open path through jungle"
+   ],
+   [
+    "trusted",
+    54792,
+    39169,
+    "Get grenades"
+   ],
+   [
+    "ok",
+    54794,
+    9,
+    "Get grenates"
+   ],
+   [
+    "ok",
+    54812,
+    39169,
+    "Get landmines"
+   ],
+   [
+    "ok",
+    54820,
+    39169,
+    "Get gas grenade"
+   ],
+   [
+    "ok",
+    54828,
+    257,
+    "Get silencer"
+   ],
+   [
+    "ok",
+    54836,
+    257,
+    "Get zippo"
+   ]
+  ]
+ },
+ {
+  "rom": "Nemesis (1986)(Konami)[a][RC-742]",
+  "name": "グラディウス",
+  "written": 15,
+  "mcf": "gradius1",
+  "ratio": 0.95,
+  "random": 0.07,
+  "levels": {
+   "ok": 14,
+   "trusted": 1
+  },
+  "codes": [
+   [
+    "ok",
+    57440,
+    153,
+    "Lives"
+   ],
+   [
+    "ok",
+    57650,
+    1,
+    "Missile"
+   ],
+   [
+    "ok",
+    57651,
+    1,
+    "Double"
+   ],
+   [
+    "ok",
+    57652,
+    1,
+    "Laser"
+   ],
+   [
+    "ok",
+    57653,
+    1,
+    "Option"
+   ],
+   [
+    "ok",
+    57654,
+    2,
+    "Shield"
+   ],
+   [
+    "ok",
+    57856,
+    3,
+    "Shield on"
+   ],
+   [
+    "trusted",
+    57869,
+    2,
+    "Enable double"
+   ],
+   [
+    "ok",
+    57870,
+    2,
+    "Enable laser"
+   ],
+   [
+    "ok",
+    57871,
+    2,
+    "Enable missile"
+   ],
+   [
+    "ok",
+    57888,
+    1,
+    "Enable option 1"
+   ],
+   [
+    "ok",
+    57920,
+    1,
+    "Enable option 2"
+   ],
+   [
+    "ok",
+    57611,
+    4,
+    "Speed set to 4"
+   ],
+   [
+    "ok",
+    57454,
+    0,
+    "Use unlimited hype"
+   ],
+   [
+    "ok",
+    57858,
+    8,
+    "Always hyper"
+   ]
+  ]
+ },
+ {
+  "rom": "Nemesis II (1987)(Konami)[a][RC-751]",
+  "name": "グラディウス2",
+  "written": 11,
+  "mcf": "gradius2",
+  "ratio": 0.84,
+  "random": 0.11,
+  "levels": {
+   "ok": 11,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    57856,
+    153,
+    "Lives"
+   ],
+   [
+    "ok",
+    58368,
+    2,
+    "Shield on"
+   ],
+   [
+    "ok",
+    58379,
+    2,
+    "Options"
+   ],
+   [
+    "ok",
+    58417,
+    2,
+    "Double"
+   ],
+   [
+    "ok",
+    58418,
+    6,
+    "Fire blaster"
+   ],
+   [
+    "ok",
+    58419,
+    3,
+    "Napalm missile"
+   ],
+   [
+    "ok",
+    58420,
+    2,
+    "Up laser"
+   ],
+   [
+    "ok",
+    58421,
+    2,
+    "Down laser"
+   ],
+   [
+    "ok",
+    58422,
+    2,
+    "Back beam"
+   ],
+   [
+    "ok",
+    58425,
+    7,
+    "Vector laser"
+   ],
+   [
+    "ok",
+    58370,
+    5,
+    "Speed set to 5"
+   ]
+  ]
+ },
+ {
+  "rom": "Nemesis III - The Eve Of Destruction (1988)(Konami)[a][RC-764]",
+  "name": "ゴーファーの野望 エピソードII",
+  "written": 16,
+  "mcf": "nemesis3",
+  "ratio": 0.81,
+  "random": 0.12,
+  "levels": {
+   "ok": 16,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    58208,
+    153,
+    "Lives"
+   ],
+   [
+    "ok",
+    58223,
+    7,
+    "All weapons and upgrades"
+   ],
+   [
+    "ok",
+    58262,
+    1,
+    "Spacefighter shield"
+   ],
+   [
+    "ok",
+    58848,
+    1,
+    "Wave motion gun"
+   ],
+   [
+    "ok",
+    58880,
+    3,
+    "Shield on"
+   ],
+   [
+    "ok",
+    58888,
+    2,
+    "Options"
+   ],
+   [
+    "ok",
+    58928,
+    12,
+    "Big fire blaster"
+   ],
+   [
+    "ok",
+    58929,
+    14,
+    "Down laser"
+   ],
+   [
+    "ok",
+    58930,
+    19,
+    "Hawkwind missile"
+   ],
+   [
+    "ok",
+    58937,
+    15,
+    "Ultra high speed rapid fire"
+   ],
+   [
+    "ok",
+    58946,
+    16,
+    "Double way missile"
+   ],
+   [
+    "ok",
+    58270,
+    1,
+    "Activate expand"
+   ],
+   [
+    "ok",
+    58221,
+    4,
+    "Set speed to 4"
+   ],
+   [
+    "ok",
+    58263,
+    1,
+    "Extra sensory device"
+   ],
+   [
+    "ok",
+    58267,
+    0,
+    "Activate hard"
+   ],
+   [
+    "ok",
+    58268,
+    1,
+    "Activate find"
+   ]
+  ]
+ },
+ {
+  "rom": "Ninjakun (1984)(Jaleco)(Jp)",
+  "name": "忍者くん",
+  "written": 0,
+  "mcf": "ninjakun1",
+  "ratio": 0.0,
+  "random": 0.03,
+  "note": "version mismatch"
+ },
+ {
+  "rom": "Relics (19xx)(-)[b]",
+  "name": "レリクス",
+  "written": 0,
+  "note": "no source"
+ },
+ {
+  "rom": "Romancia - Dragon Slayer Jr (19xx)(Falcom)[b]",
+  "name": "ロマンシア",
+  "written": 6,
+  "mcf": "romancia",
+  "ratio": 1.0,
+  "random": 0.05,
+  "levels": {
+   "ok": 6,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    53365,
+    39321,
+    "Time"
+   ],
+   [
+    "ok",
+    53348,
+    255,
+    "Swords"
+   ],
+   [
+    "ok",
+    53350,
+    64,
+    "Shields"
+   ],
+   [
+    "ok",
+    53351,
+    63,
+    "Gold"
+   ],
+   [
+    "ok",
+    53403,
+    1,
+    "Can receive unlimited potions"
+   ],
+   [
+    "ok",
+    53347,
+    255,
+    "Hearts"
+   ]
+  ]
+ },
+ {
+  "rom": "Salamander (1988)(Zemina)[RC-758]",
+  "name": "沙羅曼蛇",
+  "written": 14,
+  "mcf": "salamander",
+  "ratio": 0.57,
+  "random": 0.12,
+  "levels": {
+   "ok": 10,
+   "trusted": 4
+  },
+  "codes": [
+   [
+    "ok",
+    58112,
+    153,
+    "Lives player 1"
+   ],
+   [
+    "trusted",
+    58128,
+    7,
+    "All special weapons player 1"
+   ],
+   [
+    "trusted",
+    58129,
+    7,
+    "Capsule type player 1 - shield"
+   ],
+   [
+    "ok",
+    58164,
+    1,
+    "Option hold player 1"
+   ],
+   [
+    "trusted",
+    58175,
+    15,
+    "Ultra high speed rapid fire"
+   ],
+   [
+    "ok",
+    58176,
+    7,
+    "Triple laser shoot player 1"
+   ],
+   [
+    "trusted",
+    58177,
+    4,
+    "Double way arming ball player"
+   ],
+   [
+    "ok",
+    58178,
+    1,
+    "Trampling missile player 1"
+   ],
+   [
+    "ok",
+    58368,
+    1,
+    "Option 1 active"
+   ],
+   [
+    "ok",
+    58384,
+    1,
+    "Option 2 active"
+   ],
+   [
+    "ok",
+    58400,
+    1,
+    "Option 3 active"
+   ],
+   [
+    "ok",
+    58928,
+    6,
+    "Option chain"
+   ],
+   [
+    "ok",
+    58167,
+    5,
+    "Ship speed player 1 (1-7)"
+   ],
+   [
+    "ok",
+    58122,
+    1,
+    "Crystal breeze"
+   ]
+  ]
+ },
+ {
+  "rom": "Spelunker (1986)(Irem Corp)",
+  "name": "スペランカー",
+  "written": 5,
+  "mcf": "spelunker",
+  "ratio": 1.0,
+  "random": 0.06,
+  "levels": {
+   "ok": 5,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    57476,
+    10,
+    "Lives"
+   ],
+   [
+    "ok",
+    59717,
+    255,
+    "Stop ingame timer"
+   ],
+   [
+    "ok",
+    57488,
+    10,
+    "Bombs"
+   ],
+   [
+    "ok",
+    57489,
+    10,
+    "Flares"
+   ],
+   [
+    "ok",
+    60421,
+    0,
+    "Cancel blue ghost"
+   ]
+  ]
+ },
+ {
+  "rom": "Star Soldier (1986)(Hudson Soft)",
+  "name": "スターソルジャー",
+  "written": 2,
+  "mcf": "starsoldier",
+  "ratio": 1.0,
+  "random": 0.03,
+  "levels": {
+   "ok": 2,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    53024,
+    255,
+    "Invincible"
+   ],
+   [
+    "ok",
+    52868,
+    3,
+    "Get a more powerfull shot"
+   ]
+  ]
+ },
+ {
+  "rom": "Tank Batallion (1980-84)(Namcot)",
+  "name": "タンクバタリアン",
+  "written": 1,
+  "mcf": "tankbattalion",
+  "ratio": 1.0,
+  "random": 0.04,
+  "levels": {
+   "ok": 1,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    57421,
+    153,
+    "Lives"
+   ]
+  ]
+ },
+ {
+  "rom": "Topple Zip 2 (1988)(Bothtec)",
+  "name": "トップルジップ",
+  "written": 0,
+  "note": "no source"
+ },
+ {
+  "rom": "Tower Of Druaga, The (1984-86)(Namcot)",
+  "name": "ドルアーガの塔",
+  "written": 4,
+  "mcf": "towerofdrauga",
+  "ratio": 1.0,
+  "random": 0.06,
+  "levels": {
+   "ok": 4,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    59887,
+    5,
+    "Lives"
+   ],
+   [
+    "ok",
+    59909,
+    128,
+    "Infinite time"
+   ],
+   [
+    "ok",
+    59918,
+    1,
+    "Always have key"
+   ],
+   [
+    "ok",
+    59917,
+    250,
+    "Pick axe"
+   ]
+  ]
+ },
+ {
+  "rom": "Valis - The Fantasm Soldier (1987)(Zemina)",
+  "name": "夢幻戦士ヴァリス",
+  "written": 2,
+  "mcf": "fantasmsoldier1",
+  "ratio": 1.0,
+  "random": 0.05,
+  "levels": {
+   "ok": 2,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    61540,
+    255,
+    "Life"
+   ],
+   [
+    "ok",
+    62100,
+    3,
+    "Max sword"
+   ]
+  ]
+ },
+ {
+  "rom": "Volguard (1985)(DB Soft)",
+  "name": "ボルガード",
+  "written": 2,
+  "mcf": "volguard",
+  "ratio": 1.0,
+  "random": 0.02,
+  "levels": {
+   "ok": 2,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    58140,
+    7,
+    "Lives"
+   ],
+   [
+    "ok",
+    58267,
+    4,
+    "Speed (0-4)"
+   ]
+  ]
+ },
+ {
+  "rom": "Warp & Warp (1980-84)(Namcot)",
+  "name": "ワープ&ワープ",
+  "written": 1,
+  "mcf": "warpwarp",
+  "ratio": 1.0,
+  "random": 0.02,
+  "levels": {
+   "ok": 1,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    57481,
+    99,
+    "Lives"
+   ]
+  ]
+ },
+ {
+  "rom": "Yie Ar Kung-Fu (1985)(Konami)[RC-725]",
+  "name": "イー・アル・カンフー",
+  "written": 2,
+  "mcf": "yiearkungfu1",
+  "ratio": 1.0,
+  "random": 0.03,
+  "levels": {
+   "ok": 2,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    57623,
+    0,
+    "Kill enemy with one hit"
+   ],
+   [
+    "ok",
+    57424,
+    9,
+    "Lives"
+   ]
+  ]
+ },
+ {
+  "rom": "Yie Ar Kung-Fu II - The Emperor Yie-Gah (1985)(Konami)[a][RC-737]",
+  "name": "イー・アル・カンフーII",
+  "written": 2,
+  "mcf": "yiearkungfu2",
+  "ratio": 1.0,
+  "random": 0.05,
+  "levels": {
+   "ok": 2,
+   "trusted": 0
+  },
+  "codes": [
+   [
+    "ok",
+    57602,
+    1,
+    "Kill enemy with one hit"
+   ],
+   [
+    "ok",
+    58014,
+    255,
+    "Invincible for bosses"
+   ]
+  ]
+ }
+]
