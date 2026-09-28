@@ -83,6 +83,18 @@ Retro-Go は常に `INTFLASH_BANK=2`（0x08100000）で、`GNW_TARGET` は機種
   - カバー: `write_covart` と同じ変換（RGB → LANCZOS で 128×96 → JPEG optimize）を venv の Pillow で行ったサイズ。`.img`（変換済み）はそのままのサイズ。
 - 容量 = 割り当て - セーブ領域（ROM ごとに 4KB 単位）- 4KB（設定）-（スクリーンショット有効なら 150KB）
 
+### 内部フラッシュの見積もり（capacity.estimate_intflash）
+
+Retro-Go 本体は内部フラッシュ（`INTFLASH_BANK=2`、256KB）に入り、ここに ROM ごとの一覧表と表示名、チートも入ります。外部フラッシュに余裕があっても、ここが溢れるとリンクで `region FLASH overflowed` になります。
+
+- 使用量 = 固定 `INTFLASH_FIXED` +（チート ON なら `INTFLASH_CHEAT_CODE`）+ 一覧表 + 文字列 + チートのポインタ
+  - 一覧表: 1 本 44 バイト（`retro_emulator_file_t`、COVERFLOW=1）。チート ON で 60 バイト（`id` とポインタ 3 つ）なので、**チートの無い ROM も 16 バイト増えます**。COVERFLOW=0 では 8 バイト減ります。BIOS（`nes_bios` / `msx_bios`、ビルド時に作られる `PANASONICDISK_.rom` も）も 1 項目ずつ入ります。
+  - 文字列: 表示名（`roms/<機種>.json` の name、無ければファイル名）、拡張子、チートのコードと説明。`.rodata.str1.4` なので 1 つずつ「終端込みで 4 バイト境界」、同じ文字列は 1 つにまとまります。PCエンジンのチートは `\x1\x00…` のエスケープで書かれるので、エスケープ 1 つを 1 バイトと数えます。
+  - チートのポインタ: 1 個あたり 8 バイト（コードと説明の `const char*` 配列。.data なので RAM にも同じだけ入る）。件数の定数（`GG_NES_n_COUNT`）は最適化で消え、0 バイトです。
+  - チートの読み取りと変換は、`parse_roms.py` をそのまま読み込んで `ROM(...).get_cheat_codes()` で行います（NES の大文字化、`.mcf` の「番地,値,長さ」への変換、`.pceplus` の変換が本物と同じになる）。`parse_roms.py` は標準ライブラリだけで動きますが、グローバルの `args.save` を参照するので、読み込んだあとに設定しています。
+- 2026-09-28 に計測（ゼルダ / CODEPAGE=932 / COVERFLOW=1）: チート OFF 229,816 バイト（ELF から、固定 215,852）、チート ON 263,088 バイト（容量超過したビルドのリンクマップから、233 本・チート 113 本 745 個）で、見積もりは両方と一致しました。マリオや COVERFLOW=0 では、固定部分が少し違う可能性があります（未計測）。
+- 計測し直す方法: チート OFF は ELF の `_sidata + (_edata - _sdata) - 0x08100000` が使用量で、`*_roms` シンボルの大きさと、各項目の `.name` の文字列から固定部分を逆算します。チート ON はリンクが失敗しても `build/gw_retro_go.map` が残るので、`.text` / `.rodata` / `.data`（load address）から使用量を出し、`rom_manager.o` の `.rodata.str1.4`・`*_roms`・`*_CODE_n` / `*_DESC_n` を合計して比べます。
+
 **Retro-Go を更新したら、この数値を計測し直すこと。** 方法: 機種ごとにダミー ROM を 1 本だけ入れてビルドし、`arm-none-eabi-objdump -t` の `__extflash_data_end__` / `__extflash_game_rom_start__` と、`-h` の `.overlay_*` のサイズを読みます。NES のダミーは iNES ヘッダが必要です（`nesmapper.py` が読むため）。
 
 ## チート（cheat_code/ と scripts/nes_cheats.py）
@@ -94,10 +106,14 @@ Retro-Go は常に `INTFLASH_BANK=2`（0x08100000）で、`GNW_TARGET` は機種
   - 6 文字コードは、置換元の命令が典型パターン（DEC→LDA など）の場合だけ、北米版のものも採用します。
   - 日本版・日米共通版のファイルにある RAM コードは、出典を根拠に採用します。
   - 同じゲームでも版が違うと一致しません（例: イー・アル・カンフー Rev 1.2 と Rev 1.4）。題名が不明な ROM は、候補のコードの一致数や、ROM 内の製品番号（例: `RC802 1.4`）で特定しました。
-- 出典は `scripts/download_cheats.py` で `tools\cache\cheatdb\` にまとめて落とせます（libretro-database はファミコン / FDS / PCE / MSX の `cht` だけを sparse checkout、martaaay と olderzeus は zip）。2 つのスクリプトは、ここを先に読み、無ければ 1 本ずつネットから取ります。martaaay には `Q*Bert.ggcodes` のように Windows で使えない名前があり、git checkout が止まるため、zip を展開するときに `_` に置き換えています。
+- 出典は `scripts/download_cheats.py` で `tools\cache\cheatdb\` にまとめて落とせます（libretro-database はファミコン / FDS / PCE / MSX の `cht` だけを sparse checkout、martaaay と olderzeus と blueMSX は zip）。2 つのスクリプトは、ここを先に読み、無ければ 1 本ずつネットから取ります。martaaay には `Q*Bert.ggcodes` のように Windows で使えない名前があり、git checkout が止まるため、zip を展開するときに `_` に置き換えています。
 - ファミコンチート集 Wiki（wikiwiki.jp）は、連続してアクセスすると 429 で拒否されます。メンテナンスで止まっていることもあります。
+- 北米版と日本版で RAM の配置が違うゲームがあります（例: ハイドライド・スペシャルは北米版 Hydlide と別配置で、北米版の `0038` = 体力は日本版では経験値）。**まず日本のサイト（ファミコンチート集 Wiki）で日本版のコードを探す**こと（利用者の方針）。
 - 出典のデータベースに無いゲームは、日本のサイトの RAM コードを `MANUAL` に手で書き、ROM でその番地がどう使われているかを確かめてから採用します。例: ハドソン版ドラえもんの Wiki の `002B-2-0020` は 2 バイトのリトルエンディアンで、`002B:20+002C:00` になります（ROM では体力の満タン = `(8 - $2C) * 4`）。
 - PCエンジンの `.pceplus` は ROM パッチだけです（`main_pce.c` の `pce_rom_full_patch`）。ヘッダ（`len & 0x1FFF`）を除き、北米版のビット反転を解読した **後** の ROM_DATA に当たります。書式は 1 コマンド = `[バイト数-1:4bit][番地:20bit][データ]` の 16 進です。
+- ディスクシステム（`.fds`）も `roms/nes` に置き、`.ggcodes` が効きます（FCEU のチートは読み出しの差し替えなので、RAM に読み込まれたプログラムにも効く）。`nes_cheats.py` の `FdsRom` は、各面のファイルヘッダ（ブロック 3）から読み込み先を取り、同じ番地に読み込むファイルが複数あれば全部を候補にします。$E000 以降は BIOS なので、そこを指すコード（北米カートリッジ版の流用）は除外します。ディスクから読み込まない $6000〜$DFFF は RAM です（例: メトロイドの FDS 版は、北米版 $6877〜 の変数が $B410〜 にある）。
+- **チートは内部フラッシュを使います。** `parse_roms.py` は `const char* GG_NES_CODE_n[] = {"…"}` の形で書き出すので、文字列は .rodata、ポインタの配列は .data（どちらも intflash の 256KB）に入ります。目安は 1 コードあたり「コード + 説明の文字列 + 8 バイト」。2026-09-28 時点でチート全体は約 30KB（NES 22KB / PCE 1.4KB / MSX 6.8KB）で、利用者の ROM 構成（ROM 一覧表も intflash に入る）では `region FLASH overflowed by 600 bytes` になりました（その後、ハイドライド・スペシャル / 戦場の狼 / トマト姫の分で約 0.7KB 増えています）。利用者は、入れる ROM の数で調整する方針です。この超過は ④ の見積もり（`capacity.estimate_intflash`）で、ビルド前に分かります（下記「内部フラッシュの見積もり」）。
+- **MSX** のチートは blueMSX の `.mcf`（`0,番地,値,0,説明`、10 進）です。Retro-Go は RAM の読み出しを差し替えます（`SlotManager.c` の `msxUpdateCheatInfo`）。値が 255 を超えると 2 バイト。`scripts/msx_cheats.py` は、MCF の番地を Z80 の命令（`LD A,(nn)` など）が直接参照している割合を、RAM のランダムな番地での割合と比べて版の一致を判定します。ランダム側の範囲を MCF の番地の範囲に絞ると、番地が 1〜2 個のファイルで割合が 100% になって誤判定するので、RAM 全体（$C000 / $E000〜$F37F）から取ります。出典の Cheats.zip は公式サイトが 404 で、archive.org の `web/2015id_/` から取れます。
 - `scripts/pce_cheats.py` は、パッチ先の元の命令が典型的な改造の形（DEC/STA→LDA/LDX/CMP/NOP、分岐の変更、即値・書き込み先番地の変更）かどうかでゲームごとの一致率を出し、ランダムな位置での割合と比べます。判定の形が狭すぎると正しいコードを落とします（STA abs,Y→LDX abs,Y や DEC→CMP を加える前は、スプラッターハウスなどが落ちていました）。
 
 ## つまずきどころ
@@ -125,7 +141,9 @@ Retro-Go は常に `INTFLASH_BANK=2`（0x08100000）で、`GNW_TARGET` は機種
   - クリップボードを使うテストは、利用者のクリップボードを上書きします。
 - テスト後は `sync_roms()` を本物の `roms\` で実行し、`workspace\game-and-watch-retro-go\roms\` からダミーを消して、`git -C workspace\... status` がきれいなことを確かめる。
 - シェルのヒアドキュメントに `\\n` を含む Python を書くと、改行に化けることがありました。複雑な置換は、Write でスクリプトファイルを作ってから実行します。
-- **実機での書き込み・セーブの吸い出し / 書き戻し・reset_dbgmcu は、まだ ST-Link を接続して確認していません。** ST-Link 未接続時に安全に止まることだけを確認済みです。
+- 2026-09-28: ゼルダ版（64MB）で、Retro-Go の書き込み・セーブの吸い出し（223 件）/ 書き戻し（213 件）・reset_dbgmcu まで実機で通りました。純正ファームの書き込みは未確認です。
+- **gnwmanager のサブコマンドを 1 つにつなぎすぎると `[WinError 206] ファイル名または拡張子が長すぎます` になります**（Windows のコマンドラインは 32,767 文字まで）。セーブ 223 件の `dump` を 1 回にまとめたら超え、吸い出しの段階で失敗しました（書き込み前なので本体は無事）。`package._chain()` で 8,000 文字ごとに分けて、複数回の接続にしています。
+- 2026-09-28: ST-Link V2（USB `VID_0483&PID_3748`）でゼルダ版に接続し、`gnwmanager info` が通りました（Stock Firmware: ZELDA / External Flash 64MB / UNLOCKED）。`Filesystem Size: MISSING/CORRUPT` は、gnwmanager が外部フラッシュの末尾に置くファイルシステムが無いという意味で、この Retro-Go（`msx_wsv_genesis`）では使わないので問題ありません。コマンド行から試すときは、`tools\openocd\*\bin` を PATH に入れ、`OPENOCD` にその `openocd.exe` を指定します。
 
 ## 利用者の環境（2026-09-28 時点）
 

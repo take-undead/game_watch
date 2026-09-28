@@ -237,6 +237,8 @@ class Estimate:
     warnings: list[str] = field(default_factory=list)       # ビルドはできるが実機で問題になりうること
     orphan_images: list[Path] = field(default_factory=list)  # 対応する ROM が無い画像
     cover_dims: dict = field(default_factory=dict)
+    intflash: Optional["IntflashEstimate"] = None        # 内部フラッシュ (今の設定)
+    intflash_cheat: Optional["IntflashEstimate"] = None  # 内部フラッシュ (チートを ON にした場合)
 
     @property
     def free(self) -> int:
@@ -248,7 +250,8 @@ class Estimate:
 
     @property
     def tight(self) -> bool:
-        return 0 <= self.free < SAFETY_MARGIN
+        return 0 <= self.free < SAFETY_MARGIN or (
+            self.intflash is not None and 0 <= self.intflash.free < INTFLASH_MARGIN)
 
 
 class Estimator:
@@ -285,6 +288,13 @@ class Estimator:
         for folder, p in self.scan(roms_root) + self.scan_images(roms_root):
             st = p.stat()
             sig.append((str(p), st.st_size, st.st_mtime_ns))
+        # チートのファイル (内部フラッシュの見積もりに使う)
+        for d in [roms_root / f for f, _, _ in C.ROM_SYSTEMS] + [C.CHEATS / f for f, _, _ in C.ROM_SYSTEMS]:
+            if d.is_dir():
+                for p in sorted(d.iterdir()):
+                    if p.suffix.lower() in CHEAT_SUFFIX:
+                        st = p.stat()
+                        sig.append((str(p), st.st_size, st.st_mtime_ns))
         return tuple(sig)
 
     def _fill_covers(self, roms: list[RomInfo], quality: int, python: Optional[Path]) -> None:
@@ -391,7 +401,21 @@ class Estimator:
                 est.usage += extra
         self._check_fds(est, roms_root)
         self._check_names(est, roms_root, settings)
+        self._check_intflash(est, roms_root, settings)
         return est
+
+    @staticmethod
+    def _check_intflash(est: Estimate, roms_root: Path, settings: C.Settings) -> None:
+        """内部フラッシュ (256KB) に ROM 一覧表・表示名・チートが収まるか。超えるとリンクで失敗する."""
+        from dataclasses import replace
+        est.intflash = estimate_intflash(est.roms, roms_root, settings)
+        est.intflash_cheat = est.intflash if settings.cheat_codes else \
+            estimate_intflash(est.roms, roms_root, replace(settings, cheat_codes=True))
+        ie = est.intflash
+        if ie.free < 0:
+            est.problems.append(f"内部フラッシュ（Retro-Go 本体 256KB）が {-ie.free:,} バイト足りません"
+                                + ("（チートを減らすか、ROM を減らしてください）" if settings.cheat_codes
+                                   else "（ROM を減らしてください）"))
 
     @staticmethod
     def _mapper(p: Path) -> Optional[int]:
@@ -473,6 +497,132 @@ class Estimator:
             est.warnings.append(f"{FDS_BIOS} のサイズが {bios.stat().st_size} バイトです（正しくは {FDS_BIOS_SIZE} バイト）")
         elif bios is not None and not fds:
             est.warnings.append(f"ディスクシステムのゲームが無いため {FDS_BIOS} は不要です（入れたままでも動作に影響はありません）")
+
+
+# ---- 内部フラッシュ (Retro-Go の本体。INTFLASH_BANK=2 で 256KB) ----
+# ROM ごとに一覧表の 1 項目 (retro_emulator_file_t) と表示名の文字列が入る。チートを有効にすると、
+# 項目が 16 バイト増え (id とチート用のポインタ 3 つ)、コードと説明の文字列 + ポインタ 8 バイト/個 が入る。
+# 文字列は .rodata.str1.4 (1 つずつ 4 バイト境界に揃える。同じ文字列は 1 つにまとまる)。
+# BIOS (nes_bios / msx_bios) も一覧表に入る。PCエンジンのチートはエスケープ (\x1\x00...) で書かれるので、
+# エスケープ 1 つを 1 バイトと数える。
+# 2026-09-28 の実ビルド (ゼルダ / CODEPAGE=932 / COVERFLOW=1) で計測:
+#   チート無し: 229,816 = 固定 215,852 + 一覧表 231 本×44 + 表示名と拡張子の文字列 3,800 (ELF から実測)
+#   チート有り: 263,088 (容量超過したビルドのリンクマップ) = 固定 + チート機能 2,596 + 一覧表 233 本×60
+#               + 表示名 3,788 + チート 26,872 (113 本 745 個)。チート機能の値は、この見積もりが実測と一致するように決めた
+INTFLASH_SIZE = 256 * 1024
+INTFLASH_FIXED = 215_852
+INTFLASH_CHEAT_CODE = 2_596     # チート機能のプログラム (メニュー・各エミュレータの適用処理)
+INTFLASH_ENTRY = 44             # COVERFLOW=1 のとき。COVERFLOW=0 だと 8 バイト減る
+INTFLASH_ENTRY_CHEAT = 16
+INTFLASH_MARGIN = 1024          # これを切ったら「余裕が少ない」
+
+
+@dataclass
+class IntflashEstimate:
+    fixed: int = 0
+    tables: int = 0
+    names: int = 0
+    cheats: int = 0          # チートの文字列 + ポインタ
+    cheat_roms: int = 0      # チートのある ROM の本数
+    cheat_codes: int = 0     # チートの件数 (1 本 16 個まで)
+    per_rom: list[tuple[Path, int]] = field(default_factory=list)  # (ROM, チートの分のバイト数)
+    error: str = ""
+
+    @property
+    def usage(self) -> int:
+        return self.fixed + self.tables + self.names + self.cheats
+
+    @property
+    def free(self) -> int:
+        return INTFLASH_SIZE - self.usage
+
+
+def _align4(n: int) -> int:
+    return (n + 3) // 4 * 4
+
+
+_C_CHAR = re.compile(rb"\\x[0-9A-Fa-f]+|\\[0-7]{1,3}|\\.|.", re.S)
+
+
+def _cstr_size(s: bytes) -> int:
+    """C の文字列リテラルとして置いたときのバイト数 (終端込み、4 バイト境界)。
+
+    PCエンジンのチート (ROM パッチ) は "\\x1\\x00\\x07..." のようにエスケープで書き出されるので、
+    エスケープ 1 つを 1 バイトと数える.
+    """
+    return _align4(len(_C_CHAR.findall(s)) + 1)
+
+
+_parse_roms = None
+
+
+def _load_parse_roms():
+    """retro-go の parse_roms.py を読み込む (チートの読み取り・変換を本物と同じ処理で行うため)."""
+    global _parse_roms
+    if _parse_roms is None:
+        import importlib.util
+        import types
+        spec = importlib.util.spec_from_file_location("gnw_parse_roms", C.RETROGO_REPO / "parse_roms.py")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        mod.args = types.SimpleNamespace(save=False)  # ROM() が参照するグローバル
+        _parse_roms = mod
+    return _parse_roms
+
+
+def estimate_intflash(roms: list[RomInfo], roms_root: Path, settings: C.Settings) -> IntflashEstimate:
+    """内部フラッシュの使用量を見積もる (ROM 一覧表・表示名・チート)."""
+    import contextlib
+    import io
+    ie = IntflashEstimate(fixed=INTFLASH_FIXED + (INTFLASH_CHEAT_CODE if settings.cheat_codes else 0))
+    entry = INTFLASH_ENTRY - (0 if settings.coverflow else 8) + (INTFLASH_ENTRY_CHEAT if settings.cheat_codes else 0)
+    enc = "cp932" if settings.codepage == "932" else "cp1252"
+    strings: set[bytes] = set()
+    cheat_strings: set[bytes] = set()
+    romdefs: dict[str, dict] = {}
+    try:
+        pr = _load_parse_roms() if settings.cheat_codes else None
+    except Exception as e:  # noqa: BLE001 (retro-go が未取得など)
+        pr, ie.error = None, f"parse_roms.py を読めません: {e}"
+    targets = [r for r in roms if not r.note]  # BIOS (nes_bios / msx_bios) も一覧表に入る
+    if any(r.folder == "msx_bios" for r in targets) and not (roms_root / "msx_bios" / MSX_DISK_PATCHED).exists():
+        ie.tables += entry  # ビルド時に作られる PANASONICDISK_.rom も一覧表に入る
+    for r in targets:
+        if r.folder not in romdefs:
+            try:
+                romdefs[r.folder] = json.loads((roms_root / f"{r.folder}.json").read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                romdefs[r.folder] = {}
+        stem = r.path.stem
+        name = (romdefs[r.folder].get(stem) or {}).get("name", stem)
+        ie.tables += entry
+        strings.add(name.encode(enc, "replace"))
+        strings.add(r.path.suffix.lstrip(".").lower().encode())
+        if pr is None:
+            continue
+        # チートのファイル: roms 側 → cheat_code 側 (sync_roms() と同じ優先順)
+        cheat_dir = next((d for d in (r.path.parent, C.CHEATS / r.folder)
+                          if any((d / (stem + s)).exists() for s in C.CHEAT_SUFFIXES)), None)
+        if cheat_dir is None:
+            continue
+        try:
+            with contextlib.redirect_stdout(io.StringIO()):
+                rom = pr.ROM(r.folder, str(cheat_dir / r.path.name), r.path.suffix.lstrip("."), {})
+                codes = rom.get_cheat_codes()
+        except Exception:  # noqa: BLE001 (壊れたチートのファイル: ビルドでもエラーになる)
+            continue
+        if not codes:
+            continue
+        new = {c.encode(enc, "replace") for c, _ in codes} | {d.encode(enc, "replace") for _, d in codes if d is not None}
+        cost = sum(_cstr_size(s) for s in new - strings) + 8 * len(codes)
+        cheat_strings.update(new - strings)
+        strings.update(new)
+        ie.cheats += cost
+        ie.cheat_roms += 1
+        ie.cheat_codes += len(codes)
+        ie.per_rom.append((r.path, cost))
+    ie.names = sum(_cstr_size(s) for s in strings - cheat_strings)
+    return ie
 
 
 USAGE_RE = re.compile(r"(Capacity|Usage|Free):\s+(-?\d+) Bytes")

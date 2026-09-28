@@ -19,7 +19,7 @@ from . import config as C
 from . import cover_editor as CE
 from . import package as P
 from . import toolchain as T
-from .capacity import (ALL_COVER_SUFFIXES, Estimate, Estimator, cover_dims, find_cover, parse_build_usage,
+from .capacity import (ALL_COVER_SUFFIXES, INTFLASH_MARGIN, INTFLASH_SIZE, Estimate, Estimator, cover_dims, find_cover, parse_build_usage,
                        parse_overflow, rom_stem)
 
 Step = tuple[str, Callable]  # (説明, fn(log, proc_hook))
@@ -593,6 +593,7 @@ class App(tk.Tk):
     # ================================================================ TAB 4
     SEG_COLORS = [("固定データ", "#8c959f"), ("エミュレータ", "#8250df"), ("ROM", "#0969da"),
                   ("カバー画像", "#1f883d"), ("セーブ領域", "#bc4c00"), ("予約", "#57606a")]
+    INT_SEG_COLORS = [("本体", "#8c959f"), ("ROM一覧", "#0969da"), ("チート", "#bf3989")]
 
     def _tab_roms(self) -> None:
         T.ensure_roms_dirs()
@@ -644,6 +645,25 @@ class App(tk.Tk):
         self.exact_label = tk.Label(cap, textvariable=self.exact_var, anchor=tk.W)
         self.exact_label.pack(anchor=tk.W, pady=(4, 0))
 
+        icap = ttk.LabelFrame(f, text="内部フラッシュ (Retro-Go 本体 256KB: ROM一覧とチートもここに入ります)", padding=8)
+        icap.pack(fill=tk.X, pady=(0, 8))
+        self.int_bar = tk.Canvas(icap, height=18, highlightthickness=1, highlightbackground="#d0d7de",
+                                 background="#f6f8fa")
+        self.int_bar.pack(fill=tk.X)
+        self.int_bar.bind("<Configure>", lambda e: self._draw_int_bar())
+        ilegend = ttk.Frame(icap)
+        ilegend.pack(fill=tk.X, pady=(4, 0))
+        self.int_legend_vars: dict[str, tk.StringVar] = {}
+        for name, color in self.INT_SEG_COLORS + [("空き", "#f6f8fa")]:
+            cell = ttk.Frame(ilegend)
+            cell.pack(side=tk.LEFT, padx=(0, 12))
+            tk.Label(cell, width=2, background=color, relief=tk.SOLID, borderwidth=1).pack(side=tk.LEFT)
+            v = tk.StringVar(value=name)
+            self.int_legend_vars[name] = v
+            ttk.Label(cell, textvariable=v).pack(side=tk.LEFT, padx=3)
+        self.int_var = tk.StringVar()
+        ttk.Label(ilegend, textvariable=self.int_var, foreground="#57606a", justify=tk.LEFT).pack(side=tk.LEFT)
+
         cols = ("size", "stored", "save", "cover", "note")
         tf = ttk.Frame(f)
         tf.pack(fill=tk.BOTH, expand=True)
@@ -663,6 +683,14 @@ class App(tk.Tk):
         self.rom_tree.bind("<Double-1>", lambda e: self.edit_cover())
         self.rom_tree.bind("<Control-v>", lambda e: self.edit_cover(paste=True))
         self.rom_tree.bind("<Control-V>", lambda e: self.edit_cover(paste=True))
+        self.rom_tree.bind("<Button-3>", self._rom_menu)
+        self.rom_tree.bind("<Delete>", lambda e: self.remove_roms())
+        self.rom_menu = tk.Menu(self, tearoff=False)
+        self.rom_menu.add_command(label="ROMを削除", command=self.remove_roms)
+        self.rom_menu.add_separator()
+        self.rom_menu.add_command(label="カバーを編集…", command=self.edit_cover)
+        self.rom_menu.add_command(label="カバー削除", command=self.remove_cover)
+        self.rom_menu.add_command(label="表示名…", command=self.edit_display_name)
         for c, text, w, anchor in (("#0", "機種 / ファイル", 280, tk.W), ("size", "元サイズ", 80, tk.E),
                                    ("stored", "書き込みサイズ", 100, tk.E), ("save", "セーブ領域", 80, tk.E),
                                    ("cover", "カバー", 90, tk.E), ("note", "備考", 200, tk.W)):
@@ -703,7 +731,7 @@ class App(tk.Tk):
     def _settings_sig(self) -> tuple:
         s = self.settings
         return (s.device, s.flash_mb, s.mario_keep_extras, s.codepage, s.coverflow, s.jpg_quality,
-                s.state_saving, s.screenshot)
+                s.state_saving, s.screenshot, s.cheat_codes)
 
     def refresh_roms(self) -> None:
         if hasattr(self, "estimator"):
@@ -750,6 +778,7 @@ class App(tk.Tk):
             groups.setdefault(r.folder, []).append(r)
         cf = self.settings.coverflow
         cheat_roms = 0
+        cheat_bytes = dict(est.intflash_cheat.per_rom) if est.intflash_cheat else {}
         display_names: dict[str, dict] = {}
         if any("日本語などが含まれています" in p for p in est.problems):
             self.fix_names_btn.pack(side=tk.LEFT, padx=4)
@@ -766,7 +795,7 @@ class App(tk.Tk):
             for r in roms:
                 note = r.note or (f"圧縮 {r.stored * 100 // max(r.size, 1)}%" if r.compressed else "非圧縮")
                 if not r.note and (nch := T.cheat_count(r.path)):
-                    note += f" / チート{nch}"
+                    note += f" / チート{nch}" + (f" (本体 {self._fmt(cheat_bytes[r.path])})" if r.path in cheat_bytes else "")
                     cheat_roms += 1
                 if not r.cover:
                     cov = "なし"
@@ -816,6 +845,7 @@ class App(tk.Tk):
             cover_txt += (f"\nチート定義のあるROM {cheat_roms} 本" + (
                 "（ゲーム選択画面の「Cheat Codes」で選べます）" if self.settings.cheat_codes else
                 " — ③構成で「チートコード対応」をオンにすると使えます"))
+        self._show_intflash(est)
         self.detail_var.set(
             f"Retro-Go 用領域 {self._fmt(est.total)}（外部フラッシュ {self.settings.flash_mb}MB 構成）"
             f"　ROM {len([r for r in est.roms if not r.note])} 本 / 元サイズ合計 {self._fmt(sum(r.size for r in est.roms))}"
@@ -823,6 +853,63 @@ class App(tk.Tk):
             + ("\n※ MSX/Amstradのエミュレータサイズは推定値です" if est.emu_estimated else "")
             + "".join(f"\n⚠ {w}" for w in est.warnings))
         self._show_cover_preview()
+
+    def _show_intflash(self, est: Estimate) -> None:
+        """内部フラッシュ (Retro-Go 本体 256KB) のゲージと文章。チートが OFF なら ON にした場合も出す."""
+        ie, on = est.intflash, est.intflash_cheat
+        if ie is None:
+            self.int_var.set("")
+            self._draw_int_bar()
+            return
+        cheat_on = self.settings.cheat_codes
+
+        def state(x) -> str:
+            return f"残り {self._fmt(x.free)}" if x.free >= 0 else f"✖ {self._fmt(-x.free)} 超過"
+        self.int_legend_vars["本体"].set(f"本体 {self._fmt(ie.fixed)}")
+        self.int_legend_vars["ROM一覧"].set(f"ROM一覧 {self._fmt(ie.tables + ie.names)}")
+        if cheat_on:
+            self.int_legend_vars["チート"].set(f"チート {self._fmt(ie.cheats)}（{ie.cheat_roms} 本 {ie.cheat_codes} 個）")
+        elif on is not None and on.cheats:
+            self.int_legend_vars["チート"].set(f"チート OFF（ON で +{self._fmt(on.usage - ie.usage)}）")
+        else:
+            self.int_legend_vars["チート"].set("チート なし")
+        self.int_legend_vars["空き"].set(f"空き {self._fmt(max(ie.free, 0))}")
+        txt = f"使用 {self._fmt(ie.usage)} / {self._fmt(INTFLASH_SIZE)}（{state(ie)}）"
+        if not cheat_on and on is not None and on.cheats:
+            txt += f"／ ON なら{state(on)}（網掛け）"
+        if 0 <= ie.free < INTFLASH_MARGIN:
+            txt += "\n※ 残りが少ないため、試しビルドでの確認を推奨します（見積もりの誤差は数百バイト）"
+        if ie.error:
+            txt += f"\n※ {ie.error}"
+        self.int_var.set(txt)
+        self._draw_int_bar()
+
+    def _draw_int_bar(self) -> None:
+        c = self.int_bar
+        c.delete("all")
+        est = self.estimate
+        ie = est.intflash if est else None
+        if ie is None:
+            return
+        on = est.intflash_cheat
+        ghost = not self.settings.cheat_codes and on is not None and on.cheats
+        w, h = c.winfo_width(), c.winfo_height()
+        total = max(INTFLASH_SIZE, ie.usage, on.usage if ghost else 0)
+        scale = w / total
+        x = 0.0
+        segs = [ie.fixed, ie.tables + ie.names, ie.cheats]
+        for (_, color), val in zip(self.INT_SEG_COLORS, segs):
+            if val <= 0:
+                continue
+            nx = x + max(val * scale, 2)
+            c.create_rectangle(x, 0, nx, h, fill=color, width=0)
+            x = nx
+        if ghost:  # チートを ON にした場合の増加分 (一覧表の 16 バイト/本 + チート)
+            nx = x + (on.usage - ie.usage) * scale
+            c.create_rectangle(x, 0, nx, h, fill=self.INT_SEG_COLORS[2][1], stipple="gray50", width=0)
+        if max(ie.usage, on.usage if ghost else 0) > INTFLASH_SIZE:
+            lim = INTFLASH_SIZE * scale
+            c.create_line(lim, 0, lim, h, fill="#cf222e", width=3)
 
     def _draw_bar(self) -> None:
         c = self.bar
@@ -863,8 +950,9 @@ class App(tk.Tk):
 
     def remove_roms(self) -> None:
         sel = [i for i in self.rom_tree.selection() if not i.startswith("sys:")]
+        what = Path(sel[0]).name if len(sel) == 1 else f"{len(sel)} 個のファイル" if sel else ""
         if not sel or not messagebox.askyesno(
-                C.APP_NAME, f"{len(sel)} 個のファイルを roms フォルダから削除しますか？\n（ROMのカバー画像も一緒に削除します）"):
+                C.APP_NAME, f"{what} を roms フォルダから削除しますか？\n（ROMのカバー画像も一緒に削除します）"):
             return
         for iid in sel:
             p = Path(iid)
@@ -873,6 +961,22 @@ class App(tk.Tk):
             p.unlink(missing_ok=True)
             self.log(f"削除: {p.name}")
         self.request_estimate()
+
+    def _rom_menu(self, event) -> None:
+        """右クリック: 選択に入っていない行なら、その行だけを選び直してメニューを出す."""
+        iid = self.rom_tree.identify_row(event.y)
+        if not iid or iid.startswith("sys:"):
+            return
+        if iid not in self.rom_tree.selection():
+            self.rom_tree.selection_set(iid)
+            self.rom_tree.focus(iid)
+        single = len([i for i in self.rom_tree.selection() if not i.startswith("sys:")]) == 1
+        for label in ("カバーを編集…", "カバー削除", "表示名…"):
+            self.rom_menu.entryconfigure(label, state=tk.NORMAL if single and self._selected_rom() else tk.DISABLED)
+        try:
+            self.rom_menu.tk_popup(event.x_root, event.y_root)
+        finally:
+            self.rom_menu.grab_release()
 
     def _selected_rom(self) -> Optional[Path]:
         sel = [i for i in self.rom_tree.selection() if not i.startswith("sys:")]
@@ -1239,8 +1343,8 @@ class App(tk.Tk):
             for s in old_slots:
                 (out / s.filename).parent.mkdir(parents=True, exist_ok=True)
             log(f"セーブ位置が変わるため、現在のセーブ {len(old_slots)} 件を吸い出します → {out}")
-            if old_slots:
-                self._run_bash(P.backup_command(old_slots, out), C.ROOT, log, hook)
+            for cmd in P.backup_commands(old_slots, out):
+                self._run_bash(cmd, C.ROOT, log, hook)
             ctx["restore_from"] = out
 
         def write(log, hook):
@@ -1250,8 +1354,8 @@ class App(tk.Tk):
             src = ctx.get("restore_from")
             if not src:
                 return
-            cmd, restored = P.restore_command(ctx["new_slots"], src)
-            if cmd:
+            cmds, restored = P.restore_commands(ctx["new_slots"], src)
+            for cmd in cmds:
                 self._run_bash(cmd, C.ROOT, log, hook)
             log(f"セーブデータを {len(restored)} 件引き継ぎました" + (": " + ", ".join(restored) if restored else ""))
 
@@ -1380,8 +1484,8 @@ class App(tk.Tk):
         def dump(log, hook):
             for s in ctx["slots"]:
                 (out / s.filename).parent.mkdir(parents=True, exist_ok=True)
-            if ctx["slots"]:
-                self._run_bash(P.backup_command(ctx["slots"], out), C.ROOT, log, hook)
+            for cmd in P.backup_commands(ctx["slots"], out):
+                self._run_bash(cmd, C.ROOT, log, hook)
             self._run_bash(P.reset_dbgmcu_command(), C.RETROGO_REPO, log, hook)
             P.remove_workdir(ctx["work"])
             log(f"保存先: {out}")
@@ -1399,9 +1503,10 @@ class App(tk.Tk):
         ctx: dict = {}
 
         def write(log, hook):
-            cmd, restored = P.restore_command(ctx["slots"], Path(src))
-            if cmd:
+            cmds, restored = P.restore_commands(ctx["slots"], Path(src))
+            for cmd in cmds:
                 self._run_bash(cmd, C.ROOT, log, hook)
+            if cmds:
                 self._run_bash(P.reset_dbgmcu_command(), C.RETROGO_REPO, log, hook)
             P.remove_workdir(ctx["work"])
             log(f"書き戻し {len(restored)} 件" + (": " + ", ".join(restored) if restored else "（一致するROMがありません）"))

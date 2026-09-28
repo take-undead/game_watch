@@ -84,13 +84,11 @@ def create(settings: C.Settings, stock: bool, retrogo: bool, log: Log) -> Path:
     size, offset = settings.extflash_layout()
     roms = []
     if retrogo:
-        for folder, _, _ in C.ROM_SYSTEMS:
-            d = C.RETROGO_REPO / "roms" / folder
-            if d.is_dir():
-                for p in sorted(d.iterdir()):
-                    if p.is_file() and not p.name.startswith(".") and p.suffix.lower() not in (
-                            ".json", ".md", ".xml", ".lzma", ".cdk", ".img", ".png", ".jpg", ".jpeg", ".bmp", ".keep"):
-                        roms.append({"system": folder, "file": p.name, "size": p.stat().st_size})
+        # ④の見積もりと同じ判定 (.md はメガドライブの ROM。チートのファイル・カバー画像・派生ファイルは除く)
+        from .capacity import Estimator
+        roms = [{"system": folder, "file": p.name, "size": p.stat().st_size}
+                for folder, p in Estimator().scan(C.RETROGO_REPO / "roms")]
+    games = sum(1 for r in roms if r["system"] not in ("nes_bios", "msx_bios"))
     manifest = {
         "format": FORMAT_VERSION,
         "created": time.strftime("%Y-%m-%d %H:%M:%S"),
@@ -117,7 +115,7 @@ def create(settings: C.Settings, stock: bool, retrogo: bool, log: Log) -> Path:
     BUILDS.mkdir(exist_ok=True)
     parts = "+".join(n for n, on in (("純正", stock), ("RetroGo", retrogo)) if on)
     stamp = time.strftime("%Y%m%d-%H%M%S")
-    name = f"{stamp}_{settings.device}_{parts}" + (f"_{len(roms)}本" if retrogo else "") + ".gnw"
+    name = f"{stamp}_{settings.device}_{parts}" + (f"_{games}本" if retrogo else "") + ".gnw"
     out = BUILDS / name
     tmp = out.with_suffix(".tmp")
     with zipfile.ZipFile(tmp, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as z:
@@ -287,16 +285,34 @@ def same_save_layout(a: list[SaveSlot], b: list[SaveSlot]) -> bool:
     return sorted(map(key, a)) == sorted(map(key, b))
 
 
-def backup_command(slots: list[SaveSlot], outdir: Path) -> str:
+# Windows のコマンドラインは 32,767 文字まで。セーブ 200 件以上を 1 つにつなぐと超えて
+# [WinError 206] になるので、この長さで分けて複数回の接続にする
+MAX_CMDLINE = 8000
+
+
+def _chain(cmds: list[str]) -> list[str]:
+    """gnwmanager のサブコマンドを "--" でつなぎ、MAX_CMDLINE を超えないように分ける."""
+    out, cur = [], []
+    for c in cmds:
+        if cur and len("gnwmanager " + " -- ".join(cur + [c])) > MAX_CMDLINE:
+            out.append("gnwmanager " + " -- ".join(cur))
+            cur = []
+        cur.append(c)
+    if cur:
+        out.append("gnwmanager " + " -- ".join(cur))
+    return out
+
+
+def backup_commands(slots: list[SaveSlot], outdir: Path) -> list[str]:
     cmds = []
     for s in slots:
         dst = (outdir / s.filename).as_posix().replace("'", "'\\''")
         cmds.append(f"dump 0x{s.address:08x} --dst '{dst}' --size {s.size}")
-    return "gnwmanager " + " -- ".join(cmds)
+    return _chain(cmds)
 
 
-def restore_command(slots: list[SaveSlot], indir: Path) -> tuple[str, list[str]]:
-    """ROM名が一致するセーブだけを新しい位置へ書き戻す。戻り値: (コマンド, 復元したROM名)."""
+def restore_commands(slots: list[SaveSlot], indir: Path) -> tuple[list[str], list[str]]:
+    """ROM名が一致するセーブだけを新しい位置へ書き戻す。戻り値: (コマンドの列, 復元したROM名)."""
     cmds, restored = [], []
     for s in slots:
         f = indir / s.filename
@@ -304,7 +320,7 @@ def restore_command(slots: list[SaveSlot], indir: Path) -> tuple[str, list[str]]
             src = f.as_posix().replace("'", "'\\''")
             cmds.append(f"flash ext '{src}' --offset={s.address - EXT_BASE}")
             restored.append(f"{s.emu}/{s.name}")
-    return ("gnwmanager " + " -- ".join(cmds) if cmds else ""), restored
+    return _chain(cmds), restored
 
 
 def elf_of(package: Path, workdir: Path) -> Optional[Path]:
