@@ -16,6 +16,8 @@
 
 make・ARM GCC・OpenOCD・Python 依存パッケージは、アプリが `tools\` 以下に自動で導入します。
 
+**持ち運び版（別の PC で使う）**: `python scripts\make_portable.py` を実行すると、このフォルダの隣の `game_watch_kai\`（出力先は引数で指定可）に「フォルダの中だけで完結する版」ができます。Python・Git・ARM GCC・OpenOCD・ソース・ROM・バックアップ・セーブ・設定をすべて同梱し、`GnW改造ツール.exe` で起動します。フォルダごとコピーすれば、Python や Git が入っていない PC でも動きます（PC ごとに要るのは ST-Link の USB ドライバだけ）。大きさは約 2〜3GB です。
+
 対応している機種と、ROM を用意するときの注意点は [manual.md](manual.md) にまとめています。
 
 ## 使い方

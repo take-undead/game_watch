@@ -24,7 +24,7 @@ NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
 # 検出
 # --------------------------------------------------------------------------
 def find_git_root() -> Optional[Path]:
-    candidates = []
+    candidates = [C.GIT_DIR]  # 持ち運び版の PortableGit を優先
     git = shutil.which("git")
     if git:
         candidates.append(Path(git).resolve().parents[1])
@@ -109,7 +109,7 @@ def status() -> dict[str, tuple[bool, str]]:
 def build_env() -> dict[str, str]:
     env = os.environ.copy()
     git = find_git_root()
-    paths = [str(C.SHIM_BIN), str(C.VENV / "Scripts")]
+    paths = [str(C.SHIM_BIN), str(C.VENV_SCRIPTS)] + ([str(C.PORTABLE_PY)] if C.PORTABLE else [])
     gcc = find_gcc_bin()
     if gcc:
         paths.append(str(gcc))
@@ -123,6 +123,8 @@ def build_env() -> dict[str, str]:
     env["PYTHONIOENCODING"] = "utf-8"
     env["LANG"] = "C.UTF-8"
     env.pop("VIRTUAL_ENV", None)
+    if C.PORTABLE:  # その PC のユーザー用 site-packages を混ぜない
+        env["PYTHONNOUSERSITE"] = "1"
     return env
 
 
@@ -201,7 +203,7 @@ def update_repos(log: Log, proc_hook=None) -> None:
 
 
 def setup_venv(log: Log, proc_hook=None) -> None:
-    if not C.VENV_PY.exists():
+    if not C.PORTABLE and not C.VENV_PY.exists():
         run_cmd([_system_python(), "-m", "venv", str(C.VENV)], log, proc_hook=proc_hook)
     run_cmd([str(C.VENV_PY), "-m", "pip", "install", "--upgrade", "pip"], log, proc_hook=proc_hook)
     run_cmd([str(C.VENV_PY), "-m", "pip", "install",
@@ -211,10 +213,16 @@ def setup_venv(log: Log, proc_hook=None) -> None:
 
 
 def write_shims() -> None:
-    """Makefile が期待する python3 / wget を用意する."""
+    """Makefile が期待する python3 / wget と、gnwmanager を用意する.
+
+    パスは tools/bin からの相対にする (フォルダごと移動しても使えるように)。gnwmanager は
+    pip が作る Scripts/gnwmanager.exe が python の絶対パスを埋め込んでいて移動すると動かないため、
+    python -m gnwmanager で呼ぶ.
+    """
     C.SHIM_BIN.mkdir(parents=True, exist_ok=True)
-    (C.SHIM_BIN / "python3").write_bytes(
-        b'#!/bin/sh\nexec "$(dirname "$0")/../venv/Scripts/python.exe" "$@"\n')
+    py = '"$(dirname "$0")/../' + C.VENV_PY.relative_to(C.TOOLS).as_posix() + '"'
+    (C.SHIM_BIN / "python3").write_bytes(f'#!/bin/sh\nexec {py} "$@"\n'.encode())
+    (C.SHIM_BIN / "gnwmanager").write_bytes(f'#!/bin/sh\nexec {py} -m gnwmanager "$@"\n'.encode())
     (C.SHIM_BIN / "wget").write_bytes(
         b'#!/bin/sh\n'
         b'# Minimal wget replacement (curl based) supporting: wget [-q] URL [-P DIR] [-O FILE]\n'

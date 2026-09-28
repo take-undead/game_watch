@@ -269,8 +269,9 @@ class App(tk.Tk):
         f = ttk.Frame(self.nb, padding=12)
         self.nb.add(f, text=" ① 環境セットアップ ")
         ttk.Label(f, text="ビルド・書き込みに必要なツールを確認/自動導入します", style="H.TLabel").pack(anchor=tk.W)
-        ttk.Label(f, text="ツールはこのフォルダの tools\\ 以下に導入され、PCの環境は汚しません。"
-                          "Git for Windows のみ事前インストールが必要です。").pack(anchor=tk.W, pady=(2, 10))
+        ttk.Label(f, text="ツールはこのフォルダの tools\\ 以下に導入され、PCの環境は汚しません。" + (
+            "持ち運び版です（Python・Git・ARM GCC・OpenOCD を同梱。PC ごとに要るのは ST-Link のドライバだけ）。"
+            if C.PORTABLE else "Git for Windows のみ事前インストールが必要です。")).pack(anchor=tk.W, pady=(2, 10))
 
         grid = ttk.Frame(f)
         grid.pack(fill=tk.X)

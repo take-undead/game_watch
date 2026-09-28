@@ -10,6 +10,7 @@ from . import config as C
 
 NAME = "GnW改造ツール.lnk"
 ICON = Path(__file__).resolve().parent / "assets" / "app.ico"
+EXE = C.ROOT / "GnW改造ツール.exe"  # 持ち運び版の起動用 (scripts/make_portable.py が作る)
 
 
 def _pythonw() -> Path:
@@ -33,8 +34,8 @@ if (${'true' if desktop else 'false'}) {{ $dirs += [Environment]::GetFolderPath(
 foreach ($dir in $dirs) {{
   $lnk = Join-Path $dir {_ps_quote(NAME)}
   $s = $ws.CreateShortcut($lnk)
-  $s.TargetPath = {_ps_quote(str(_pythonw()))}
-  $s.Arguments = '-m gnwtool'
+  $s.TargetPath = {_ps_quote(str(EXE if EXE.exists() else _pythonw()))}
+  $s.Arguments = {_ps_quote("" if EXE.exists() else "-m gnwtool")}
   $s.WorkingDirectory = {_ps_quote(str(C.ROOT))}
   $s.IconLocation = {_ps_quote(str(ICON))}
   $s.Description = {_ps_quote(C.APP_NAME)}

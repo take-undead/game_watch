@@ -16,8 +16,19 @@ TOOLS = ROOT / "tools"
 WORKSPACE = ROOT / "workspace"
 SETTINGS_FILE = ROOT / "settings.json"
 
-VENV = TOOLS / "venv"
-VENV_PY = VENV / "Scripts" / "python.exe"
+# 持ち運び版 (scripts/make_portable.py が作る) は venv の代わりに Python 一式を tools/python に置く。
+# venv は元の Python の場所を覚えていて、フォルダごと別の PC へ移すと動かないため
+PORTABLE_PY = TOOLS / "python"
+PORTABLE = (PORTABLE_PY / "python.exe").exists()
+if PORTABLE:
+    VENV = PORTABLE_PY
+    VENV_PY = PORTABLE_PY / "python.exe"
+    VENV_SCRIPTS = PORTABLE_PY / "Scripts"
+else:
+    VENV = TOOLS / "venv"
+    VENV_PY = VENV / "Scripts" / "python.exe"
+    VENV_SCRIPTS = VENV / "Scripts"
+GIT_DIR = TOOLS / "git"  # 持ち運び版の PortableGit
 SHIM_BIN = TOOLS / "bin"
 GCC_DIR = TOOLS / "arm-gcc"
 OPENOCD_DIR = TOOLS / "openocd"
@@ -110,6 +121,14 @@ ROM_SYSTEMS = [
 ]
 
 
+def _rel_to_root(p: str) -> str:
+    """ツールのフォルダ内のパスは相対にする (外のパスはそのまま)."""
+    try:
+        return str(Path(p).resolve().relative_to(ROOT))
+    except (ValueError, OSError):
+        return p
+
+
 @dataclass
 class Settings:
     device: str = "zelda"
@@ -157,14 +176,18 @@ class Settings:
         except TypeError:
             return cls()
         base = cls()
-        s.backup_dirs = {**base.backup_dirs, **(s.backup_dirs or {})}
+        # フォルダ内のパスは相対で保存している (フォルダごと移動・コピーしても使えるように)
+        s.backup_dirs = {**base.backup_dirs, **{k: str(ROOT / v) if v and not Path(v).is_absolute() else v
+                                                 for k, v in (s.backup_dirs or {}).items()}}
         s.flash_mbs = {**base.flash_mbs, **(s.flash_mbs or {})}
         if s.device not in DEVICES:
             s.device = "zelda"
         return s
 
     def save(self) -> None:
-        SETTINGS_FILE.write_text(json.dumps(asdict(self), ensure_ascii=False, indent=2), encoding="utf-8")
+        data = asdict(self)
+        data["backup_dirs"] = {k: _rel_to_root(v) for k, v in self.backup_dirs.items()}
+        SETTINGS_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
     # ---- 機種ごとの値 ---------------------------------------------------
     @property

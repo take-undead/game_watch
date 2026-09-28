@@ -19,6 +19,18 @@ UI の文言・コメントは日本語です。
 - GUI は **システムの Python** で動きます（tkinter が必要。カバー編集には Pillow も必要）。ビルド用の依存は `tools\venv` に分けています。
 - `.bat` は **cp932・CRLF** で保存すること（cmd は日本語を Shift-JIS で読むため）。日本語の文字列を cmd から PowerShell に渡すと文字化けするので、ショートカットは `gnwtool/shortcut.py` から PowerShell の `-EncodedCommand`（UTF-16）で作っています。
 
+### 持ち運び版（scripts/make_portable.py）
+
+フォルダの中だけで完結し、フォルダごとコピーすれば別の PC でも動く版です。`python scripts\make_portable.py [出力先]` で作ります（既定はこのフォルダの隣の `game_watch_kai\`。何度実行してもよく、コピーは差分だけ）。
+
+- **venv は使えません。** `pyvenv.cfg` が元の Python の場所を覚えているため、移すと動きません。代わりに、venv の元の Python 一式を `tools\python` にコピーし、venv の `site-packages` を重ねます。`config.PORTABLE`（`tools\python\python.exe` があるか）で切り替わり、`VENV_PY` / `VENV_SCRIPTS` がそちらを指します。
+- **pip が作る `Scripts\*.exe`（gnwmanager.exe など）は python の絶対パスを埋め込んでいて、移すと動きません。** `write_shims()` が `tools\bin\gnwmanager`（`python -m gnwmanager`）と `python3` を、`tools\bin` からの相対パスで作ります（通常版でも同じシムを使う）。
+- Git は PortableGit（`tools\git`、`find_git_root()` が最優先で探す）、ARM GCC は xPack（`tools\arm-gcc`、もともと同梱版を優先）。ダウンロードは元のフォルダの `tools\downloads` に残して再利用します。
+- 起動用の `GnW改造ツール.exe` は、Windows 標準の `csc.exe`（.NET Framework 4）で `scripts\portable\launcher.cs` からビルドします。`tools\python\pythonw.exe -m gnwtool` を、`PYTHONNOUSERSITE=1` を付けて起動するだけです。`build_env()` も持ち運び版では `PYTHONNOUSERSITE=1` を付けます（その PC のユーザー用パッケージを混ぜない）。
+- `settings.json` の `backup_dirs` は、ツールのフォルダ内なら相対パスで保存します（`Settings.save()` / `load()`）。
+- PC ごとに要るのは ST-Link の USB ドライバだけです（Windows の仕組み上、持ち運べない）。
+- 2026-09-28 に確認: PATH を `C:\Windows\System32` などだけにして、持ち運び版の中から `gnwmanager info`（ST-Link まで通信）と Retro-Go の実ビルドが通り、exe から画面が開きました。すべてのコマンドが持ち運び版の `tools\` から使われていました。
+
 ## モジュール構成
 
 | ファイル | 役割 |
