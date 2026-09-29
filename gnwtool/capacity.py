@@ -292,7 +292,7 @@ class Estimator:
         for d in [roms_root / f for f, _, _ in C.ROM_SYSTEMS] + [C.CHEATS / f for f, _, _ in C.ROM_SYSTEMS]:
             if d.is_dir():
                 for p in sorted(d.iterdir()):
-                    if p.suffix.lower() in CHEAT_SUFFIX:
+                    if p.suffix.lower() in CHEAT_SUFFIX or p.name == "roms.json":  # roms.json: チートの対応表
                         st = p.stat()
                         sig.append((str(p), st.st_size, st.st_mtime_ns))
         return tuple(sig)
@@ -333,7 +333,8 @@ class Estimator:
                 save = 0
             elif folder == "gb":
                 save = gb_save_size(data)
-            elif folder == "nes" and p.suffix.lower() == ".nes":
+            elif folder == "nes":
+                # .fds も nesmapper.py で決まる (ディスク全体を保存するので 1 本 176〜368KB。24KB ではない)
                 save = nes_save_size(p, python)
             else:
                 save = SAVE_SIZES.get(folder, 0)
@@ -480,7 +481,7 @@ class Estimator:
             return
         bad = [n for n in names if menu_name(n, "932") != n]
         if bad:
-            est.warnings.append(f"表示名に使えない文字（「表」「能」「ソ」など）があり、「_」で表示されます: "
+            est.warnings.append(f"表示名に Shift-JIS に無い文字（絵文字や一部の記号など）があり、「_」で表示されます: "
                                 + ", ".join(bad[:3]) + (f" ほか {len(bad) - 3} 件" if len(bad) > 3 else ""))
 
     @staticmethod
@@ -610,14 +611,15 @@ def estimate_intflash(roms: list[RomInfo], roms_root: Path, settings: C.Settings
         strings.add(r.path.suffix.lstrip(".").lower().encode())
         if pr is None:
             continue
-        # チートのファイル: roms 側 → cheat_code 側 (sync_roms() と同じ優先順)
-        cheat_dir = next((d for d in (r.path.parent, C.CHEATS / r.folder)
-                          if any((d / (stem + s)).exists() for s in C.CHEAT_SUFFIXES)), None)
-        if cheat_dir is None:
+        # チートのファイル (sync_roms() と同じ探し方: 同じ名前 → ROM の中身の SHA1)
+        from .toolchain import cheat_for
+        cheat = cheat_for(r.path)
+        if cheat is None:
             continue
         try:
             with contextlib.redirect_stdout(io.StringIO()):
-                rom = pr.ROM(r.folder, str(cheat_dir / r.path.name), r.path.suffix.lstrip("."), {})
+                # ROM() はファイルを開かず、名前から隣のチートを探すだけ
+                rom = pr.ROM(r.folder, str(cheat.with_suffix(r.path.suffix)), r.path.suffix.lstrip("."), {})
                 codes = rom.get_cheat_codes()
         except Exception:  # noqa: BLE001 (壊れたチートのファイル: ビルドでもエラーになる)
             continue

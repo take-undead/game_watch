@@ -3,7 +3,25 @@
 cheat_code/ のファイルは UTF-8 で保存する (ビルドの parse_roms.py は PYTHONUTF8=1 で読む)。
 書き出す前に、既存のファイルにある日本語の説明をコードごとに読み取り、英語の出典名の代わりに使う。
 """
+import hashlib
+import json
 from pathlib import Path
+
+
+def find_rom(roms_dir: Path, stem: str, exts: tuple[str, ...]) -> Path | None:
+    """チートの名前 (MAP のキー) に対応する ROM. 同じ名前が無ければ cheat_code/<機種>/roms.json
+    ({ROM の SHA1: チートの名前}) で、名前を変えた ROM を中身から探す (gnwtool.toolchain.cheat_for と同じ)."""
+    files = [p for p in roms_dir.iterdir() if p.is_file() and p.suffix.lower() in exts] if roms_dir.is_dir() else []
+    for ext in exts:  # 拡張子の優先順 (例: .nes → .fds)
+        hit = next((p for p in files if p.stem == stem and p.suffix.lower() == ext), None)
+        if hit:
+            return hit
+    try:
+        idx = json.loads((roms_dir.parent.parent / "cheat_code" / roms_dir.name / "roms.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    want = {h for h, name in idx.items() if name == stem}
+    return next((p for p in files if want and hashlib.sha1(p.read_bytes()).hexdigest() in want), None)
 
 
 def _key(line: str, suffix: str) -> tuple[str, str]:

@@ -142,7 +142,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-from cheat_ja import localize
+from cheat_ja import find_rom, localize
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -480,12 +480,10 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     report = []
     for stem, (jname, jp_files, us_files) in MAP.items():
-        rom_path = ROMS / f"{stem}.nes"
-        fds = not rom_path.exists()
-        if fds:
-            rom_path = ROMS / f"{stem}.fds"
-            if not rom_path.exists():
-                continue
+        rom_path = find_rom(ROMS, stem, (".nes", ".fds"))  # 名前を変えた ROM も中身から探す
+        if rom_path is None:
+            continue
+        fds = rom_path.suffix.lower() == ".fds"
         rom = FdsRom(rom_path) if fds else Rom(rom_path)
         jp_url, jp_db = (LIBRETRO_FDS, DB_LIBRETRO_FDS) if fds else (LIBRETRO, DB_LIBRETRO)
         cands = []  # (code, desc, source, trusted)

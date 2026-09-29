@@ -21,7 +21,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-from cheat_ja import localize
+from cheat_ja import find_rom, localize
 
 ROOT = Path(__file__).resolve().parent.parent
 ROMS = ROOT / "roms" / "pce"
@@ -164,8 +164,8 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     report = []
     for stem, (jname, src) in MAP.items():
-        rom_path = ROMS / f"{stem}.pce"
-        if not rom_path.exists():
+        rom_path = find_rom(ROMS, stem, (".pce",))  # 名前を変えた ROM も中身から探す
+        if rom_path is None:
             continue
         rom = load_rom(rom_path)
         text = fetch(src) or ""

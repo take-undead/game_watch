@@ -203,7 +203,8 @@ def describe(m: dict) -> str:
     if m.get("stock"):
         parts.append("純正")
     if m.get("retrogo"):
-        parts.append(f"Retro-Go（ROM {len(m.get('roms', []))} 本）")
+        games = sum(1 for r in m.get("roms", []) if not r["system"].endswith("_bios"))  # BIOS は数えない
+        parts.append(f"Retro-Go（ゲーム {games} 本）")
     return " + ".join(parts)
 
 

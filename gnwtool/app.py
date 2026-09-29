@@ -698,9 +698,13 @@ class App(tk.Tk):
             self.rom_tree.column(c, width=w, anchor=anchor)
         sb = ttk.Scrollbar(tf, orient=tk.VERTICAL, command=self.rom_tree.yview)
         self.rom_tree.configure(yscrollcommand=sb.set)
+        # スクロールバーを先に置く (一覧を先に置くと、ウィンドウの幅が足りないときに削られて見えなくなる)
+        sb.pack(side=tk.RIGHT, fill=tk.Y)
         self.rom_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        sb.pack(side=tk.LEFT, fill=tk.Y)
         self.rom_tree.tag_configure("warn", foreground="#cf222e")
+        # カバーが無い ROM (と、それを含む機種の行) を色で目立たせる
+        self.rom_tree.tag_configure("nocover", background="#fff1d6", foreground="#7d4e00")
+        self.rom_tree.tag_configure("nocover_sys", foreground="#9a6700")
 
         self.estimator = Estimator()
         self.estimate: Optional[Estimate] = None
@@ -781,29 +785,38 @@ class App(tk.Tk):
         cheat_bytes = dict(est.intflash_cheat.per_rom) if est.intflash_cheat else {}
         display_names: dict[str, dict] = {}
         for folder, roms in groups.items():
+            bios = folder.endswith("_bios")  # BIOS はメニューに出ないので、カバーは要らない
             ncov = sum(1 for r in roms if r.cover)
+            missing = len(roms) - ncov
             parent = tree.insert("", tk.END, iid=f"sys:{folder}", open=True,
                                  text=f"{names[folder]}  ({len(roms)})",
                                  values=(self._fmt(sum(r.size for r in roms)),
                                          self._fmt(sum(r.stored for r in roms if not r.note)),
                                          self._fmt(sum(r.save for r in roms if not r.note)),
-                                         f"{ncov}/{len(roms)} 枚", ""))
+                                         "—" if bios else f"○ {ncov}/{len(roms)}" if not missing else f"× {missing} 本なし",
+                                         ""),
+                                 tags=("nocover_sys",) if missing and not bios else ())
             for r in roms:
                 note = r.note or (f"圧縮 {r.stored * 100 // max(r.size, 1)}%" if r.compressed else "非圧縮")
                 if not r.note and (nch := T.cheat_count(r.path)):
                     note += f" / チート{nch}" + (f" (本体 {self._fmt(cheat_bytes[r.path])})" if r.path in cheat_bytes else "")
                     cheat_roms += 1
-                if not r.cover:
-                    cov = "なし"
+                tags = ()
+                if bios:
+                    cov = "—"
+                elif not r.cover:
+                    cov, tags = "× なし", ("nocover",)
                 elif r.cover_bytes < 0:
-                    cov = "変換失敗"
+                    cov = "× 変換失敗"
                     note = "カバー画像を読み込めません"
                 else:
-                    cov = self._fmt(r.cover_bytes) if cf else f"({self._fmt(r.cover_bytes)})"
+                    cov = "○ " + (self._fmt(r.cover_bytes) if cf else f"({self._fmt(r.cover_bytes)})")
+                if r.note or cov == "× 変換失敗":
+                    tags = ("warn",)
                 disp = display_names.setdefault(folder, T.load_names(folder)).get(rom_stem(r.path))
                 tree.insert(parent, tk.END, iid=str(r.path), text=r.path.name + (f"  →「{disp}」" if disp else ""),
                             values=(self._fmt(r.size), self._fmt(r.stored), self._fmt(r.save), cov, note),
-                            tags=("warn",) if r.note or cov == "変換失敗" else ())
+                            tags=tags)
         if est.orphan_images:
             parent = tree.insert("", tk.END, iid="sys:_orphan", open=True,
                                  text=f"対応するROMが無い画像  ({len(est.orphan_images)})", tags=("warn",))
@@ -831,12 +844,18 @@ class App(tk.Tk):
             self.legend_vars[name].set(f"{name} {self._fmt(val)}")
         self.legend_vars["空き"].set(f"空き {self._fmt(max(est.free, 0))}")
         self._draw_bar()
-        ncov = sum(1 for r in est.roms if r.cover)
+        # BIOS (nes_bios / msx_bios) はゲームとして数えない (ビルドの .gnw の「○本」と同じ数え方)
+        games = [r for r in est.roms if not r.note and not r.folder.endswith("_bios")]
+        n_bios = len([r for r in est.roms if not r.note and r.folder.endswith("_bios")])
+        ncov = sum(1 for r in games if r.cover)
         cover_txt = ""
         if ncov and not self.settings.coverflow:
             cover_txt = f"\nカバー画像 {ncov} 枚あり — ③構成で「カバーアート表示」を有効にすると使われます（括弧内は有効時のサイズ）"
         elif self.settings.coverflow:
-            cover_txt = f"\nカバー画像 {ncov}/{len(est.roms)} 本に設定済み（画像が無いROMはカバー無しで表示されます）"
+            left = len(games) - ncov
+            cover_txt = (f"\nカバー画像 {ncov}/{len(games)} 本に設定済み" + (
+                f" — 残り {left} 本は一覧の「× なし」（色付きの行）です。画像が無いROMはカバー無しで表示されます"
+                if left else "（すべて準備済み）"))
         if cheat_roms:
             cover_txt += (f"\nチート定義のあるROM {cheat_roms} 本" + (
                 "（ゲーム選択画面の「Cheat Codes」で選べます）" if self.settings.cheat_codes else
@@ -844,7 +863,8 @@ class App(tk.Tk):
         self._show_intflash(est)
         self.detail_var.set(
             f"Retro-Go 用領域 {self._fmt(est.total)}（外部フラッシュ {self.settings.flash_mb}MB 構成）"
-            f"　ROM {len([r for r in est.roms if not r.note])} 本 / 元サイズ合計 {self._fmt(sum(r.size for r in est.roms))}"
+            f"　ゲーム {len(games)} 本" + (f"（ほかに BIOS {n_bios} 個）" if n_bios else "")
+            + f" / 元サイズ合計 {self._fmt(sum(r.size for r in est.roms))}"
             + cover_txt
             + ("\n※ MSX/Amstradのエミュレータサイズは推定値です" if est.emu_estimated else "")
             + "".join(f"\n⚠ {w}" for w in est.warnings))
@@ -1131,8 +1151,8 @@ class App(tk.Tk):
             self.build_tree.column(c, width=w, anchor=tk.W)
         sb = ttk.Scrollbar(tf, orient=tk.VERTICAL, command=self.build_tree.yview)
         self.build_tree.configure(yscrollcommand=sb.set)
+        sb.pack(side=tk.RIGHT, fill=tk.Y)  # 先に置く (幅が足りないときに削られないように)
         self.build_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        sb.pack(side=tk.LEFT, fill=tk.Y)
         self.build_tree.tag_configure("other", foreground="#8c959f")
         self.build_tree.tag_configure("current", foreground="#1a7f37")
         self.build_tree.bind("<Double-1>", lambda e: self.show_build_detail())
@@ -1195,7 +1215,8 @@ class App(tk.Tk):
         if m.get("retrogo"):
             rg = m["retrogo"]
             lines.append(f"Retro-Go: 外部 {rg['extflash_offset'] // 1024}KB目から {rg['extflash_size'] // 1024}KB")
-            lines.append(f"ROM {len(m['roms'])} 本:")
+            n_bios = sum(1 for r in m["roms"] if r["system"].endswith("_bios"))
+            lines.append(f"ゲーム {len(m['roms']) - n_bios} 本" + (f"（ほかに BIOS {n_bios} 個）" if n_bios else "") + ":")
             names = {folder: name for folder, name, _ in C.ROM_SYSTEMS}
             lines += [f"  [{names.get(r['system'], r['system'])}] {r['file']}" for r in m["roms"][:60]]
             if len(m["roms"]) > 60:

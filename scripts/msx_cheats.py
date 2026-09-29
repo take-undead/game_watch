@@ -17,6 +17,8 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
+from cheat_ja import find_rom
+
 ROOT = Path(__file__).resolve().parent.parent
 ROMS = ROOT / "roms" / "msx"
 OUT = ROOT / "cheat_code" / "msx"
@@ -173,7 +175,7 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     report = []
     for stem, (jname, mcfs) in MAP.items():
-        rom_path = next((p for p in ROMS.iterdir() if p.stem == stem and p.suffix.lower() == ".rom"), None)
+        rom_path = find_rom(ROMS, stem, (".rom",))  # 名前を変えた ROM も中身から探す
         if rom_path is None:
             continue
         rom = rom_path.read_bytes()

@@ -322,29 +322,71 @@ ROMS_README = """ここに機種ごとのフォルダへROMイメージを入れ
 """
 
 
-def cheat_files(folder: str) -> list[Path]:
-    d = C.CHEATS / folder
-    if not d.is_dir():
-        return []
-    return [p for p in d.iterdir() if p.is_file() and p.suffix.lower() in C.CHEAT_SUFFIXES]
+# ---- チートと ROM の対応 ----------------------------------------------------
+# cheat_code/<機種>/<名前>.ggcodes などは、同じ名前の ROM か、cheat_code/<機種>/roms.json
+# ({ROM の SHA1: チートの名前}) で中身が一致する ROM に使う。ROM の名前を変えても外れない。
+# 名前で対応が取れた ROM は、同期のときに roms.json に書き足す (update_cheat_index)。
+CHEAT_INDEX = "roms.json"
+_sha1_cache: dict[tuple, str] = {}
+
+
+def rom_sha1(p: Path) -> str:
+    st = p.stat()
+    key = (str(p), st.st_size, st.st_mtime_ns)
+    if key not in _sha1_cache:
+        _sha1_cache[key] = hashlib.sha1(p.read_bytes()).hexdigest()
+    return _sha1_cache[key]
+
+
+def cheat_index(folder: str) -> dict[str, str]:
+    try:
+        return json.loads((C.CHEATS / folder / CHEAT_INDEX).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def cheat_for(rom: Path) -> Optional[Path]:
+    """ROM に使うチートのファイル (roms 側の同名 → cheat_code 側の同名 → 中身の SHA1 の順)."""
+    from .capacity import rom_stem
+    stem, folder = rom_stem(rom), rom.parent.name
+    for d in (rom.parent, C.CHEATS / folder):
+        for suf in C.CHEAT_SUFFIXES:
+            if (d / (stem + suf)).exists():
+                return d / (stem + suf)
+    idx = cheat_index(folder)
+    name = idx.get(rom_sha1(rom)) if idx else None
+    for suf in C.CHEAT_SUFFIXES if name else ():
+        if (C.CHEATS / folder / (name + suf)).exists():
+            return C.CHEATS / folder / (name + suf)
+    return None
+
+
+def update_cheat_index(folder: str, roms: list[Path]) -> None:
+    """cheat_code 側と名前で対応が取れた ROM の SHA1 を roms.json に記録する (あとで名前を変えても使える)."""
+    from .capacity import rom_stem
+    idx = cheat_index(folder)
+    new = dict(idx)
+    for rom in roms:
+        if any((C.CHEATS / folder / (rom_stem(rom) + s)).exists() for s in C.CHEAT_SUFFIXES):
+            new[rom_sha1(rom)] = rom_stem(rom)
+    if new != idx:
+        (C.CHEATS / folder / CHEAT_INDEX).write_text(
+            json.dumps(dict(sorted(new.items(), key=lambda kv: kv[1].lower())), ensure_ascii=False, indent=1) + "\n",
+            encoding="utf-8")
 
 
 def cheat_count(rom: Path) -> int:
-    """ROM に対応するチートの件数 (roms 側 → cheat_code 側の順に探す)."""
-    from .capacity import rom_stem
-    stem = rom_stem(rom)
-    for d in (rom.parent, C.CHEATS / rom.parent.name):
-        for suf in C.CHEAT_SUFFIXES:
-            f = d / (stem + suf)
-            if f.exists():
-                try:
-                    lines = f.read_text(encoding="utf-8", errors="replace").splitlines()
-                except OSError:
-                    return 0
-                if suf == ".mcf":
-                    return sum(1 for ln in lines if ln.strip())
-                return min(16, sum(1 for ln in lines if ln.split(",", 1)[0].strip()))
-    return 0
+    """ROM に対応するチートの件数."""
+    f = cheat_for(rom)
+    if f is None:
+        return 0
+    try:
+        lines = f.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError:
+        return 0
+    if f.suffix == ".mcf":
+        return sum(1 for ln in lines if ln.strip())
+    return min(16, sum(1 for ln in lines if ln.split(",", 1)[0].strip()))
 
 
 # ---- 表示名 (roms/<機種>.json) ----------------------------------------------
@@ -398,23 +440,41 @@ def build_name(p: Path) -> str:
 
 
 def menu_name(name: str, codepage: str) -> Optional[str]:
-    """表示名を C の文字列に書ける形にする. 使えなければ None (英数字のファイル名が表示される).
+    """メニューに出せる表示名. 使えなければ None (英数字のファイル名が表示される).
 
-    CODEPAGE=932 では Shift-JIS で書かれる。2 バイト目が 0x5C の文字 (「表」「能」「ソ」など) は
-    C の文字列の中で壊れるので「_」にする。それ以外の CODEPAGE では日本語は使えない。
+    CODEPAGE=932 では Shift-JIS で書かれ、Shift-JIS に無い文字は「_」にする。それ以外の CODEPAGE では日本語は使えない。
     """
     if name.isascii():
         return name
     if codepage != "932":
         return None
-    return "".join(ch if ch.isascii() or _sjis_ok(ch) else "_" for ch in name)
+    return "".join(ch if _sjis_ok(ch) else "_" for ch in name)
 
 
 def _sjis_ok(ch: str) -> bool:
     try:
-        return 0x5C not in ch.encode("cp932")
+        ch.encode("cp932")
+        return True
     except UnicodeEncodeError:
         return False
+
+
+def c_name(name: str) -> str:
+    """parse_roms.py は表示名を「.name = "…"」にそのまま書くので、C の文字列として正しくなるようにしておく.
+
+    Shift-JIS の 2 バイト目が 0x5C の文字 (「ソ」「十」「表」「能」など) は、C では 0x5C が \\ として読まれて壊れる。
+    直後に \\ を 1 つ足すと、C の中で「\\\\」が 1 バイトの 0x5C に戻り、元の文字になる。" と \\ もエスケープする。
+    (チートの説明は parse_roms.py が \\ を 4 つに増やすので、この方法は使えない)
+    """
+    out = []
+    for ch in name:
+        if ch in '\\"':
+            out.append("\\" + ch)
+        elif not ch.isascii() and 0x5C in ch.encode("cp932", "replace"):
+            out.append(ch + "\\")
+        else:
+            out.append(ch)
+    return "".join(out)
 
 
 def _romdefs(folder: str, stems: list[str], codepage: str, log: Log) -> dict:
@@ -435,19 +495,19 @@ def _romdefs(folder: str, stems: list[str], codepage: str, log: Log) -> dict:
         v = dict(v)
         if v.get("name"):
             name = menu_name(v["name"], codepage)
-            # _no_save は表示名の末尾で判定されるので、日本語の表示名にも付けておく
-            if k.endswith(NO_SAVE) and name is not None and not name.endswith(NO_SAVE):
-                name += NO_SAVE
             if name != v["name"]:
                 changed.append(f"{v['name']} → {name or build_stem(k)}")
             if name is None:
                 v.pop("name")
             else:
-                v["name"] = name
+                # _no_save は表示名の末尾で判定されるので、日本語の表示名にも付けておく
+                if k.endswith(NO_SAVE) and not name.endswith(NO_SAVE):
+                    name += NO_SAVE
+                v["name"] = c_name(name)
         if v:
             out[build_stem(k)] = v
     if changed:
-        why = "Shift-JIS で使えない文字を「_」に" if codepage == "932" else "日本語はメニュー言語が日本語 (932) のときだけ"
+        why = "Shift-JIS に無い文字を「_」に" if codepage == "932" else "日本語はメニュー言語が日本語 (932) のときだけ"
         log(f"  表示名を変えました ({why}): {folder}: {' / '.join(changed[:3])}"
             + (f" ほか {len(changed) - 3} 件" if len(changed) > 3 else ""))
     return out
@@ -539,9 +599,15 @@ def sync_roms(log: Log, proc_hook=None, codepage: str = "932") -> None:
         dst_dir.mkdir(parents=True, exist_ok=True)
         # キーは retro-go 側での名前 (日本語のファイル名は英数字に置き換える)
         src = {build_name(p): p for p in src_dir.iterdir() if p.is_file() and p.name.lower() not in _KEEP}
-        # cheat_code/<機種>/ のチート定義も ROM の隣に置く (roms 側に同名があればそちらを優先)
-        for p in cheat_files(folder):
-            src.setdefault(build_name(p), p)
+        # cheat_code/<機種>/ のチートも ROM の隣に置く (roms 側に同名があればそちらを優先。
+        # 名前が違っても、ROM の中身が roms.json に記録したものと同じなら使う)
+        from .capacity import EXTS, rom_stem
+        roms = [p for p in src.values() if p.suffix.lower() in EXTS.get(folder, ())]
+        if (C.CHEATS / folder).is_dir():
+            update_cheat_index(folder, roms)
+        for p in roms:
+            if (cheat := cheat_for(p)) is not None:
+                src.setdefault(build_stem(rom_stem(p)) + cheat.suffix, cheat)
         for d in list(dst_dir.iterdir()):
             if not d.is_file() or d.name.lower() in _KEEP or d.name.lower().endswith(".json"):
                 continue
