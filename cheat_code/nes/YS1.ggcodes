@@ -1,16 +1,16 @@
-0358:FF, Infinite HP
-051A:0F, Set Power Ring
-051C:0F, Set Timer Ring
-04FA:0F, Set Short Sword
-04FB:0F, Set Long Sword
-04FD:0F, Set Silver Sword
-035F:0F+035E:FF, Set Infinite Gold F
-035B:0F+035A:FF, Set Max. Exp. F
-052E:0F, Set Gold Pedestal
-04FC:0F, Set Talwar
-0502:0F, Set Small Shield
-0503:0F, Set Middle Shield
-04FE:0F, Set Flame Sword
-0504:0F, Set Large Shield
-0505:0F, Set Silver Shield
-0506:0F, Set Battle Shield
+0358:FF, HP 無限
+051A:0F, パワーリングを持つ
+051C:0F, タイムリングを持つ
+04FA:0F, 短い剣を持つ
+04FB:0F, 長い剣を持つ
+04FD:0F, 銀の剣を持つ
+035F:0F+035E:FF, ゴールド無限
+035B:0F+035A:FF, 経験値を最大に
+052E:0F, 金の台座を持つ
+04FC:0F, タルワールを持つ
+0502:0F, スモールシールドを持つ
+0503:0F, ミドルシールドを持つ
+04FE:0F, 炎の剣を持つ
+0504:0F, ラージシールドを持つ
+0505:0F, シルバーシールドを持つ
+0506:0F, バトルシールドを持つ

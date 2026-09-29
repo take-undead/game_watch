@@ -1,8 +1,8 @@
-ATKTGKOZ, Invincibility Against Enemies
-AVOTGEOZ, Invincibility Against Rocks
-SXUKTIVG, Infinite Lives
-0060:03, Infinite Lives (Player 1&2)
-PAZGTK, Start With 9 Lives
-OXXGLUPX, Skip Title Screen Scroll
-006E:01, Stage Round Select
-PAPGLG, Start On Round ??
+ATKTGKOZ, 敵に触れても死なない
+AVOTGEOZ, 岩に当たっても死なない
+SXUKTIVG, 残機無限
+0060:03, 残機無限 (2人とも)
+PAZGTK, 開始時の残機 9
+OXXGLUPX, タイトルのスクロールを飛ばす
+006E:01, ラウンドセレクト
+PAPGLG, 開始ラウンドを変える

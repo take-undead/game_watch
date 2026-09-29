@@ -619,7 +619,6 @@ class App(tk.Tk):
         ttk.Button(top, text="カバーを編集…", command=self.edit_cover).pack(side=tk.LEFT)
         ttk.Button(top, text="カバー削除", command=self.remove_cover).pack(side=tk.LEFT, padx=4)
         ttk.Button(top, text="表示名…", command=self.edit_display_name).pack(side=tk.LEFT)
-        self.fix_names_btn = ttk.Button(top, text="ファイル名を英数字に直す", command=self.fix_names)
         ttk.Button(top, text="再計算", command=lambda: self.request_estimate(force=True)).pack(side=tk.LEFT)
         self._btn(top, "試しビルドで正確に確認", self.do_exact_check, side=tk.RIGHT)
 
@@ -781,10 +780,6 @@ class App(tk.Tk):
         cheat_roms = 0
         cheat_bytes = dict(est.intflash_cheat.per_rom) if est.intflash_cheat else {}
         display_names: dict[str, dict] = {}
-        if any("日本語などが含まれています" in p for p in est.problems):
-            self.fix_names_btn.pack(side=tk.LEFT, padx=4)
-        else:
-            self.fix_names_btn.pack_forget()
         for folder, roms in groups.items():
             ncov = sum(1 for r in roms if r.cover)
             parent = tree.insert("", tk.END, iid=f"sys:{folder}", open=True,
@@ -1007,15 +1002,6 @@ class App(tk.Tk):
         self.log(f"表示名: {rom.name} → {new or '(ファイル名)'}")
         self.request_estimate(force=False)
         self._est_sig = None  # json の変更は監視対象外なので再計算させる
-
-    def fix_names(self) -> None:
-        if not messagebox.askyesno(C.APP_NAME, (
-                "日本語などを含むファイル名を英数字に付け替えます。\n"
-                "元の名前はメニューの表示名として残します（カバー画像・チートのファイル名も一緒に変更）。\n\n続けますか？")):
-            return
-        n = T.fix_non_ascii_names(self.log)
-        self.log(f"{n} 件のファイル名を修正しました")
-        self._est_sig = None
 
     def edit_cover(self, paste: bool = False) -> None:
         rom = self._selected_rom()
@@ -1290,7 +1276,8 @@ class App(tk.Tk):
         s = self.settings
         vars_ = " ".join(shlex.quote(v) for v in s.retrogo_vars())
         steps: list[Step] = [("ビルド環境の準備", lambda log, hook: T.write_shims()),
-                             ("ROMフォルダを retro-go に同期", T.sync_roms)]
+                             ("ROMフォルダを retro-go に同期",
+                              lambda log, hook: T.sync_roms(log, hook, codepage=s.codepage))]
         if s.clean_build:
             steps.append(("Retro-Go をクリーン", self.sh(f"make {vars_} clean", C.RETROGO_REPO)))
         steps.append(("Retro-Go をビルド (数分かかります)", self.sh(f"make -j{self._jobs()} {vars_}", C.RETROGO_REPO)))

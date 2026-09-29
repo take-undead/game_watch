@@ -349,7 +349,7 @@ def cheat_count(rom: Path) -> int:
 
 # ---- 表示名 (roms/<機種>.json) ----------------------------------------------
 # retro-go の romdef 形式 {"<ROM名(拡張子なし)>": {"name": "<表示名>"}}。parse_roms.py が roms/<機種>.json を読む。
-# ファイル名は英数字でないとビルドが失敗するが、表示名は CODEPAGE=932 なら日本語にできる。
+# 表示名は CODEPAGE=932 なら日本語にできる。日本語のファイル名も、同期のときに表示名に回す (下記)。
 def names_file(folder: str) -> Path:
     return C.ROMS / f"{folder}.json"
 
@@ -372,33 +372,85 @@ def save_names(folder: str, names: dict[str, str]) -> None:
                  encoding="utf-8")
 
 
-def fix_non_ascii_names(log: Log) -> int:
-    """英数字以外を含む ROM のファイル名を付け替え、元の名前は表示名として残す。関連ファイルも一緒に."""
+# ---- 日本語のファイル名 ----------------------------------------------------
+# parse_roms.py はファイル名から C の識別子を作るため、日本語などが入るとビルドが失敗する。
+# roms/ のファイルは日本語の名前のまま置いてよく、retro-go 側へ同期するときだけ英数字の名前でコピーする。
+# 元の名前 (または roms/<機種>.json の表示名) は、メニューの表示名として渡す。
+NO_SAVE = "_no_save"  # parse_roms.py の目印 (ファイル名と表示名の末尾。表示名からは取り除かれる)
+
+
+def build_stem(stem: str) -> str:
+    """retro-go 側で使うファイル名 (拡張子なし). 英数字だけの名前はそのまま."""
+    if stem.isascii():
+        return stem
     import re
     import zlib
-    from .capacity import ALL_COVER_SUFFIXES, rom_stem
-    fixed = 0
-    for folder, _, _ in C.ROM_SYSTEMS:
-        d = C.ROMS / folder
-        if not d.is_dir():
+    base, ns = (stem[: -len(NO_SAVE)], NO_SAVE) if stem.endswith(NO_SAVE) else (stem, "")
+    ascii_part = re.sub(r"[^A-Za-z0-9]+", "_", base.encode("ascii", "ignore").decode()).strip("_")
+    return f"{ascii_part or 'rom'}_{zlib.crc32(base.encode('utf-8')) & 0xFFFFFFFF:08X}{ns}"
+
+
+def build_name(p: Path) -> str:
+    """ROM・カバー・チートのファイルの、retro-go 側での名前 (ROM と同じ名前の部分だけを置き換える)."""
+    from .capacity import rom_stem
+    stem = rom_stem(p)
+    return build_stem(stem) + p.name[len(stem):] if p.name.startswith(stem) else p.name
+
+
+def menu_name(name: str, codepage: str) -> Optional[str]:
+    """表示名を C の文字列に書ける形にする. 使えなければ None (英数字のファイル名が表示される).
+
+    CODEPAGE=932 では Shift-JIS で書かれる。2 バイト目が 0x5C の文字 (「表」「能」「ソ」など) は
+    C の文字列の中で壊れるので「_」にする。それ以外の CODEPAGE では日本語は使えない。
+    """
+    if name.isascii():
+        return name
+    if codepage != "932":
+        return None
+    return "".join(ch if ch.isascii() or _sjis_ok(ch) else "_" for ch in name)
+
+
+def _sjis_ok(ch: str) -> bool:
+    try:
+        return 0x5C not in ch.encode("cp932")
+    except UnicodeEncodeError:
+        return False
+
+
+def _romdefs(folder: str, stems: list[str], codepage: str, log: Log) -> dict:
+    """retro-go 側の roms/<機種>.json. キーを英数字のファイル名にし、日本語のファイル名は表示名として足す."""
+    try:
+        data = json.loads(names_file(folder).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        data = {}
+    for stem in stems:
+        if not stem.isascii():
+            v = data.get(stem) if isinstance(data.get(stem), dict) else {}
+            data[stem] = {**v, "name": v.get("name") or stem}
+    out, changed = {}, []
+    for k, v in data.items():
+        if k.startswith("_") or not isinstance(v, dict):  # _cover_width などの設定
+            out[k] = v
             continue
-        names = load_names(folder)
-        for p in sorted(d.iterdir()):
-            if not p.is_file() or p.name.isascii() or p.suffix.lower() in ALL_COVER_SUFFIXES + C.CHEAT_SUFFIXES:
-                continue
-            stem = rom_stem(p)
-            ascii_part = re.sub(r"[^A-Za-z0-9]+", "_", stem.encode("ascii", "ignore").decode()).strip("_")
-            new_stem = f"{ascii_part or 'rom'}_{zlib.crc32(stem.encode('utf-8')) & 0xFFFFFFFF:08X}"
-            related = [q for q in d.iterdir() if q.is_file() and rom_stem(q) == stem]
-            related += [q for q in (d / ".cover_originals").glob(f"{stem}.*")] if (d / ".cover_originals").is_dir() else []
-            related += [q for q in (C.CHEATS / folder).glob(f"{stem}.*")] if (C.CHEATS / folder).is_dir() else []
-            for q in related:
-                q.rename(q.with_name(new_stem + q.name[len(stem):]))
-                log(f"名前を変更: {folder}/{q.name} → {new_stem + q.name[len(stem):]}")
-            names[new_stem] = names.pop(stem, stem)
-            fixed += 1
-        save_names(folder, names)
-    return fixed
+        v = dict(v)
+        if v.get("name"):
+            name = menu_name(v["name"], codepage)
+            # _no_save は表示名の末尾で判定されるので、日本語の表示名にも付けておく
+            if k.endswith(NO_SAVE) and name is not None and not name.endswith(NO_SAVE):
+                name += NO_SAVE
+            if name != v["name"]:
+                changed.append(f"{v['name']} → {name or build_stem(k)}")
+            if name is None:
+                v.pop("name")
+            else:
+                v["name"] = name
+        if v:
+            out[build_stem(k)] = v
+    if changed:
+        why = "Shift-JIS で使えない文字を「_」に" if codepage == "932" else "日本語はメニュー言語が日本語 (932) のときだけ"
+        log(f"  表示名を変えました ({why}): {folder}: {' / '.join(changed[:3])}"
+            + (f" ほか {len(changed) - 3} 件" if len(changed) > 3 else ""))
+    return out
 
 
 def ensure_roms_dirs() -> None:
@@ -428,7 +480,53 @@ def _force_unlink(p: Path) -> None:
         p.unlink()
 
 
-def sync_roms(log: Log, proc_hook=None) -> None:
+def _cheat_bytes(src: Path, codepage: str, log: Log) -> bytes:
+    """ビルドに渡すチートのファイルの中身 (UTF-8). 使えない説明文は外す.
+
+    parse_roms.py は .ggcodes / .pceplus を UTF-8 (build_env の PYTHONUTF8) で、.mcf を cp1252 で読み、
+    説明文を CODEPAGE の文字コードで C ソースに書く。日本語は CODEPAGE=932 の .ggcodes / .pceplus だけ使える。
+    Shift-JIS の 2 バイト目が 0x5C (「表」「能」「ソ」など) の文字は、C の文字列の中で \\ と解釈されて壊れる。
+    """
+    raw = src.read_bytes()
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return raw  # 出典のままの .mcf (cp1252) など
+    if text.isascii():
+        return raw
+    suf = src.suffix.lower()
+    jp_ok = codepage == "932" and suf != ".mcf"
+
+    def bad(desc: str) -> bool:
+        if not jp_ok:
+            return not desc.isascii()
+        try:
+            return any(b"\\" in ch.encode("cp932") for ch in desc if not ch.isascii())
+        except UnicodeEncodeError:
+            return True
+
+    out, dropped = [], []
+    for n, line in enumerate(text.splitlines(), 1):
+        if suf == ".ggcodes":
+            code, sep, desc = line.partition(",")
+        elif suf == ".pceplus":
+            code, sep, desc = line.rpartition(",")
+        else:
+            parts = line.split(",", 4)
+            code, sep, desc = (",".join(parts[:4]), ",", parts[4]) if len(parts) == 5 else (line, "", "")
+        if sep and bad(desc):
+            dropped.append(desc.strip())
+            # .ggcodes は説明が無ければコードが表示される。ほかは説明の欄が必須
+            line = code if suf == ".ggcodes" else f"{code}, Cheat {n}"
+        out.append(line)
+    if dropped:
+        why = "Shift-JIS で使えない文字" if jp_ok else "日本語 (CODEPAGE=932 の .ggcodes / .pceplus のみ使えます)"
+        log(f"  チートの説明を外しました ({why}): {src.name}: {' / '.join(dropped[:3])}"
+            + (f" ほか {len(dropped) - 3} 件" if len(dropped) > 3 else ""))
+    return ("\n".join(out) + "\n").encode("utf-8")
+
+
+def sync_roms(log: Log, proc_hook=None, codepage: str = "932") -> None:
     """プロジェクトの roms/ を retro-go/roms/ へミラーする.
 
     retro-go は ROM の隣に .lzma 等の圧縮済みファイルを作り、存在すれば再圧縮しないため、
@@ -439,10 +537,11 @@ def sync_roms(log: Log, proc_hook=None) -> None:
     for folder, _, _ in C.ROM_SYSTEMS:
         src_dir, dst_dir = C.ROMS / folder, C.RETROGO_REPO / "roms" / folder
         dst_dir.mkdir(parents=True, exist_ok=True)
-        src = {p.name: p for p in src_dir.iterdir() if p.is_file() and p.name.lower() not in _KEEP}
+        # キーは retro-go 側での名前 (日本語のファイル名は英数字に置き換える)
+        src = {build_name(p): p for p in src_dir.iterdir() if p.is_file() and p.name.lower() not in _KEEP}
         # cheat_code/<機種>/ のチート定義も ROM の隣に置く (roms 側に同名があればそちらを優先)
         for p in cheat_files(folder):
-            src.setdefault(p.name, p)
+            src.setdefault(build_name(p), p)
         for d in list(dst_dir.iterdir()):
             if not d.is_file() or d.name.lower() in _KEEP or d.name.lower().endswith(".json"):
                 continue
@@ -455,7 +554,9 @@ def sync_roms(log: Log, proc_hook=None) -> None:
                 base = base[:-4]
             s = src.get(base) or src.get(base.rsplit(".", 1)[0] + ".dsk")
             stale = s is None
-            if not stale and d.name == s.name:
+            if not stale and d.suffix.lower() in C.CHEAT_SUFFIXES:
+                continue  # 中身を比べて下で書き直す
+            if not stale and src.get(d.name) is s:  # 派生ファイルでなく、コピーそのもの
                 st, dt = s.stat(), d.stat()
                 stale = st.st_size != dt.st_size or int(st.st_mtime) != int(dt.st_mtime)
             elif not stale:
@@ -465,15 +566,28 @@ def sync_roms(log: Log, proc_hook=None) -> None:
                 removed += 1
         for name, s in src.items():
             d = dst_dir / name
+            if s.suffix.lower() in C.CHEAT_SUFFIXES:
+                data = _cheat_bytes(s, codepage, log)
+                if not d.exists() or d.read_bytes() != data:
+                    if d.exists():
+                        _force_unlink(d)
+                    d.write_bytes(data)
+                    copied += 1
+                continue
             if not d.exists():
                 shutil.copy2(s, d)
                 # 読み取り専用属性まで引き継ぐと、次回の入れ替えで消せなくなる (retro-go も BIOS を書き換える)
                 os.chmod(d, stat.S_IREAD | stat.S_IWRITE)
                 copied += 1
-        # 表示名 (roms/<機種>.json) も同期。無ければ retro-go 側からも消す
-        src_names, dst_names = names_file(folder), C.RETROGO_REPO / "roms" / f"{folder}.json"
-        if src_names.exists():
-            shutil.copy2(src_names, dst_names)
+        # 表示名 (roms/<機種>.json) も同期。日本語のファイル名は表示名に回す。無ければ retro-go 側からも消す
+        from .capacity import rom_stem
+        defs = _romdefs(folder, sorted({rom_stem(p) for p in src.values()}), codepage, log)
+        dst_names = C.RETROGO_REPO / "roms" / f"{folder}.json"
+        if defs:
+            dst_names.write_text(json.dumps(defs, ensure_ascii=False, indent=1), encoding="utf-8")
         elif dst_names.exists():
             _force_unlink(dst_names)
+    # Makefile は ROM のファイル名の一覧しか比べないため、チートや表示名の中身、CODEPAGE を変えても
+    # ROM の一覧表 (parse_roms.py) が作り直されない。一覧を消して毎回作り直させる (圧縮済みは再利用される)
+    (C.RETROGO_REPO / "build" / "rom_files.txt").unlink(missing_ok=True)
     log(f"ROM同期: コピー {copied} 件 / 削除 {removed} 件")

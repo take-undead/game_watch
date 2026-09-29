@@ -1,8 +1,8 @@
-OXNUATSX+OZELLGSX, Invincibility
-SZLOOT, Infinite Lives
-SUAPOS, Infinite Time
-00C0:00, Stage &quot;Floor&quot
-0099:40, Doors Always Opened
-00E5:01, Treasure Instantly Appears
-AAASZZ, Doors Open Without Keys
-AAGSII, Have Treasure
+OXNUATSX+OZELLGSX, 無敵
+SZLOOT, 残機無限
+SUAPOS, 時間無限
+00C0:00, フロアを固定 (00)
+0099:40, 扉が常に開いている
+00E5:01, 宝箱がすぐに出る
+AAASZZ, 鍵なしで扉が開く
+AAGSII, 宝物を持っている状態に

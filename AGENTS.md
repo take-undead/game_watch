@@ -112,7 +112,13 @@ Retro-Go 本体は内部フラッシュ（`INTFLASH_BANK=2`、256KB）に入り�
 ## チート（cheat_code/ と scripts/nes_cheats.py）
 
 - `cheat_code/<機種>/<ROM名>.ggcodes|.pceplus|.mcf` は、`sync_roms()` で同名 ROM の隣へコピーされます（`roms` 側に同名があれば、そちらを優先）。
-- Retro-Go の NES チートは、ゲームジニー（6 / 8 文字）、`AAAA:VV`、`AAAA?CC:VV`、PAR を読みます（`main_nes_fceu.c` の `apply_cheat_code`）。1 本あたり最大 16 個です。`parse_roms.py` は `#` の行を読み飛ばしません。説明文は CODEPAGE で C ソースに書き出されるので、ASCII にしています。
+- Retro-Go の NES チートは、ゲームジニー（6 / 8 文字）、`AAAA:VV`、`AAAA?CC:VV`、PAR を読みます（`main_nes_fceu.c` の `apply_cheat_code`）。1 本あたり最大 16 個です。`parse_roms.py` は `#` の行を読み飛ばしません。
+- **チートの説明文（NES / PCE）は日本語で、ファイルは UTF-8 です**（2026-09-29）。仕組みは次のとおりです。
+  - ビルドでは `build_env()` の `PYTHONUTF8=1` により、`parse_roms.py` は `.ggcodes` / `.pceplus` を UTF-8 で読みます（GUI の Python は cp932 で読むので、`capacity._load_parse_roms()` で `Path.read_text` を UTF-8 に差し替えています）。`.mcf` は `encoding="cp1252"` で固定なので、MSX の説明は日本語にできません。
+  - **実機の描画（`rg_i18n.c`）と UI の文言（`rg_i18n_ja_jp.c`）は Shift-JIS ですが、Makefile は CODEPAGE=932 のとき `ROMINFOCODE=eucjp` で C ソースを書きます。** そのままだと表示名もチートの説明も文字化けするので、`retrogo_vars()` で `ROMINFOCODE=cp932` を渡しています。GCC（入力は UTF-8 扱い）は、文字列の中の Shift-JIS をそのままのバイト列で埋め込みます（ARM GCC 14.2 で、378 種類の説明が `.o` にそのまま入ることを確認）。
+  - Shift-JIS の 2 バイト目が 0x5C の文字（「表」「能」「十」「ソ」など）は、C の文字列の中で `\` と解釈されて壊れます。`toolchain._cheat_bytes()` が同期のときに調べ、該当する説明を外してログに出します。CODEPAGE が 932 以外のときは日本語の説明をすべて外します（`iso-8859-1` で書けずにビルドが止まるため）。`.ggcodes` は説明を外すとコードが表示され、`.pceplus` / `.mcf` は `Cheat n` にします。
+  - 集め直しのスクリプトは、`scripts/cheat_ja.py` の `localize()` で既存ファイルの日本語の説明をコードごとに引き継ぎます。
+  - 日本語の方が英語より短く、利用者の構成で内部フラッシュの使用量が 1,356 バイト減りました（見積もり）。
 - `scripts/nes_cheats.py` は、libretro-database と martaaay のコードを集め、**手元の日本版 ROM と照合して**から書き出します。
   - 8 文字コードは、比較値が PRG の該当番地（マッパーのバンク配置を考慮）にあるかで判定します。
   - 6 文字コードは、置換元の命令が典型パターン（DEC→LDA など）の場合だけ、北米版のものも採用します。
@@ -134,7 +140,12 @@ Retro-Go 本体は内部フラッシュ（`INTFLASH_BANK=2`、256KB）に入り�
 - ROM が 1 本も無いと、`parse_roms.py` がエラーになります。
 - **MSX** は BIOS 7 ファイルを SHA1 で照合し、1 つでも違うと MSX は使えません。`PANASONICDISK_.rom` はビルド時に作られます（+16KB）。
 - **FDS** の BIOS は `nes_bios\disksys.rom`（8192 バイト）の固定名です。
-- **ROM・カバーのファイル名に日本語などがあると、ビルドが失敗します。** `parse_roms.py` は Python の `isalnum()` で記号を `_` に置き換えますが、日本語はそのまま残ります。そのため C 側の識別子が壊れます（932 では EUC-JP のバイト列で `stray '¥'`、1252 ではエンコードエラー）。表示名は `roms/<機種>.json`（romdef 形式の `name`）で付けられ、CODEPAGE=932 なら日本語にできます。このファイルは `sync_roms()` が retro-go 側へ同期します。
+- **ROM・カバー・チートのファイル名に日本語があると、そのままではビルドが失敗します。** `parse_roms.py` は Python の `isalnum()` で記号を `_` にして識別子やシンボル名を作りますが、日本語は「英数字」扱いで残ります。一方 `objcopy` の `_binary_…_start` は英数字でないバイトを `_` にするので、名前が一致しません。C ソースの文字コードも、識別子（UTF-8 が必要）と表示名（実機は Shift-JIS）で両立しません。上流を直すと更新のたびにぶつかるので、次のようにしています（2026-09-29）。
+  - `roms\` は日本語の名前のままでよく、`sync_roms()` が retro-go 側へ **英数字の名前でコピー** します（`toolchain.build_stem()`: 英数字の部分 + 元の名前の CRC32。`_no_save` は末尾に残す）。以前の「ファイル名を英数字に直す」ボタン（利用者のファイルを改名する方式）は廃止しました。
+  - 表示名は `roms/<機種>.json`（romdef 形式の `name`）で付けられます。`toolchain._romdefs()` が、キーを英数字の名前にし、日本語のファイル名を表示名として足した json を retro-go 側に書きます。CODEPAGE=932 なら日本語で表示されます（`ROMINFOCODE=cp932` が必要。上記「チート」を参照）。Shift-JIS の 2 バイト目が 0x5C の文字は「_」に、932 以外では日本語の表示名を外します（`menu_name()`）。`_no_save` は表示名の末尾で判定される（`parse_roms.py` が表示名から取り除き、セーブを無効にする）ので、表示名にも付けます。
+  - セーブの対応付けは ELF の表示名で行います。gdb の `printf "%s"` は Shift-JIS のバイト列をそのまま出すので、`package.save_slots()` は cp932 で読みます（UTF-8 で読むと、長さが同じ別の日本語名が同じ文字列に化けていました）。
+  - 2026-09-29 に、テスト用の ROM フォルダ（`ドラえもん.nes` + チート、`テスト表示_no_save.nes`、`ABC.nes` + 日本語の表示名）で実際にビルドし、C ソースに Shift-JIS の表示名とチートの説明が入ること、`_no_save` でセーブ領域が無いこと、`save_slots()` が日本語名を正しく読むことを確認しました。
+- **Makefile は ROM のファイル名の一覧（`build/rom_files.txt`）しか比べません。** チートや表示名の中身、`ROMINFOCODE` を変えても、クリーンビルドしない限り ROM の一覧表が作り直されませんでした。`sync_roms()` の最後にこのファイルを消し、毎回 `parse_roms.py` を実行させています（圧縮済みの `.lzma` などは再利用されるので速い）。
 - 読み取り専用属性の付いた ROM があると、コピー先も読み取り専用になり、次の同期で削除できません。同期ではコピー後に書き込み可能にしています。
 - `.md` はメガドライブの ROM の拡張子です（Markdown と間違えて除外しないこと）。`README.md` は名前で除外しています。
 - `.ggcodes` / `.pceplus` / `.mcf` はチート用の付属ファイルで、ROM ではありません。

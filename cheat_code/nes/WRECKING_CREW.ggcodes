@@ -1,16 +1,16 @@
-ATNKYZAZ, Invincibility
-SXGXGL, Infinite Lives (Player 1)
-SXIXZL, Infinite Lives (Player 2)
-PELXYP, Start w/ 1 Life (Both P)
-0055:7F, Freeze monsters  freeze timer
-03DD:FF, Fireball timer
-VVUXGPSA, Start With Golden Hammer
-004C:01, Die to Complete Stage
-SANXYLSZ, Instant Win
-SZXILXSO+SXKILOSO, Annoying Guy Doesn't Bother
-ASSGPTEY+AISLOGEI+AEKKTTYG, Always Can Climb Up
-PELXYO, Start w/ 10 lives (Both P)
-YELXYO, Start w/ 15 lives (Both P)
-ENLXYO, 250 Lives
-0090:09, Infinite Lives P1
-0091:09, Infinite Lives P2
+ATNKYZAZ, 無敵
+SXGXGL, 残機無限 (1P)
+SXIXZL, 残機無限 (2P)
+PELXYP, 開始時の残機 1 (2人とも)
+0055:7F, 敵と時間を止める
+03DD:FF, 火の玉のタイマー
+VVUXGPSA, ゴールデンハンマーで始まる
+004C:01, ミスするとフェーズクリア
+SANXYLSZ, すぐにクリア
+SZXILXSO+SXKILOSO, スパイクが邪魔しない
+ASSGPTEY+AISLOGEI+AEKKTTYG, いつでもはしごを登れる
+PELXYO, 開始時の残機 10 (2人とも)
+YELXYO, 開始時の残機 15 (2人とも)
+ENLXYO, 残機 250
+0090:09, 1P の残機無限 (別版)
+0091:09, 2P の残機無限 (別版)

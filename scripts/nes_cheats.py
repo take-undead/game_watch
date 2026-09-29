@@ -142,6 +142,8 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
+from cheat_ja import localize
+
 
 ROOT = Path(__file__).resolve().parent.parent
 ROMS = ROOT / "roms" / "nes"
@@ -534,8 +536,9 @@ def main():
                 descs.add(a[2].lower())
                 final.append(a)
         if final:
-            (OUT / f"{stem}.ggcodes").write_text(
-                "".join(f"{code}, {desc}\n" for _, code, desc, _, _ in final), encoding="ascii")
+            # 日本語にした説明は、既存のファイルから引き継ぐ (scripts/cheat_ja.py)
+            out = OUT / f"{stem}.ggcodes"
+            out.write_text(localize(out, [f"{code}, {desc}" for _, code, desc, _, _ in final]), encoding="utf-8")
         report.append({
             "rom": stem, "name": jname, "mapper": rom.mapper, "written": len(final), "rejected": rejected,
             "levels": {k: sum(1 for f in final if f[0] == k) for k in order},

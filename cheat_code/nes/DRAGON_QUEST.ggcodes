@@ -1,8 +1,8 @@
-00E2:00, Enemy dies in one hit
+00E2:00, 敵を一撃で倒せる
 00C5:FF, HP 255
 00C6:FF, MP 255
-00BC:FF+00BD:FF, Gold 65535
-00BA:FF+00BB:FF, EXP 65535 (max level)
-00BF:06, Keys x6
-00C0:06, Herbs x6
-0094:FF+0095:FF, Fewer encounters
+00BC:FF+00BD:FF, ゴールド 65535
+00BA:FF+00BB:FF, 経験値 65535 (最大レベル)
+00BF:06, かぎ 6 個
+00C0:06, やくそう 6 個
+0094:FF+0095:FF, 敵に出会いにくくなる

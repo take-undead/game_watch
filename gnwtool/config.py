@@ -250,6 +250,9 @@ class Settings:
         v = [f"GNW_TARGET={self.device}", "INTFLASH_BANK=2", "ADAPTER=stlink",
              f"EXTFLASH_SIZE={size}", f"EXTFLASH_OFFSET={offset}"]
         v.append(f"CODEPAGE={self.codepage}")
+        if self.codepage == "932":
+            # 既定の eucjp だと表示名・チートの説明が文字化けする (実機の描画は Shift-JIS)
+            v.append("ROMINFOCODE=cp932")
         v.append(f"COVERFLOW={int(self.coverflow)}")
         v.append(f"JPG_QUALITY={int(self.jpg_quality)}")
         v.append(f"CHEAT_CODES={int(self.cheat_codes)}")

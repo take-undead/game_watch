@@ -21,6 +21,8 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
+from cheat_ja import localize
+
 ROOT = Path(__file__).resolve().parent.parent
 ROMS = ROOT / "roms" / "pce"
 OUT = ROOT / "cheat_code" / "pce"
@@ -180,7 +182,9 @@ def main() -> None:
                 if len(written) == 16:
                     break
                 written.append(",".join(raw for _, _, raw in c) + ", " + short(desc))
-            (OUT / f"{stem}.pceplus").write_text("\n".join(written) + "\n", encoding="ascii")
+            # 日本語にした説明は、既存のファイルから引き継ぐ (scripts/cheat_ja.py)
+            out = OUT / f"{stem}.pceplus"
+            out.write_text(localize(out, written), encoding="utf-8")
         else:
             (OUT / f"{stem}.pceplus").unlink(missing_ok=True)
         report.append({"rom": stem, "name": jname, "source": src, "codes": len(lines), "patches": len(cmds),

@@ -1,7 +1,7 @@
-0085:00, Invincibility
-0026:02, Infinite Lives
-SKGKNP, Infinite Power
-009F:00, Floor Modifier
-010F:00, Exit Always Open
-0203:01, Change Horizontal Location
-006C:C8, Change Vertical Location
+0085:00, 無敵
+0026:02, 残機無限
+SKGKNP, パワー無限
+009F:00, フロアを固定 (00)
+010F:00, 出口が常に開いている
+0203:01, 横の位置を変える (01)
+006C:C8, 縦の位置を変える (C8)

@@ -457,28 +457,31 @@ class Estimator:
 
     @staticmethod
     def _check_names(est: Estimate, roms_root: Path, settings: C.Settings) -> None:
-        """ファイル名に英数字以外 (日本語など) があるとビルドが失敗する。表示名の日本語は CODEPAGE=932 のみ可."""
-        bad = []
-        for folder, _, _ in C.ROM_SYSTEMS:
-            d = roms_root / folder
-            if d.is_dir():
-                bad += [f"{folder}/{p.name}" for p in d.iterdir() if p.is_file() and not p.name.isascii()]
-        if bad:
-            est.problems.append(f"ファイル名に日本語などが含まれています（ビルドが失敗します）: {', '.join(bad[:3])}"
-                                + (f" ほか {len(bad) - 3} 件" if len(bad) > 3 else "")
-                                + " — ④の「ファイル名を英数字に直す」で修正できます")
-        if settings.codepage != "932":
-            import json
-            jp = []
-            for folder, _, _ in C.ROM_SYSTEMS:
+        """日本語のファイル名・表示名がメニューでどう出るか (ビルドは sync_roms() が英数字の名前にするので通る)."""
+        from .toolchain import menu_name
+        names = []  # メニューに出る名前 (表示名、無ければ日本語のファイル名)
+        defs: dict[str, dict] = {}
+        for r in est.roms:
+            if r.folder.endswith("_bios"):
+                continue
+            if r.folder not in defs:
                 try:
-                    data = json.loads((roms_root / f"{folder}.json").read_text(encoding="utf-8"))
+                    defs[r.folder] = json.loads((roms_root / f"{r.folder}.json").read_text(encoding="utf-8"))
                 except (OSError, ValueError):
-                    continue
-                jp += [v.get("name", "") for v in data.values() if isinstance(v, dict) and not v.get("name", "").isascii()]
-            if jp:
-                est.problems.append(f"日本語の表示名が {len(jp)} 件あります。メニュー言語が英語だとビルドが失敗します"
-                                    "（③構成で「日本語 (932)」を選んでください）")
+                    defs[r.folder] = {}
+            stem = rom_stem(r.path)
+            name = (defs[r.folder].get(stem) or {}).get("name") or stem
+            if not name.isascii():
+                names.append(name)
+        if settings.codepage != "932":
+            if names:
+                est.warnings.append(f"日本語の名前が {len(names)} 件あります。メニュー言語が英語なので、"
+                                    "メニューでは英数字の名前で表示されます（③構成で「日本語 (932)」にすると日本語で表示）")
+            return
+        bad = [n for n in names if menu_name(n, "932") != n]
+        if bad:
+            est.warnings.append(f"表示名に使えない文字（「表」「能」「ソ」など）があり、「_」で表示されます: "
+                                + ", ".join(bad[:3]) + (f" ほか {len(bad) - 3} 件" if len(bad) > 3 else ""))
 
     @staticmethod
     def _check_fds(est: Estimate, roms_root: Path) -> None:
@@ -566,6 +569,13 @@ def _load_parse_roms():
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
         mod.args = types.SimpleNamespace(save=False)  # ROM() が参照するグローバル
+
+        class Utf8Path(type(Path())):
+            """ビルドは PYTHONUTF8=1 なので、チートのファイルは UTF-8 で読まれる (この画面の既定は cp932)."""
+            def read_text(self, encoding=None, errors=None):
+                return super().read_text(encoding or "utf-8", errors)
+
+        mod.Path = Utf8Path
         _parse_roms = mod
     return _parse_roms
 

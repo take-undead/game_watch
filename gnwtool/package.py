@@ -261,7 +261,8 @@ def save_slots(elf: Path) -> list[SaveSlot]:
         for e in exprs:
             args += ["-ex", e]
         r = subprocess.run(args, capture_output=True, env=env, creationflags=T.NO_WINDOW)
-        return r.stdout.decode("utf-8", errors="replace").splitlines()
+        # 表示名は CODEPAGE=932 なら Shift-JIS のバイト列のまま出てくる (UTF-8 で読むと別の ROM と同じ名前に化ける)
+        return r.stdout.decode("cp932", errors="replace").splitlines()
 
     counts: dict[str, int] = {}
     for line in run([f'printf "N|{a}|%d\\n", sizeof({a}_roms)/sizeof({a}_roms[0])' for a in SAVE_ARRAYS]):

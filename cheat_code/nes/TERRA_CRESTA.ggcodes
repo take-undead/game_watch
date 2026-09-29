@@ -1,4 +1,4 @@
-0078:00+0278:01, Invincibility
-0020:09, Infinite Lives P1
-0021:09, Infinite Lives P2
-006F:00, Shot Modifier
+0078:00+0278:01, 無敵
+0020:09, 1P の残機無限
+0021:09, 2P の残機無限
+006F:00, ショットを固定 (00)

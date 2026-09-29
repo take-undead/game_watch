@@ -1,8 +1,8 @@
-SXEPSISA, Infinite Energy
-SZYPNI+SZYPSI, Infinite Health (Alt)
-00D8:C8, Infinite Health
-0074:BE, Level Select
-00B0:FF, Super Jump Midair
-NYZOEK, Jump In Mid-Air
-SZEOKAVG, Infinite Shield
-00AD:80, Remain as Ship Always
+SXEPSISA, エネルギー無限
+SZYPNI+SZYPSI, 体力無限 (別版)
+00D8:C8, 体力無限
+0074:BE, レベルセレクト
+00B0:FF, 空中でスーパージャンプ
+NYZOEK, 空中でジャンプ
+SZEOKAVG, シールド無限
+00AD:80, 常に飛行形態
